@@ -18,19 +18,19 @@ BEGIN
 	============================================= */
 	
 	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'admins' AND column_name = 'username' ) = 0 THEN
-		ALTER TABLE admins ADD username VARCHAR(20);
+		ALTER TABLE admins ADD username VARCHAR(40) NOT NULL;
 	END IF;
 
 	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'admins' AND column_name = 'password' ) = 0 THEN
-		ALTER TABLE admins ADD password VARCHAR(20);
+		ALTER TABLE admins ADD password VARCHAR(128) NOT NULL;
 	END IF;
 
 	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'admins' AND column_name = 'salt' ) = 0 THEN
-		ALTER TABLE admins ADD salt VARCHAR(20);
+		ALTER TABLE admins ADD salt VARCHAR(20) NOT NULL;
 	END IF;
 
 	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'admins' AND column_name = 'tier' ) = 0 THEN
-		ALTER TABLE admins ADD tier INT;
+		ALTER TABLE admins ADD tier INT NOT NULL;
 	END IF;
 	
 	ALTER TABLE admins ADD UNIQUE (username);
@@ -40,15 +40,15 @@ BEGIN
 	============================================= */
 
 	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'players' AND column_name = 'nickname' ) = 0 THEN
-		ALTER TABLE players ADD nickname VARCHAR(20);
+		ALTER TABLE players ADD nickname VARCHAR(20) NOT NULL;
 	END IF;
 
 	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'players' AND column_name = 'firstname' ) = 0 THEN
-		ALTER TABLE players ADD firstname VARCHAR(20);
+		ALTER TABLE players ADD firstname VARCHAR(20) NOT NULL;
 	END IF;
 
 	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'players' AND column_name = 'lastname' ) = 0 THEN
-		ALTER TABLE players ADD lastname VARCHAR(20);
+		ALTER TABLE players ADD lastname VARCHAR(20) NOT NULL;
 	END IF;
 	
 	ALTER TABLE players ADD UNIQUE (nickname);
@@ -58,7 +58,7 @@ BEGIN
 	============================================= */
 	
 	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'factions' AND column_name = 'name' ) = 0 THEN
-		ALTER TABLE factions ADD name VARCHAR(20);
+		ALTER TABLE factions ADD name VARCHAR(20) NOT NULL;
 	END IF;
 	
 	ALTER TABLE factions ADD UNIQUE (name);
@@ -68,49 +68,61 @@ BEGIN
 	============================================= */
 	
 	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'games' AND column_name = 'player1_id' ) = 0 THEN
-		ALTER TABLE games ADD player1_id INT;
+		ALTER TABLE games ADD player1_id INT NOT NULL;
 	END IF;
 
 	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'games' AND column_name = 'player1_faction_id' ) = 0 THEN
-		ALTER TABLE games ADD player1_faction_id INT;
+		ALTER TABLE games ADD player1_faction_id INT NOT NULL;
 	END IF;
 
 	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'games' AND column_name = 'player2_id' ) = 0 THEN
-		ALTER TABLE games ADD player2_id INT;
+		ALTER TABLE games ADD player2_id INT NOT NULL;
 	END IF;
 
 	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'games' AND column_name = 'player2_faction_id' ) = 0 THEN
-		ALTER TABLE games ADD player2_faction_id INT;
+		ALTER TABLE games ADD player2_faction_id INT NOT NULL;
 	END IF;
 
 	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'games' AND column_name = 'date' ) = 0 THEN
-		ALTER TABLE games ADD date DATETIME;
+		ALTER TABLE games ADD date DATETIME NOT NULL;
 	END IF;
 
 	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'games' AND column_name = 'is_draw' ) = 0 THEN
-		ALTER TABLE games ADD is_draw BOOL;
+		ALTER TABLE games ADD is_draw BOOL NOT NULL;
 	END IF;
 
 	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'games' AND column_name = 'is_ranked' ) = 0 THEN
-		ALTER TABLE games ADD is_ranked BOOL;
+		ALTER TABLE games ADD is_ranked BOOL NOT NULL;
 	END IF;
 
 	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'games' AND column_name = 'is_time_runout' ) = 0 THEN
-		ALTER TABLE games ADD is_time_runout BOOL;
+		ALTER TABLE games ADD is_time_runout BOOL NOT NULL;
 	END IF;
 
 	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'games' AND column_name = 'is_online' ) = 0 THEN
-		ALTER TABLE games ADD is_online BOOL;
+		ALTER TABLE games ADD is_online BOOL NOT NULL;
 	END IF;
 	
 	ALTER TABLE games ADD
-		FOREIGN KEY (player1_faction_id, player2_faction_id)
+		FOREIGN KEY (player1_faction_id)
 		REFERENCES factions(faction_id)
 		ON DELETE CASCADE
 		ON UPDATE CASCADE;
 	
 	ALTER TABLE games ADD
-		FOREIGN KEY (player1_id, player2_id)
+		FOREIGN KEY (player2_faction_id)
+		REFERENCES factions(faction_id)
+		ON DELETE CASCADE
+		ON UPDATE CASCADE;
+	
+	ALTER TABLE games ADD
+		FOREIGN KEY (player1_id)
+		REFERENCES players(player_id)
+		ON DELETE CASCADE
+		ON UPDATE CASCADE;
+	
+	ALTER TABLE games ADD
+		FOREIGN KEY (player2_id)
 		REFERENCES players(player_id)
 		ON DELETE CASCADE
 		ON UPDATE CASCADE;
@@ -231,7 +243,7 @@ BEGIN
         COUNT(*) AS games_played
 	FROM  games_split games_split
 		RIGHT JOIN players players on games_split.player_id = players.player_id
-	GROUP BY players.player_id
+	GROUP BY players.player_id;
 	
 	
 	
