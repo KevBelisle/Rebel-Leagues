@@ -1,0 +1,10 @@
+Options -MultiViews
+AddDefaultCharset UTF-8
+AddHandler x-mapp-php6 .php
+
+RewriteBase /Rebel-Leagues/Dev/api/
+
+RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)\?*$ index.php?__route__=/$1 [L,QSA]
