@@ -86,7 +86,7 @@ BEGIN
 	
 	ALTER TABLE factions ADD
 		FOREIGN KEY (factiongroup_id)
-		REFERENCES faction_groups(factiongrop_id)
+		REFERENCES faction_groups(factiongroup_id)
 		ON DELETE CASCADE
 		ON UPDATE CASCADE;
 	
