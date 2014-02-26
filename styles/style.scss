@@ -1,0 +1,38 @@
+/* IMPORT FRAMELESS */
+@import url("frameless.scss");
+
+
+/*  GENERAL TYPOGRAPHY */
+body {
+	font-family: 'Roboto', sans-serif;
+	font-size: 16px;
+	font-weight: 400;
+}
+
+strong {
+	font-weight: 500;
+}
+
+
+/*	LAYOUT STRUCTURE */
+div#topBar {
+	width: 100%;
+	height: 40px;
+}
+
+body {
+	background-color: #0c0c0c;
+	background-image: url("../images/background.png");
+}
+
+/*  TOP BAR */
+div#topBar {
+	background-color: #ec5d00;
+	border-bottom: 1px solid #ef7526;
+	color: #f6f6f6;
+	
+	div {
+		line-height: 40px;
+		text-align: right;
+	}
+}
