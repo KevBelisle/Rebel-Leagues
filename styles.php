@@ -1,6 +1,6 @@
 <?php
 $directory = "styles";
 
-require "scssphp/scss.inc.php";
+require "scss.inc.php";
 scss_server::serveFrom($directory);
 ?>
