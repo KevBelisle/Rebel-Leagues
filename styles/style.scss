@@ -1,5 +1,5 @@
 /* IMPORT FRAMELESS */
-@import url("frameless.scss");
+@import 'frameless';
 
 
 /*  GENERAL TYPOGRAPHY */
@@ -18,12 +18,32 @@ strong {
 div#topBar {
 	width: 100%;
 	height: 40px;
+	
+	div {
+		width: $cols3;
+	}
+}
+
+div#test {
+
+	width: $cols12 + $gutter;
+	margin: 0 auto;
+	border: 2px solid red;
+
+	div {
+		background: white;
+		width: $cols1;
+		height: 100px;
+		float: left;
+		margin: 0 $gutter/2;
+	}
 }
 
 body {
 	background-color: #0c0c0c;
 	background-image: url("../images/background.png");
 }
+
 
 /*  TOP BAR */
 div#topBar {
