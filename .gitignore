@@ -1,2 +1,4 @@
 
 api/.htaccess
+
+api/db_access.php
