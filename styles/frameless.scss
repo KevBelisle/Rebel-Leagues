@@ -9,11 +9,8 @@
 // Configuration
 //
 
-$font-size: 16; 		// Your base font-size in pixels
-$em: $font-size * 1em;	// Shorthand for outputting ems
-
-$column: 48px;	// The column-width of your grid in pixels
-$gutter: 24px;	// The gutter-width of your grid in pixels
+$column: 60px;	// The column-width of your grid in pixels
+$gutter: 20px;	// The gutter-width of your grid in pixels
 
 
 //
@@ -36,15 +33,16 @@ $cols13: (13 * ($column + $gutter) - $gutter);
 $cols14: (14 * ($column + $gutter) - $gutter);
 $cols15: (15 * ($column + $gutter) - $gutter);
 $cols16: (16 * ($column + $gutter) - $gutter);
+$cols17: (17 * ($column + $gutter) - $gutter);
+$cols18: (18 * ($column + $gutter) - $gutter);
+$cols19: (19 * ($column + $gutter) - $gutter);
+$cols20: (20 * ($column + $gutter) - $gutter);
+$cols21: (21 * ($column + $gutter) - $gutter);
+$cols22: (22 * ($column + $gutter) - $gutter);
+$cols23: (23 * ($column + $gutter) - $gutter);
+$cols24: (24 * ($column + $gutter) - $gutter);
 
 
-//
-// Column-widths in a function, in ems
-//
-
-@mixin width ($cols:1) {
-	width: ($cols * ($column + $gutter) - $gutter) / $em;
-}
 
 
 /*
@@ -60,6 +58,9 @@ article, aside, figure, footer, header, hgroup, menu, nav, section {
 	margin: 0;
 	padding: 0;
 	border: 0;
+	box-sizing: border-box;
+	font-size: 1em;
+	font-weight: inherit;
 }
 
 
@@ -169,25 +170,4 @@ body {
 
 .ie {
 	
-}
-
-
-/*
-	An easy way to zoom your entire layout in or out (as long as it's set in ems).
-	Just change the media queries to activate them.
-	Assuming your base font-size is 16:
-	- the first one zooms out by a factor of (16-2)/16 = 0.875
-	- the second one zooms in by a factor of (16+2)/16 = 1.125  
-*/
-
-@media screen and (max-width: 1px) {
-	body {
-		font-size: ($font-size - 2) / $em;
-	}
-}
-
-@media screen and (max-width: 1px) {
-	body {
-		font-size: ($font-size + 2) / $em;
-	}
 }
