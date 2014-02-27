@@ -1,0 +1,258 @@
+
+
+/*	LAYOUT STRUCTURE */
+div#topBar {
+	width: 100%;
+	height: 40px;
+	
+	div {
+		margin: 0 auto;
+	}
+}
+
+div#wrapper {
+	margin: 0 auto;
+
+	div#right {
+		header {
+		}
+		aside {
+		}
+	}
+
+	div#left {
+		section {
+			nav a {
+				display: block;
+				float: left;
+			}
+		}
+	}
+}
+
+
+
+// Default styling here
+div#topBar div { width: $cols4; }
+div#wrapper { width: $cols4; }
+
+	div#right {
+		width: $cols4;
+		
+		header {
+			width: 100%;
+			margin-top: 20px;
+		}
+		aside { display: none; }
+	}
+	
+	div#left {
+		width: $cols4;
+		
+		section {
+			width: 100%;
+			
+			nav a { width: 50%; }
+			
+			div#main {
+				div.game {
+					padding: 10px 40px 10px 10px;
+					
+					div.player {
+						display: table;
+						width: 50%;
+						float: left;
+						
+						div.badges {
+							width: $cols2;
+							text-align: center;
+							margin-top: 10px;
+						}
+						div.playerid {
+							width: $cols2;
+							text-align: center;
+						}
+					}
+					div.player1 {
+					}
+					div.player2 {
+					}
+					
+					div.moreInfo {
+					}
+				}
+			}
+		}
+		
+		footer {
+			width: 100%;
+			text-align: center;
+			
+			div.left {
+				margin-bottom: 20px;
+			}
+			div.right {  }
+
+		}
+	}
+
+
+// Little larger screen
+@media only screen and (min-width: 480px) {
+	div#topBar div { width: $cols6; }
+	div#wrapper { width: $cols6; }
+	
+		div#right {
+			width: $cols6;
+			
+			header {  }
+			aside {  }
+		}
+		
+		div#left {
+			width: $cols6;
+			
+			section {
+			
+				div#main {
+					div.game {
+						
+						div.player {
+							
+							div.badges {
+								margin-top: 0;
+								width: 50%;
+								
+								display: table-cell;
+								vertical-align: middle;
+								img.badge {
+									vertical-align: middle;
+								}
+							}
+							div.playerid {
+								display: table-cell;
+								vertical-align: middle;
+								width: 50%;
+							}
+						}
+						div.player1 {
+							div.badges {
+								text-align: left;
+								position: relative;
+								left: -50%;
+							}
+							div.playerid {
+								text-align: right;
+								padding-right: 10px;
+								position: relative;
+								right: -50%;
+							}
+						}
+						div.player2 {
+							div.badges {
+								text-align: right;
+								//float: right;
+							}
+							div.playerid {
+								text-align: left;
+								padding-left: 10px;
+								//float: left;
+							}
+						}
+						
+						div.moreInfo {
+						}
+					}
+				}
+			}
+			
+			footer {
+			
+				div.left {
+					margin-bottom: 0;
+					width: 60%;
+					float: left;
+					text-align: left;
+				}
+				div.right {
+					width: 40%;
+					float: right;
+					text-align: right;
+				}
+			}
+		}
+}
+
+// Pads and larger phones
+@media only screen and (min-width: 600px) {
+	div#topBar div { width: $cols7; }
+	div#wrapper { width: $cols7; }
+	
+		div#right {
+			width: $cols7;
+			
+			header {  }
+			aside {  }
+		}
+		
+		div#left {
+			width: $cols7;
+		}
+}
+
+// Larger pads
+@media only screen and (min-width: 768px) {
+	div#topBar div { width: $cols9; }
+	div#wrapper { width: $cols9; }
+	
+		div#right {
+			width: $cols3;
+			float: right;
+			
+			header {
+				margin-top: 70px;
+			}
+			aside {
+				display: block;
+				width: 100%;
+			}
+		}
+		
+		div#left {
+			width: $cols6;
+			float: left;
+		}
+}
+
+// Larger screens
+@media only screen and (min-width: 900px) {
+	div#topBar div { width: $cols11; }
+	div#wrapper { width: $cols11; }
+	
+		div#right {
+			width: $cols3;
+		}
+		
+		div#left {
+			width: $cols8;
+		}
+}
+
+// Horizontal pads and laptops
+@media only screen and (min-width: 992px) {
+	div#topBar div { width: $cols12; }
+	div#wrapper { width: $cols12; }
+	
+		div#right {
+			width: $cols4;
+		}
+		
+		div#left {
+			width: $cols8;
+		}
+
+}
+
+
+
+
