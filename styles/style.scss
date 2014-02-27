@@ -25,7 +25,7 @@ $dark_color: #e1e1e1;
 $xdark_color: #929395;
 $xxdark_color: #141414;
 
-$accent_color: #00a9f1;
+$accent_color: #6652c8;
 
 
 
@@ -55,8 +55,8 @@ body {
 }
 
 div#topBar {
-	background-color: #ec5d00;
-	border-bottom: 1px solid #ef7526;
+	background-color: #c30008;
+	border-bottom: 1px solid #e92b32;
 	color: $xlight_color;
 	
 	div {
@@ -137,7 +137,7 @@ div#wrapper {
 							float: right;
 							
 							color: $accent_color;
-							font-weight: $medium_weight;
+							font-weight: $heavy_weight;
 							text-align: right;
 						}
 					}
@@ -162,7 +162,7 @@ div#wrapper {
 				color: $xdark_color;
 				
 				a {
-					font-weight: $medium_weight;
+					font-weight: $light_weight;
 					text-align: center;
 					padding: 20px 0 10px 0;
 				}

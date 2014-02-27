@@ -178,7 +178,7 @@ div#wrapper { width: $cols4; }
 							
 							div.badges {
 								margin-top: 0;
-								width: 50%;
+								width: 30%;
 								
 								display: table-cell;
 								vertical-align: middle;
@@ -189,20 +189,20 @@ div#wrapper { width: $cols4; }
 							div.playerid {
 								display: table-cell;
 								vertical-align: middle;
-								width: 50%;
+								width: 70%;
 							}
 						}
 						div.player1 {
 							div.badges {
 								text-align: left;
 								position: relative;
-								left: -50%;
+								left: -70%;
 							}
 							div.playerid {
 								text-align: right;
 								padding-right: 10px;
 								position: relative;
-								right: -50%;
+								right: -30%;
 							}
 						}
 						div.player2 {
