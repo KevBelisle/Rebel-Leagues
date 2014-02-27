@@ -40,7 +40,7 @@ div#wrapper { width: $cols4; }
 		width: $cols4;
 		
 		header {
-			width: $cols4;
+			width: 100%;
 			margin-top: 20px;
 		}
 		aside { display: none; }
@@ -50,16 +50,17 @@ div#wrapper { width: $cols4; }
 		width: $cols4;
 		
 		section {
-			width: $cols4;
+			width: 100%;
 			
-			nav a {
-				width: $cols2;
-			}
+			nav a { width: 50%; }
 			
 			main {
 				div.game {
+					padding: 10px 40px 10px 10px;
+					
 					div.player {
-						width: $cols2;
+						display: table;
+						width: 50%;
 						float: left;
 						
 						div.badges {
@@ -84,19 +85,13 @@ div#wrapper { width: $cols4; }
 		}
 		
 		footer {
-			width: $cols4;
+			width: 100%;
 			text-align: center;
 			
 			div.left {
 				margin-bottom: 20px;
-				//width: 50%;
-				//float: left;
 			}
-			div.right {
-				//width: 50%;
-				//float: right;
-				//text-align: right;
-			}
+			div.right {  }
 
 		}
 	}
@@ -110,7 +105,7 @@ div#wrapper { width: $cols4; }
 		div#right {
 			width: $cols6;
 			
-			header { width: $cols6; }
+			header {  }
 			aside {  }
 		}
 		
@@ -118,14 +113,11 @@ div#wrapper { width: $cols4; }
 			width: $cols6;
 			
 			section {
-				width: $cols6;
-			
-				nav a { width: $cols3; }
 			
 				main {
 					div.game {
+						
 						div.player {
-							width: $cols3;
 							
 							div.badges {
 								margin-top: 0;
@@ -175,7 +167,6 @@ div#wrapper { width: $cols4; }
 			}
 			
 			footer {
-				width: $cols6;
 			
 				div.left {
 					margin-bottom: 0;
@@ -200,27 +191,12 @@ div#wrapper { width: $cols4; }
 		div#right {
 			width: $cols7;
 			
-			header { width: $cols7; }
+			header {  }
 			aside {  }
 		}
 		
 		div#left {
 			width: $cols7;
-			
-			section {
-				width: $cols7;
-			
-				nav a { width: $cols3 + ($cols1 + $gutter)/2; }
-			
-				main {
-					div.game {
-						div.player {
-							width: $cols3 + ($cols1 + $gutter)/2;
-						}
-					}
-				}
-			}
-			footer { width: $cols7; }
 		}
 }
 
@@ -234,33 +210,17 @@ div#wrapper { width: $cols4; }
 			float: right;
 			
 			header {
-				width: $cols3;
 				margin-top: 70px;
 			}
 			aside {
 				display: block;
-				width: $cols3;
+				width: 100%;
 			}
 		}
 		
 		div#left {
 			width: $cols6;
 			float: left;
-			
-			section {
-				width: $cols6;
-			
-				nav a { width: $cols3; }
-			
-				main {
-					div.game {
-						div.player {
-							width: $cols3;
-						}
-					}
-				}
-			}
-			footer { width: $cols6; }
 		}
 }
 
@@ -271,28 +231,10 @@ div#wrapper { width: $cols4; }
 	
 		div#right {
 			width: $cols3;
-			
-			header { width: $cols3; }
-			aside { width: $cols3; }
 		}
 		
 		div#left {
 			width: $cols8;
-			
-			section {
-				width: $cols8;
-			
-				nav a { width: $cols4; }
-			
-				main {
-					div.game {
-						div.player {
-							width: $cols4;
-						}
-					}
-				}
-			}
-			footer { width: $cols8; }
 		}
 }
 
@@ -303,20 +245,10 @@ div#wrapper { width: $cols4; }
 	
 		div#right {
 			width: $cols4;
-			
-			header { width: $cols4; }
-			aside { width: $cols4; }
 		}
 		
 		div#left {
 			width: $cols8;
-			
-			section {
-				width: $cols8;
-			
-				nav a { width: $cols4; }
-			}
-			footer { width: $cols8; }
 		}
 
 }
