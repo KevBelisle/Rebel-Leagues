@@ -84,7 +84,7 @@ div#wrapper {
 				
 				background: purple;
 				border-radius: 50px;
-				border: 3px solid $xlight_color;
+				box-shadow: 0 0 0 3px $xlight_color; /* This is actually a border. */
 				
 				margin: 0 auto;
 			}
