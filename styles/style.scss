@@ -167,7 +167,7 @@ div#wrapper {
 					font-weight: 400;
 				}
 			}
-			main {
+			div#main {
 				background: $xlight_color;
 				color: $xdark_color;
 				
@@ -229,10 +229,10 @@ div#wrapper {
 			
 			strong {
 				font-weight: 100;
-				color: $light-color;
+				color: $dark-color;
 				
 				strong {
-					font-weight: 400;
+					font-weight: 300;
 				}
 			}
 		}
