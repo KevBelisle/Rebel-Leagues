@@ -56,7 +56,7 @@ div#wrapper { width: $cols4; }
 			
 			div#main {
 				div.game {
-					padding: 10px 40px 10px 10px;
+					padding: 10px;
 					
 					div.player {
 						display: table;
@@ -64,12 +64,12 @@ div#wrapper { width: $cols4; }
 						float: left;
 						
 						div.badges {
-							width: $cols2;
+							width: 100%;
 							text-align: center;
 							margin-top: 10px;
 						}
 						div.playerid {
-							width: $cols2;
+							width: 100%;
 							text-align: center;
 						}
 					}
@@ -111,75 +111,6 @@ div#wrapper { width: $cols4; }
 		
 		div#left {
 			width: $cols6;
-			
-			section {
-			
-				div#main {
-					div.game {
-						
-						div.player {
-							
-							div.badges {
-								margin-top: 0;
-								width: 50%;
-								
-								display: table-cell;
-								vertical-align: middle;
-								img.badge {
-									vertical-align: middle;
-								}
-							}
-							div.playerid {
-								display: table-cell;
-								vertical-align: middle;
-								width: 50%;
-							}
-						}
-						div.player1 {
-							div.badges {
-								text-align: left;
-								position: relative;
-								left: -50%;
-							}
-							div.playerid {
-								text-align: right;
-								padding-right: 10px;
-								position: relative;
-								right: -50%;
-							}
-						}
-						div.player2 {
-							div.badges {
-								text-align: right;
-								//float: right;
-							}
-							div.playerid {
-								text-align: left;
-								padding-left: 10px;
-								//float: left;
-							}
-						}
-						
-						div.moreInfo {
-						}
-					}
-				}
-			}
-			
-			footer {
-			
-				div.left {
-					margin-bottom: 0;
-					width: 60%;
-					float: left;
-					text-align: left;
-				}
-				div.right {
-					width: 40%;
-					float: right;
-					text-align: right;
-				}
-			}
 		}
 }
 
@@ -199,6 +130,85 @@ div#wrapper { width: $cols4; }
 			width: $cols7;
 		}
 }
+
+
+// Layout shifts to having playerid and badges side-by-side, instead of stacked
+@media only screen and (min-width: 600px) and (max-width: 767px), (min-width: 900px)  {
+
+	div#left {
+		section {
+		
+			div#main {
+				div.game {
+					padding: 20px;
+					
+					div.player {
+						
+						div.badges {
+							margin-top: 0;
+							width: 50%;
+							
+							display: table-cell;
+							vertical-align: middle;
+							img.badge {
+								vertical-align: middle;
+							}
+						}
+						div.playerid {
+							display: table-cell;
+							vertical-align: middle;
+							width: 50%;
+						}
+					}
+					div.player1 {
+						div.badges {
+							text-align: left;
+							position: relative;
+							left: -50%;
+						}
+						div.playerid {
+							text-align: right;
+							padding-right: 10px;
+							position: relative;
+							right: -50%;
+						}
+					}
+					div.player2 {
+						div.badges {
+							text-align: right;
+							//float: right;
+						}
+						div.playerid {
+							text-align: left;
+							padding-left: 10px;
+							//float: left;
+						}
+					}
+					
+					div.moreInfo {
+					}
+				}
+			}
+		}
+		
+		footer {
+		
+			div.left {
+				margin-bottom: 0;
+				width: 60%;
+				float: left;
+				text-align: left;
+			}
+			div.right {
+				width: 40%;
+				float: right;
+				text-align: right;
+			}
+		}
+	}
+			
+}
+			
 
 // Larger pads
 @media only screen and (min-width: 768px) {
@@ -244,14 +254,30 @@ div#wrapper { width: $cols4; }
 	div#wrapper { width: $cols12; }
 	
 		div#right {
+			width: $cols3;
+		}
+		
+		div#left {
+			width: $cols9;
+		}
+
+}
+
+// Desktop screens
+@media only screen and (min-width: 1200px) {
+	div#topBar div { width: $cols15; }
+	div#wrapper { width: $cols15; }
+	
+		div#right {
 			width: $cols4;
 		}
 		
 		div#left {
-			width: $cols8;
+			width: $cols11;
 		}
 
 }
+
 
 
 
