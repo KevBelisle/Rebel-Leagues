@@ -37,6 +37,7 @@
 	<div>
 		<ul>
 			<li id='getPlayers'>Get players</li>
+			<li id='getFactiongroups'>Get factiongroups</li>
 			<li id='getFactions'>Get factions</li>
 			<li id='getGames'>Get games</li>
 			<li id='getRanking'>Get ranking</li>
@@ -80,9 +81,20 @@
 	</div>
 	
 	<div>
-		<form id="addFaction">
+		<form id="addFactiongroup">
+			<h3>Add factiongroup</h3>
+			<input type="text" name="name" placeholder="name" />
+			<input type="submit" value="Submit" />
+		</form>
+	</div>
+	
+	<div>
+		<form id="addFaction" enctype="multipart/form-data">
 			<h3>Add faction</h3>
 			<input type="text" name="name" placeholder="name" />
+			<input type="text" name="factiongroup_id" placeholder="factiongroup_id" />
+			<input type="text" name="color" placeholder="color" />
+			Logo: <input name="logo" type="file" />
 			<input type="submit" value="Submit" />
 		</form>
 	</div>
@@ -111,6 +123,12 @@
 	
 		$("#getPlayers").click( function () {
 			$.get("api/players", function (data) {
+				$("#result").html(data);
+			});
+		});
+	
+		$("#getFactiongroups").click( function () {
+			$.get("api/factiongroups", function (data) {
 				$("#result").html(data);
 			});
 		});
@@ -177,14 +195,54 @@
 			return false;
 		});
 		
-		$("#addFaction").submit( function () {
+		$("#addFactiongroup").submit( function () {
 			$.post(
-				"api/factions",
-				$("#addFaction").serialize(),
+				"api/factiongroups",
+				$("#addFactiongroup").serialize(),
 				function (data) {
 					$("#result").html(data);
 				}
 			);
+			return false;
+		});
+		
+		var factionLogoFile = [];
+		$('#addFaction input[name=logo]').on('change', function(event) {
+			factionLogoFile = event.target.files;
+		});
+		
+		$("#addFaction").submit( function () {
+		
+			var data = new FormData();
+			
+			$.each( factionLogoFile, function(key, value) {
+				data.append(key, value);
+			});
+			
+			data.append( "name", $('#addFaction input[name=name]').val() );
+			data.append( "factiongroup_id", $('#addFaction input[name=factiongroup_id]').val() );
+			data.append( "color", $('#addFaction input[name=color]').val() );
+			
+			$.ajax({
+				url: 'api/factions',
+				type: 'POST',
+				data: data,
+				cache: false,
+				//dataType: 'json',
+				processData: false, // Don't process the files
+				contentType: false, // Set content type to false as jQuery will tell the server its a query string request
+				success: function(data)
+				{
+					console.log("SUCCESS");
+					$("#result").html(data);
+				},
+				error: function(jqXHR, textStatus, errorThrown)
+				{
+					// Handle errors here
+					console.log('ERRORS: ' + textStatus);
+				}
+			});
+			
 			return false;
 		});
 		
