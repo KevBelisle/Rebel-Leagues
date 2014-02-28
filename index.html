@@ -14,6 +14,7 @@
 	<link href='http://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700' rel='stylesheet' type='text/css'>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.13/angular.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.13/angular-route.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.13/angular-animate.js"></script>
 	
 	<!--[if lt IE 9]>
 		<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -61,13 +62,12 @@
 	<div id="left" class="clear">
 		<section>
 			<nav class="clear">
-				<a class="active">Historique des parties</a>
-				<a>Classement des joueurs</a>
+				<a active-link="active" href="#/gamesHistory">Historique des parties</a>
+				<a active-link="active" href="#/playersRanking">Classement des joueurs</a>
 			</nav>
 			
-			<div id="main" ng-view>
+			<div id="main" ng-view ng-animate class="anim-appear">
 			</div>
-			
 		</section>
 
 		<footer class="clear">

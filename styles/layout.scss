@@ -55,9 +55,13 @@ div#wrapper { width: $cols4; }
 			nav a { width: 50%; }
 			
 			div#main {
-				div.game {
+				div.game,
+				> div.player {
+					width: 100%;
 					padding: 10px;
-					
+				}
+			
+				div.game {
 					div.player {
 						display: table;
 						width: 50%;
@@ -73,13 +77,12 @@ div#wrapper { width: $cols4; }
 							text-align: center;
 						}
 					}
-					div.player1 {
-					}
-					div.player2 {
-					}
 					
 					div.moreInfo {
 					}
+				}
+				
+				> div.player {
 				}
 			}
 		}
@@ -128,6 +131,14 @@ div#wrapper { width: $cols4; }
 		
 		div#left {
 			width: $cols7;
+			
+			div#main {
+				> div.player {
+					div.playerid {
+						width: 30%;
+					}
+				}
+			}
 		}
 }
 			
@@ -171,11 +182,14 @@ div#wrapper { width: $cols4; }
 			section {
 			
 				div#main {
-					div.game {
+					div.game,
+					> div.player {
 						padding: 20px;
+					}
+					
+					div.game {
 						
 						div.player {
-							
 							div.badges {
 								margin-top: 0;
 								width: 30%;
