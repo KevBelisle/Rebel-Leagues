@@ -12,8 +12,8 @@
 					<span class="fullname">({{ game.player1_firstname }} {{ game.player1_lastname }})</span>
 				</div>
 				<div class="badges">
-					<img class="badge" src="api/uploads/VictoryLogo-0.png" ng-if="!game.is_draw" />
-					<img class="badge" src="api/uploads/FactionLogo-{{ game.player1_faction_id }}.png" />
+					<img class="badge" src="images/VictoryLogo.png" ng-if="!game.is_draw" />
+					<img class="badge" src="api/{{ game.player1_faction_logo }}" />
 				</div>
 			</div>
 			<div class="player player2">
@@ -22,7 +22,7 @@
 					<span class="fullname">({{ game.player2_firstname }} {{ game.player2_lastname }})</span>
 				</div>
 				<div class="badges">
-					<img class="badge" src="api/uploads/FactionLogo-{{ game.player2_faction_id }}.png" />
+					<img class="badge" src="api/{{ game.player2_faction_logo }}" />
 				</div>
 			</div>
 			<div class="moreInfo">
