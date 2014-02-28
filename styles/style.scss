@@ -3,7 +3,19 @@
 @import 'frameless';
 @import 'layout';
 
+/*  FONTS */
+@import url(http://fonts.googleapis.com/css?family=Signika:400,600,300);
+$main_font: "Signika", sans-serif;
 
+$light_weight: 300;
+$medium_weight: 400;
+$heavy_weight: 700;
+
+$base_font_size: 19px;
+
+$small_text: 0.8em;
+$normal_text: 0.8em;
+$large_text: 1.2em;
 
 /*  COLORS */
 
@@ -13,7 +25,7 @@ $dark_color: #e1e1e1;
 $xdark_color: #929395;
 $xxdark_color: #141414;
 
-$accent_color: #4a8dcc;
+$accent_color: #6652c8;
 
 
 
@@ -31,36 +43,27 @@ $accent_color: #4a8dcc;
 
 
 
-/*  GENERAL TYPOGRAPHY */
-body {
-	font-family: 'Roboto', sans-serif;
-	font-size: 16px;
-	font-weight: 300;
-}
-
-
-
-
 /*  GENERAL STYLING */
 
 body {
 	background-color: #0c0c0c;
-	background-image: url("../images/background.png");
+	background-image: url("images/background.png");
 	
-	font-weight: 100;
+	font-family: $main_font;
+	font-weight: $light_weight;
+	font-size: $base_font_size;
 }
 
 div#topBar {
-	background-color: #ec5d00;
-	border-bottom: 1px solid #ef7526;
+	background-color: #c30008;
+	border-bottom: 1px solid #e92b32;
 	color: $xlight_color;
 	
 	div {
 		line-height: 40px;
 		text-align: right;
-		font-weight: 100;
 		strong {
-			font-weight: 400;
+			font-weight: $heavy_weight;
 		}
 	}
 }
@@ -74,13 +77,14 @@ div#wrapper {
 	
 		header {
 		
-			div#logo {
+			img#logo {
 				width: 100px;
 				height: 100px;
+				display: block;
 				
 				background: purple;
 				border-radius: 50px;
-				border: 3px solid $xlight_color;
+				box-shadow: 0 0 0 3px $xlight_color; /* This is actually a border. */
 				
 				margin: 0 auto;
 			}
@@ -90,9 +94,8 @@ div#wrapper {
 				
 				text-align: center;
 				color: $xlight_color;
-				font-size: 1.2em;
-				font-weight: 300;
-				letter-spacing: 1px
+				font-size: $large_text;
+				font-weight: $heavy_weight;
 			}
 			h2 {
 				text-align: center;
@@ -117,14 +120,16 @@ div#wrapper {
 							box-sizing: border-box;
 							transition: padding-left ease 200ms,
 										padding-right ease 200ms;
+										
+							text-transform: uppercase;
+							font-size: $small_text;
+							color: $dark_color;
 						}
 						
 						span.left {
 							display: inline-block;
 							width: 80%;
 							float: left;
-							
-							text-transform: uppercase;
 						}
 						span.right {
 							display: inline-block;
@@ -132,7 +137,7 @@ div#wrapper {
 							float: right;
 							
 							color: $accent_color;
-							font-weight: 400;
+							font-weight: $heavy_weight;
 							text-align: right;
 						}
 					}
@@ -157,14 +162,14 @@ div#wrapper {
 				color: $xdark_color;
 				
 				a {
-					font-weight: 100;
+					font-weight: $light_weight;
 					text-align: center;
 					padding: 20px 0 10px 0;
 				}
 				a.active {
 					border-bottom: 3px solid $accent_color;
 					color: $accent_color;
-					font-weight: 400;
+					font-weight: $heavy_weight;
 				}
 			}
 			div#main {
@@ -173,8 +178,8 @@ div#wrapper {
 				
 				div.date {
 					color: $accent_color;
-					font-weight: 400;
-					font-size: 0.8em;
+					font-weight: $medium_weight;
+					font-size: $small_text;
 					text-transform: uppercase;
 					
 					padding: 20px 20px 10px 20px;
@@ -183,7 +188,6 @@ div#wrapper {
 				
 				div.game {
 					width: 100%;
-					padding: 10px;
 					border-bottom: 1px solid $dark_color;
 					
 					div.player {
@@ -192,7 +196,6 @@ div#wrapper {
 						
 						div.badges {
 							img.badge {
-								background: purple;
 								width: 30px;
 								height: 30px;
 							}
@@ -200,11 +203,11 @@ div#wrapper {
 						div.playerid {
 							span.nickname {
 								color: $xxdark_color;
-								font-weight: 300;
+								font-weight: $medium_weight;
 							}
 							span.fullname {
 								display: block;
-								font-size: 0.8em;
+								font-size: $small_text;
 							}
 						}
 					}
@@ -225,14 +228,14 @@ div#wrapper {
 		footer {
 			color: $xdark_color;
 			padding: 20px 20px 60px 20px;
-			font-size: 0.8em;
+			font-size: $small_text;
 			
 			strong {
-				font-weight: 100;
+				font-weight: $light_weight;
 				color: $dark-color;
 				
 				strong {
-					font-weight: 300;
+					font-weight: $heavy_weight;
 				}
 			}
 		}

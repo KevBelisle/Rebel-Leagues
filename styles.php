@@ -1,6 +1,7 @@
 <?php
-$directory = "styles";
-
 require "scss.inc.php";
-scss_server::serveFrom($directory);
+$scss = new scssc();
+
+header("Content-type: text/css");
+echo $scss->compile('@import "styles/style.scss"');
 ?>
