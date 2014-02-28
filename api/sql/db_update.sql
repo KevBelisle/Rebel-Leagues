@@ -79,7 +79,7 @@ BEGIN
 	END IF;
 	
 	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'factions' AND column_name = 'logo' ) = 0 THEN
-		ALTER TABLE factions ADD logo VARCHAR(20) NOT NULL;
+		ALTER TABLE factions ADD logo VARCHAR(60) NOT NULL;
 	END IF;
 	
 	ALTER TABLE factions ADD UNIQUE (name);
