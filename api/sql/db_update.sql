@@ -10,7 +10,7 @@ BEGIN
 	
 	CREATE TABLE IF NOT EXISTS admins ( admin_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 	CREATE TABLE IF NOT EXISTS players ( player_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ) ENGINE=InnoDB DEFAULT CHARSET=utf8;  
-	CREATE TABLE IF NOT EXISTS faction_groups ( factiongroup_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+	CREATE TABLE IF NOT EXISTS factiongroups ( factiongroup_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 	CREATE TABLE IF NOT EXISTS factions ( faction_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 	CREATE TABLE IF NOT EXISTS games ( game_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -54,14 +54,14 @@ BEGIN
 	
 	ALTER TABLE players ADD UNIQUE (nickname);
 	
-	/* CREATE faction_groups COLUMNS
+	/* CREATE factiongroups COLUMNS
 	============================================= */
 	
-	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'faction_groups' AND column_name = 'name' ) = 0 THEN
-		ALTER TABLE faction_groups ADD name VARCHAR(40) NOT NULL;
+	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'factiongroups' AND column_name = 'name' ) = 0 THEN
+		ALTER TABLE factiongroups ADD name VARCHAR(40) NOT NULL;
 	END IF;
 	
-	ALTER TABLE faction_groups ADD UNIQUE (name);
+	ALTER TABLE factiongroups ADD UNIQUE (name);
 	
 	/* CREATE factions COLUMNS
 	============================================= */
@@ -86,7 +86,7 @@ BEGIN
 	
 	ALTER TABLE factions ADD
 		FOREIGN KEY (factiongroup_id)
-		REFERENCES faction_groups(factiongroup_id)
+		REFERENCES factiongroups(factiongroup_id)
 		ON DELETE CASCADE
 		ON UPDATE CASCADE;
 	
@@ -171,23 +171,27 @@ BEGIN
 		player1.firstname				AS player1_firstname,
 		player1.lastname				AS player1_lastname,
 		factiongroup1.factiongroup_id 	AS player1_factiongroup_id,
-		factiongroup1.name 				AS player1_factiongroup,
+		factiongroup1.name 				AS player1_factiongroup_name,
 		games.player1_faction_id		AS player1_faction_id,
 		faction1.name					AS player1_faction_name,
+		faction1.color					AS player1_faction_color,
+		faction1.logo					AS player1_faction_logo,
 		
 		games.player2_id				AS player2_id,
 		player2.nickname 				AS player2_nickname,
 		player2.firstname				AS player2_firstname,
 		player2.lastname				AS player2_lastname,
 		factiongroup2.factiongroup_id 	AS player2_factiongroup_id,
-		factiongroup2.name 				AS player2_factiongroup,
+		factiongroup2.name 				AS player2_factiongroup_name,
 		games.player2_faction_id		AS player2_faction_id,
 		faction2.name					AS player2_faction_name,
+		faction2.color					AS player2_faction_color,
+		faction2.logo					AS player2_faction_logo,
 		
 		date, is_draw, is_ranked, is_time_runout, is_online
 		
-	FROM 		faction_groups AS factiongroup1, 
-				faction_groups AS factiongroup2, 
+	FROM 		factiongroups AS factiongroup1, 
+				factiongroups AS factiongroup2, 
 				games
 				
 		LEFT JOIN players player1 ON games.player1_id = player1.player_id
