@@ -218,8 +218,8 @@ div#wrapper {
 					}
 				}
 				
-				div.date:nth-child(2n),
-				div.game:nth-child(2n) {
+				div:nth-child(2n) div.date,
+				div:nth-child(2n) div.game {
 					background: $light_color;
 				}
 			}
