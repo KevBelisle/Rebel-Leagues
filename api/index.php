@@ -16,6 +16,7 @@
 	getRoute()->get('/', array('League', 'nope'));
 	
 	getRoute()->get('/players', array('League', 'getPlayers'));
+	getRoute()->get('/factiongroups', array('League', 'getFactiongroups'));
 	getRoute()->get('/factions', array('League', 'getFactions'));
 	getRoute()->get('/games', array('League', 'getGamesHistory'));
 	getRoute()->get('/ranking', array('League', 'getPlayersRanking'));
@@ -26,6 +27,7 @@
 	
 	getRoute()->post('/admins', array('Admin', 'addAdmin'));
 	getRoute()->post('/players', array('Admin', 'addPlayer'));
+	getRoute()->post('/factiongroups', array('Admin', 'addFactiongroup'));
 	getRoute()->post('/factions', array('Admin', 'addFaction'));
 	getRoute()->post('/games', array('Admin', 'addGame'));
 	
@@ -46,8 +48,8 @@
 		session_set_cookie_params(3600,
 			$cookieParams["path"],
 			$cookieParams["domain"],
-			$secure,
-			$httponly);
+			false,
+			true);
 		
 		session_name('rebel_leagues');
 		session_start();
@@ -55,10 +57,10 @@
 	
 	
 	function outputSuccess($data) {
-		return json_encode( array('status' => 'success', 'data' => $data), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE );
+		return json_encode( array('status' => 'success', 'data' => $data), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
 	}
 	function outputError($data) {
-		return json_encode( array('status' => 'error', 'data' => $data), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE );
+		return json_encode( array('status' => 'error', 'data' => $data), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
 	}
 	
 	
@@ -76,11 +78,19 @@
 		}
 		
 		
+		public static function getFactiongroups() {
+			$factions = getDatabase()->all(
+				'SELECT * FROM factiongroups ORDER BY name'
+			);
+			echo outputSuccess( array( 'factiongroups' => $factions ) );
+		}
+		
+		
 		public static function getFactions() {
 			$factions = getDatabase()->all(
 				'SELECT * FROM factions ORDER BY name'
 			);
-			echo outputSuccess( array( 'players' => $factions ) );
+			echo outputSuccess( array( 'factions' => $factions ) );
 		}
 		
 		public static function getGamesHistory() {
@@ -98,7 +108,7 @@
 				'SELECT * FROM games_history ORDER BY date DESC LIMIT :skip, :take',
 				array(':skip' => $skip, ':take' => $take)
 			);
-			echo outputSuccess( array( 'players' => $games ) );
+			echo outputSuccess( array( 'games' => $games ) );
 		}
 		
 		public static function getPlayersRanking() {
@@ -261,15 +271,53 @@
 		}
 		
 		
-		public static function addFaction() {
+		public static function addFactiongroup() {
 			self::checkLogin(3);
 			self::checkFields( array('name'), $_POST );
 			
 			try {
-				$faction_id = getDatabase()->execute('INSERT INTO factions (name) VALUES(:name)', array(':name' => $_POST['name']) );
-				echo outputSuccess( array( 'faction_id' => $faction_id ) );
+				$factiongroup_id = getDatabase()->execute('INSERT INTO factiongroups (name) VALUES(:name)', array(':name' => $_POST['name']) );
+				echo outputSuccess( array( 'factiongroup_id' => $factiongroup_id ) );
 				
 			} catch (Exception $e) {
+				echo outputError($e->getMessage());
+			}
+		}
+		
+		
+		public static function addFaction() {
+			self::checkLogin(3);
+			self::checkFields( array('name', 'factiongroup_id', 'color'), $_POST );
+			
+			if ( count($_FILES) != 1 ) {
+				echo outputError( array( 'missingFields' => array("logo") ) );
+				return;
+			}
+			
+			$file = $_FILES[0];
+			
+			$uploaddir = 'uploads/factions/';
+			$extension = explode(".", $file['name']);
+			$filename = $uploaddir . md5(microtime()) . "." . end( $extension );
+			
+			if( ! move_uploaded_file( $file['tmp_name'], $filename ) ) {
+				echo outputError(  );
+				return;
+			}
+			
+			try {
+				$faction_id = getDatabase()->execute('INSERT INTO factions (name, factiongroup_id, color, logo) VALUES(:name, :factiongroup_id, :color, :logo)',
+					array(
+						':name' => $_POST['name'],
+						':factiongroup_id' => $_POST['factiongroup_id'],
+						':color' => $_POST['color'],
+						':logo' => $filename
+					)
+				);
+				echo outputSuccess( array( 'faction_id' => $faction_id, 'logo' => $filename ) );
+				
+			} catch (Exception $e) {
+				unlink( $filename );
 				echo outputError($e->getMessage());
 			}
 		}
