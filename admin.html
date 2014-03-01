@@ -41,6 +41,7 @@
 			<li id='getFactions'>Get factions</li>
 			<li id='getGames'>Get games</li>
 			<li id='getRanking'>Get ranking</li>
+			<li id='getELORatings'>Get ELO ratings</li>
 		</ul>
 	</div>
 	
@@ -147,6 +148,12 @@
 	
 		$("#getRanking").click( function () {
 			$.get("api/ranking", function (data) {
+				$("#result").html(data);
+			});
+		});
+		
+		$("#getELORatings").click( function () {
+			$.get("api/ranking/elo", function (data) {
 				$("#result").html(data);
 			});
 		});

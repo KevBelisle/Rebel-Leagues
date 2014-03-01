@@ -10,6 +10,8 @@
 	Epi::setSetting('exceptions', true);
 	
 	include_once 'db_access.php';
+	include_once 'getELORankings.php';
+	
 	EpiDatabase::employ('mysql', $db["database"], $db["host"], $db["username"], $db["password"]);
 
 	// Define routes
@@ -20,6 +22,7 @@
 	getRoute()->get('/factions', array('League', 'getFactions'));
 	getRoute()->get('/games', array('League', 'getGamesHistory'));
 	getRoute()->get('/ranking', array('League', 'getPlayersRanking'));
+	getRoute()->get('/ranking/elo', array('League', 'getELORankings'));
 	
 	getRoute()->post('/login', array('Admin', 'login'));
 	getRoute()->get('/logout', array('Admin', 'logout'));
@@ -115,8 +118,20 @@
 			$players = getDatabase()->all(
 				'SELECT * FROM players_ranking ORDER BY games_played DESC'
 			);
-			echo outputSuccess( array( 'players' => $players ) );
+			echo outputSuccess( array( 'ranking' => $players ) );
 		}
+		
+		public static function getELORankings() {
+			$games = getDatabase()->all(
+				'SELECT * FROM games_history ORDER BY date ASC'
+			);
+			$players = getDatabase()->all(
+				'SELECT * FROM players ORDER BY nickname'
+			);
+			$elos = ELO::getELORankings($games, $players);
+			echo outputSuccess( array( 'ranking/elo' => $elos) );
+		}
+		
 	}
 	
 	
