@@ -27,13 +27,20 @@ class ELO {
 		else return ELO::kFactorStarting;
 	}
 
+	static function cmp($a, $b) {
+		if ($a['ELO_rating'] == $b['ELO_rating'])
+		return 0;
+		return ($b['ELO_rating'] < $a['ELO_rating']) ? -1 : 1;
+	}
+
 	public static function getELORankings($games, $players) {
+		
+		$nbPlayers = count($players);
 		
 		//set all players to $initELO initially and their game to 0
 		foreach($players as $player)
 		{
-			$elos[$player['player_id']] = ELO::initELO;
-			$games_played[$player['player_id']] = 0;
+			$games_played[$player['player_id']] = 0; // helper array to keep track of game count
 		}
 		
 		foreach($games as $game)
@@ -42,14 +49,15 @@ class ELO {
 			$pl1 = $game['player1_id'];
 			$pl2 = $game['player2_id'];
 
-			//fetch k factors
-			$k1 = ELO::getKFactor($games_played[$pl1], $elos[$pl1]);
-			$k2 = ELO::getKFactor($games_played[$pl2], $elos[$pl2]);
-
-
-			//fetch elos
-			$elo1 = $elos[$pl1];
-			$elo2 = $elos[$pl2];
+			//fetch ELO ratings and k factors
+			foreach($players as $player)
+			{
+				if($player['player_id'] == $pl1) $elo1 = $player['ELO_rating'];
+				if($player['player_id'] == $pl2) $elo2 = $player['ELO_rating'];
+			}
+			
+			$k1 = ELO::getKFactor($games_played[$pl1], $elo1);
+			$k2 = ELO::getKFactor($games_played[$pl2], $elo2);
 
 			//compute expected probability of winning
 			$exp1 = 1.0/(1.0+pow(10.0,($elo2-$elo1)/400.0));
@@ -59,29 +67,36 @@ class ELO {
 			if($game['is_draw']==1)
 			{
 				//adjust elo scores
-				$elos[$pl1] = $elo1 + $k1*(0.5-$exp1);
-				$elos[$pl2] = $elo2 + $k2*(0.5-$exp2);
+				foreach($players as $player)
+				{
+					if($player['player_id'] == $pl1) $elo1 = $elo1 + $k1*(0.5-$exp1);
+					if($player['player_id'] == $pl2) $elo2 = $elo2 + $k2*(0.5-$exp2);
+				}
 			}
 			else
 			{
 				//adjust elo scores
-				$elos[$pl1] = $elo1 + $k1*(1-$exp1);
-				$elos[$pl2] = $elo2 + $k2*(1-$exp2);
+				foreach($players as $player)
+				{
+					if($player['player_id'] == $pl1) $elo1 = $elo1 + $k1*(1-$exp1);
+					if($player['player_id'] == $pl2) $elo2 = $elo2 + $k2*(0-$exp2);
+				}
 			}
 
+			for($i=0; $i<$nbPlayers; $i++)
+			{
+				if($players[$i]['player_id'] == $pl1) $players[$i]['ELO_rating'] = $elo1;
+				if($players[$i]['player_id'] == $pl2) $players[$i]['ELO_rating'] = $elo2;
+			}
 			//adjust number of games to influence k factor maybe
 			$games_played[$pl1]++; 
 			$games_played[$pl2]++; 
 			
 		}	
-		//repackage to mimick other output produced in admin.html
-		foreach($elos as $key=>$value)
-		{
-		$arr = null;
-		$arr[$key] = $value;
-		$output[] = $arr;
-		}
-		return $output;
+		
+		//sort high to low
+		usort($players, "ELO::cmp");
+		return $players;
 	}
 }
 
