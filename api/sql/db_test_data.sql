@@ -1,13 +1,12 @@
 /* POPULATE faction_groups
 ============================================= */
 
-INSERT INTO factiongroups (factiongroup_id, name) VALUES (2,'Empire-group');
-INSERT INTO factiongroups (factiongroup_id, name) VALUES (1,'Alliance-group');
+INSERT INTO factiongroups (factiongroup_id, name) VALUES (1,'Galaxy_Far_Away');
 
 /* POPULATE factions
 ============================================= */
 
-INSERT INTO factions (faction_id, name, factiongroup_id, color, logo) VALUES (2,'Empire',2,'248717','uploads/factions/84935fe3eba50ea4e3d70b7f7964b9c0.png');
+INSERT INTO factions (faction_id, name, factiongroup_id, color, logo) VALUES (2,'Empire',1,'248717','uploads/factions/84935fe3eba50ea4e3d70b7f7964b9c0.png');
 INSERT INTO factions (faction_id, name, factiongroup_id, color, logo) VALUES (1,'Alliance',1,'a90c0c','uploads/factions/81edf7d428e9f21aefab65d440a2c1a1.png');
 
 
