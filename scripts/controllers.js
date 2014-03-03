@@ -43,7 +43,7 @@ rebelLeaguesControllers.controller('playersRankingCtrl', ['$scope', '$http',
 	function($scope, $http) {
 		$http.get('api/ranking').success(function(data) {
 		
-			$scope.players = data.data.players;
+			$scope.players = data.data.ranking;
 			
 			console.log($scope.players);
 			
