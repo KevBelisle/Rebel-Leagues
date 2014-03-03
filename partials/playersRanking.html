@@ -6,4 +6,8 @@
 			<span class="fullname">({{ player.firstname }} {{ player.lastname }})</span>
 		</div>
 		
+		<div class="player_stats">
+			{{ player.games_played }} ({{ player.games_won }}, {{ player.games_tied }}, {{ player.games_lost }}) = {{ player.points }} pts, {{ player.elo_rating | number:0 }}
+		</div>
+		
 	</div>
