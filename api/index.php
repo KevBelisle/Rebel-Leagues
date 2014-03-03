@@ -128,7 +128,7 @@
 				'SELECT * FROM games_history ORDER BY date ASC'
 			);
 			$players = getDatabase()->all(
-				'SELECT *, 1000 AS ELO_rating FROM players_ranking'
+				'SELECT *, 1000 AS elo_rating FROM players_ranking'
 			);
 			$elos = ELO::getELORankings($games, $players);
 			echo outputSuccess( array( 'ranking' => 'elo', 'players' => $elos) );
