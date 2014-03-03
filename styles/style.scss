@@ -2,6 +2,7 @@
 /* IMPORT FRAMELESS */
 @import 'frameless';
 @import 'layout';
+@import 'animations';
 
 /*  FONTS */
 @import url(http://fonts.googleapis.com/css?family=Signika:400,600,300);
@@ -165,6 +166,8 @@ div#wrapper {
 					font-weight: $light_weight;
 					text-align: center;
 					padding: 20px 0 10px 0;
+					text-decoration: none;
+					color: $xdark_color;
 				}
 				a.active {
 					border-bottom: 3px solid $accent_color;
@@ -179,47 +182,46 @@ div#wrapper {
 				div.date {
 					color: $accent_color;
 					font-weight: $medium_weight;
-					font-size: $small_text;
-					text-transform: uppercase;
+					font-size: $normal_text;
 					
 					padding: 20px 20px 10px 20px;
 					border-bottom: 1px solid $accent_color;
 				}
 				
-				div.game {
-					width: 100%;
+				div.game,
+				> div.player {
 					border-bottom: 1px solid $dark_color;
 					
-					div.player {
-						
-						display: table;
-						
-						div.badges {
-							img.badge {
-								width: 45px;
-								height: 45px;
-							}
+					div.playerid {
+						span.nickname {
+							color: $xxdark_color;
+							font-weight: $medium_weight;
 						}
-						div.playerid {
-							span.nickname {
-								color: $xxdark_color;
-								font-weight: $medium_weight;
-							}
-							span.fullname {
-								display: block;
-								font-size: $small_text;
-							}
+						span.fullname {
+							display: block;
+							font-size: $small_text;
 						}
-					}
-				
-					div.player1 {
-					}
-					div.player2 {
 					}
 				}
 				
-				div.date:nth-child(2n),
-				div.game:nth-child(2n) {
+				div.game {
+					padding-right: 40px;
+					
+					div.player {
+						div.badges {
+						}
+					}
+				}
+				
+				> div.player {
+					div.playerid {
+						text-align: center;
+					}
+				}
+				
+				div:nth-child(2n) div.date,
+				div:nth-child(2n) div.game,
+				> div.player:nth-child(2n) {
 					background: $light_color;
 				}
 			}

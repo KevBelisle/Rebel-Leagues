@@ -37,3 +37,16 @@ rebelLeaguesControllers.controller('gamesHistoryCtrl', ['$scope', '$http',
 		});
 	}
 ]);
+
+
+rebelLeaguesControllers.controller('playersRankingCtrl', ['$scope', '$http',
+	function($scope, $http) {
+		$http.get('api/ranking').success(function(data) {
+		
+			$scope.players = data.data.players;
+			
+			console.log($scope.players);
+			
+		});
+	}
+]);
