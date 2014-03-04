@@ -120,15 +120,13 @@ div#wrapper {
 					list-style-type: none;
 					
 					li {
-						margin-bottom: 5px;
+						margin-bottom: 10px;
 						
 						span {
 							box-sizing: border-box;
 							transition: padding-left ease 200ms,
 										padding-right ease 200ms;
 										
-							text-transform: uppercase;
-							font-size: $small_text;
 							color: $dark_color;
 						}
 						
@@ -216,6 +214,7 @@ div#wrapper {
 					div.player {
 						i.winner {
 							color: $accent_color;
+							margin-left: 5px;
 						}
 						div.badges {
 						}
