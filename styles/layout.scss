@@ -55,39 +55,58 @@ div#wrapper { width: $cols4; }
 			nav a { width: 50%; }
 			
 			div#main {
-				div.game,
-				> div.player {
-					width: 100%;
-					padding: 10px;
-				}
-			
 				div.game {
+					width: 100%;
+					padding: 10px 0 10px 10px;
+					display: table;
+					table-layout: fixed;
+					
 					div.player {
-						display: table;
-						width: 50%;
-						float: left;
+						display: table-cell;
+						vertical-align: middle;
 						
-						div.badges {
+						width: 50%;
+						
+						> div {
 							width: 100%;
-							text-align: center;
-							margin-top: 10px;
-							
-							img.badge {
-								width: 40px;
-								height: 40px;
+							display: table;
+						
+							div.badges {
+								width: 100%;
+								text-align: center;
+								margin-top: 10px;
+								font-size: 0;
+								
+								img.badge {
+									width: 40px;
+									height: 40px;
+								}
 							}
-						}
-						div.playerid {
-							width: 100%;
-							text-align: center;
+							div.playerid {
+								width: 100%;
+								text-align: center;
+							}
 						}
 					}
 					
 					div.moreInfo {
+						display: table-cell;
+						vertical-align: middle;
+						
+						i {
+							font-size: $large_text;
+						}
 					}
 				}
 				
+				div.notes {
+					padding: 0 10px 10px 10px;
+				}
+				
 				> div.player {
+					width: 100%;
+					padding: 10px;
+					
 					div.playerid {
 						width: 100%;
 					}
@@ -188,65 +207,71 @@ div#wrapper { width: $cols4; }
 			
 				div#main {
 					
-					> div.player {
-						padding: 20px;
-					}
-					
 					div.game {
+						padding: 20px 0 20px 20px;
 						
 						div.player {
-							div.badges {
-								margin: 0;
-								width: 40%;
-								
-								display: table-cell;
-								vertical-align: middle;
-							
-								img.badge {
-									width: 50px;
-									height: 50px;
+						
+							> div {
+								div.badges {
+									display: table-cell;
 									vertical-align: middle;
+									
+									width: 40%;
+									
+									img.badge {
+										width: 50px;
+										height: 50px;
+									}
 								}
-							}
-							div.playerid {
-								padding: 10px 0;
-								
-								display: table-cell;
-								vertical-align: middle;
-								width: 60%;
+								div.playerid {
+									display: table-cell;
+									vertical-align: middle;
+									
+									width: 60%;
+								}
 							}
 						}
 						div.player1 {
-							div.badges {
-								text-align: left;
-								position: relative;
-								left: -60%;
-							}
-							div.playerid {
-								text-align: right;
-								padding-right: 10px;
-								position: relative;
-								right: -40%;
+							> div {
+								div.badges {
+									text-align: left;
+									position: relative;
+									left: -60%;
+								}
+								div.playerid {
+									text-align: right;
+									padding-right: 10px;
+									position: relative;
+									right: -40%;
+								}
 							}
 						}
 						div.player2 {
-							div.badges {
-								text-align: right;
-								//float: right;
-							}
-							div.playerid {
-								text-align: left;
-								padding-left: 10px;
-								//float: left;
+							> div {
+								div.badges {
+									text-align: right;
+								}
+								div.playerid {
+									text-align: left;
+									padding-left: 10px;
+								}
 							}
 						}
 						
 						div.moreInfo {
 						}
+						
+					}
+					
+					div.notes {
+						padding: 0 20px 20px 20px;
 					}
 					
 				
 					> div.player {
+						padding: 20px 10px 20px 20px;
+						
 						display: table;
 						float: none;
 						

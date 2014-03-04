@@ -183,7 +183,7 @@ BEGIN
 		faction2.name					AS player2_faction_name,
 		faction2.color					AS player2_faction_color,
 		
-		date, is_draw, is_ranked, is_time_runout, is_online
+		date, is_draw, is_ranked, is_time_runout, is_online, notes
 		
 	FROM games
 	LEFT OUTER JOIN	players AS player1 ON games.player1_id = player1.player_id
