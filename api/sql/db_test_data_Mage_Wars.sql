@@ -1,32 +1,33 @@
 /* POPULATE faction_groups
 ============================================= */
 
-INSERT INTO factiongroups (factiongroup_id, name) VALUES (1,'Beastmaster');
-INSERT INTO factiongroups (factiongroup_id, name) VALUES (2,'Priest');
-INSERT INTO factiongroups (factiongroup_id, name) VALUES (3,'Warlord');
-INSERT INTO factiongroups (factiongroup_id, name) VALUES (4,'Forcemaster');
-INSERT INTO factiongroups (factiongroup_id, name) VALUES (5,'Wizard');
-INSERT INTO factiongroups (factiongroup_id, name) VALUES (6,'Druid');
-INSERT INTO factiongroups (factiongroup_id, name) VALUES (7,'Warlock');
-INSERT INTO factiongroups (factiongroup_id, name) VALUES (8,'Necromancer');
 
 
 /* POPULATE factions
 ============================================= */
 
-INSERT INTO factions (faction_id, name, factiongroup_id, color, logo) VALUES(1, 'Straywood Forest', 1, '', 'uploads/factions/4fc615d57869cde839de93529f96f66c.png');
-INSERT INTO factions (faction_id, name, factiongroup_id, color, logo) VALUES(2, 'Johktari', 1, '', 'uploads/factions/55d7145a5473f45cae1dab30f39ab757.png');
-INSERT INTO factions (faction_id, name, factiongroup_id, color, logo) VALUES(3, 'Westlock', 2, '', 'uploads/factions/f6883edd93f07e9f0177433f954a5135.png');
-INSERT INTO factions (faction_id, name, factiongroup_id, color, logo) VALUES(4, 'Malakai', 2, '', 'uploads/factions/493be5af12217fc449073dee53e6b791.png');
-INSERT INTO factions (faction_id, name, factiongroup_id, color, logo) VALUES(5, 'Pellian', 4, '', 'uploads/factions/5cdb4f3933c7ec974f9ef66fcb29831f.png');
-INSERT INTO factions (faction_id, name, factiongroup_id, color, logo) VALUES(6, 'Arraxian Crown', 7, '', 'uploads/factions/77ec843a45098a32e8a29a129aabcffa.png');
-INSERT INTO factions (faction_id, name, factiongroup_id, color, logo) VALUES(7, 'Bloodwave', 3, '', 'uploads/factions/412061162194656905a6109ea2e34e94.png');
-INSERT INTO factions (faction_id, name, factiongroup_id, color, logo) VALUES(8, 'Air Sortilege', 5, '', 'uploads/factions/6c2a92aa4e53e386c5bf8658de388974.png');
-INSERT INTO factions (faction_id, name, factiongroup_id, color, logo) VALUES(9, 'Earth Sortilege', 5, '', 'uploads/factions/2c8e7aa99d7708852e6791c3a6eeef2f.png');
-INSERT INTO factions (faction_id, name, factiongroup_id, color, logo) VALUES(10, 'Fire Sortilege', 5, '', 'uploads/factions/0d0566ed7bc32b79df498f4311bdc229.png');
-INSERT INTO factions (faction_id, name, factiongroup_id, color, logo) VALUES(11, 'Water Sortilege', 5, '', 'uploads/factions/a303a10ecc68afdd4a7b4fd0f5d79187.png');
-INSERT INTO factions (faction_id, name, factiongroup_id, color, logo) VALUES(12, 'Wychwood', 6, '', 'uploads/factions/20aa554893c7f677fa1aaf1e9e4a5f66.png');
-INSERT INTO factions (faction_id, name, factiongroup_id, color, logo) VALUES(13, 'Darkfenne', 7, '', 'uploads/factions/14b22ddbcdbb13e8d9bae05119bd18cd.png');
+INSERT INTO factions (faction_id, name, parent_faction_id, color, logo) VALUES (1,'Beastmaster', NULL, '', NULL);
+INSERT INTO factions (faction_id, name, parent_faction_id, color, logo) VALUES (2,'Priest', NULL, '', NULL);
+INSERT INTO factions (faction_id, name, parent_faction_id, color, logo) VALUES (3,'Warlord', NULL, '', NULL);
+INSERT INTO factions (faction_id, name, parent_faction_id, color, logo) VALUES (4,'Forcemaster', NULL, '', NULL);
+INSERT INTO factions (faction_id, name, parent_faction_id, color, logo) VALUES (5,'Wizard', NULL, '', NULL);
+INSERT INTO factions (faction_id, name, parent_faction_id, color, logo) VALUES (6,'Druid', NULL, '', NULL);
+INSERT INTO factions (faction_id, name, parent_faction_id, color, logo) VALUES (7,'Warlock', NULL, '', NULL);
+INSERT INTO factions (faction_id, name, parent_faction_id, color, logo) VALUES (8,'Necromancer', NULL, '', NULL);
+
+INSERT INTO factions (faction_id, name, parent_faction_id, color, logo) VALUES(9,  'Straywood Forest', 1, '', 'uploads/factions/4fc615d57869cde839de93529f96f66c.png');
+INSERT INTO factions (faction_id, name, parent_faction_id, color, logo) VALUES(10, 'Johktari', 1, '', 'uploads/factions/55d7145a5473f45cae1dab30f39ab757.png');
+INSERT INTO factions (faction_id, name, parent_faction_id, color, logo) VALUES(11, 'Westlock', 2, '', 'uploads/factions/f6883edd93f07e9f0177433f954a5135.png');
+INSERT INTO factions (faction_id, name, parent_faction_id, color, logo) VALUES(12, 'Malakai', 2, '', 'uploads/factions/493be5af12217fc449073dee53e6b791.png');
+INSERT INTO factions (faction_id, name, parent_faction_id, color, logo) VALUES(13, 'Pellian', 4, '', 'uploads/factions/5cdb4f3933c7ec974f9ef66fcb29831f.png');
+INSERT INTO factions (faction_id, name, parent_faction_id, color, logo) VALUES(14, 'Arraxian Crown', 7, '', 'uploads/factions/77ec843a45098a32e8a29a129aabcffa.png');
+INSERT INTO factions (faction_id, name, parent_faction_id, color, logo) VALUES(15, 'Bloodwave', 3, '', 'uploads/factions/412061162194656905a6109ea2e34e94.png');
+INSERT INTO factions (faction_id, name, parent_faction_id, color, logo) VALUES(16, 'Air Sortilege', 5, '', 'uploads/factions/6c2a92aa4e53e386c5bf8658de388974.png');
+INSERT INTO factions (faction_id, name, parent_faction_id, color, logo) VALUES(17, 'Earth Sortilege', 5, '', 'uploads/factions/2c8e7aa99d7708852e6791c3a6eeef2f.png');
+INSERT INTO factions (faction_id, name, parent_faction_id, color, logo) VALUES(18, 'Fire Sortilege', 5, '', 'uploads/factions/0d0566ed7bc32b79df498f4311bdc229.png');
+INSERT INTO factions (faction_id, name, parent_faction_id, color, logo) VALUES(19, 'Water Sortilege', 5, '', 'uploads/factions/a303a10ecc68afdd4a7b4fd0f5d79187.png');
+INSERT INTO factions (faction_id, name, parent_faction_id, color, logo) VALUES(20, 'Wychwood', 6, '', 'uploads/factions/20aa554893c7f677fa1aaf1e9e4a5f66.png');
+INSERT INTO factions (faction_id, name, parent_faction_id, color, logo) VALUES(21, 'Darkfenne', 7, '', 'uploads/factions/14b22ddbcdbb13e8d9bae05119bd18cd.png');
 
 /* POPULATE players
 ============================================= */

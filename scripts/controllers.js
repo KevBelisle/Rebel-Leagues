@@ -1,5 +1,5 @@
 var monthNames = [ "janvier", "février", "mars", "avril", "mai", "juin",
-	"juillet", "août", "septembre", "octobre", "novembre", "decembre" ];
+	"juillet", "août", "septembre", "octobre", "novembre", "décembre" ];
 
 var rebelLeaguesControllers = angular.module('rebelLeaguesControllers', []);
 

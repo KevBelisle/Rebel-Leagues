@@ -37,7 +37,6 @@
 	<div>
 		<ul>
 			<li id='getPlayers'>Get players</li>
-			<li id='getFactiongroups'>Get factiongroups</li>
 			<li id='getFactions'>Get factions</li>
 			<li id='getGames'>Get games</li>
 			<li id='getRanking'>Get default ranking</li>
@@ -45,6 +44,14 @@
 			<li id='getPlayedRanking'>Get played ranking</li>
 			<li id='getPointsRanking'>Get points ranking</li>
 		</ul>
+	</div>
+	
+	<div>
+		<form id="getLogo">
+			<h3>Temp test getLogo</h3>
+			<input type="text" name="faction_id" placeholder="faction_id" />
+			<input type="submit" value="Submit" />
+		</form>
 	</div>
 	
 	<div>
@@ -84,18 +91,10 @@
 	</div>
 	
 	<div>
-		<form id="addFactiongroup">
-			<h3>Add factiongroup</h3>
-			<input type="text" name="name" placeholder="name" />
-			<input type="submit" value="Submit" />
-		</form>
-	</div>
-	
-	<div>
-		<form id="addFaction" enctype="multipart/form-data">
+		<form id="addFaction">
 			<h3>Add faction</h3>
 			<input type="text" name="name" placeholder="name" />
-			<input type="text" name="factiongroup_id" placeholder="factiongroup_id" />
+			<input type="text" name="parent_faction_id" placeholder="parent_faction_id" />
 			<input type="text" name="color" placeholder="color" />
 			Logo: <input name="logo" type="file" />
 			<input type="submit" value="Submit" />
@@ -130,12 +129,6 @@
 			});
 		});
 	
-		$("#getFactiongroups").click( function () {
-			$.get("api/factiongroups", function (data) {
-				$("#result").html(data);
-			});
-		});
-	
 		$("#getFactions").click( function () {
 			$.get("api/factions", function (data) {
 				$("#result").html(data);
@@ -163,7 +156,7 @@
 		});
 		
 		$("#getPlayedRanking").click( function () {
-			$.get("api/ranking/played", function (data) {
+			$.get("api/ranking/games_played", function (data) {
 				$("#result").html(data);
 			});
 		});
@@ -175,7 +168,13 @@
 		});
 		
 		
+		$("#getLogo").submit( function () {
+			var faction_id = $("#getLogo input[name=faction_id]").val();
+			$("#result").html( "<img src='api/factions/" + faction_id + "/logo' />" );
+			return false;
+		});
 		
+
 		$("#login").submit( function () {
 			$.post(
 				"api/login",
@@ -220,16 +219,6 @@
 			return false;
 		});
 		
-		$("#addFactiongroup").submit( function () {
-			$.post(
-				"api/factiongroups",
-				$("#addFactiongroup").serialize(),
-				function (data) {
-					$("#result").html(data);
-				}
-			);
-			return false;
-		});
 		
 		var factionLogoFile = [];
 		$('#addFaction input[name=logo]').on('change', function(event) {
@@ -245,7 +234,7 @@
 			});
 			
 			data.append( "name", $('#addFaction input[name=name]').val() );
-			data.append( "factiongroup_id", $('#addFaction input[name=factiongroup_id]').val() );
+			data.append( "parent_faction_id", $('#addFaction input[name=parent_faction_id]').val() );
 			data.append( "color", $('#addFaction input[name=color]').val() );
 			
 			$.ajax({
@@ -270,6 +259,7 @@
 			
 			return false;
 		});
+		
 		
 		$("#addGame").submit( function () {
 			$.post(
