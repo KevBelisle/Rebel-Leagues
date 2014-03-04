@@ -250,7 +250,7 @@ class Admin {
 				$_SESSION['username'] = $dbUser['username'];
 				$_SESSION['tier'] = $dbUser['tier'];
 				// Login successful.
-				echo outputSuccess(array( 'login' => $dbUser ));
+				echo outputSuccess(array( 'username' => $_SESSION['username'], 'tier' => $_SESSION['tier'] ));
 				
 			} else {
 				echo outputError( array( 'error' => 'Nom d\'utilisateur ou mot de passe invalid.' ) );
@@ -266,7 +266,13 @@ class Admin {
 	
 	public static function logout() {
 		sec_session_start();
-		$session_name = session_name();
+		
+		if ( array_key_exists('username', $_SESSION) ) {
+			$ex_username = $_SESSION['username'];
+		} else {
+			$ex_username = "";
+		}
+		
 		// Unset all session values 
 		$_SESSION = array();
 		// get session parameters 
@@ -277,7 +283,7 @@ class Admin {
 		session_destroy();
 		
 		// Logout successful.
-		echo outputSuccess(array( 'logout' => $session_name ));
+		echo outputSuccess(array( 'logout' => $ex_username ));
 	}
 	
 	
