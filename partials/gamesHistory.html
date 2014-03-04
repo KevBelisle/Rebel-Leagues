@@ -14,7 +14,7 @@
 						<span class="fullname">({{ game.player1_firstname }} {{ game.player1_lastname }})</span>
 					</div>
 					<div class="player1 badges">
-						<img class="badge" src="api/factions/{{ game.player1_faction_id }}/logo" tooltip="{{ game.player1_parent_faction_name }} : {{ game.player1_faction_name }}" />
+						<img class="badge" src="api/factions/{{ game.player1_faction_id }}/logo" tooltip="{{ game.player1_parent_faction_name }}{{ game.player1_parent_faction_name | iif : ' : ' : '' }}{{ game.player1_faction_name }}" />
 					</div>
 				</div>
 			</div>
@@ -26,7 +26,7 @@
 						<span class="fullname">({{ game.player2_firstname }} {{ game.player2_lastname }})</span>
 					</div>
 					<div class="player2 badges">
-						<img class="badge" src="api/factions/{{ game.player2_faction_id }}/logo" tooltip="{{ game.player1_parent_faction_name }} : {{ game.player2_faction_name }}" />
+						<img class="badge" src="api/factions/{{ game.player2_faction_id }}/logo" tooltip="{{ game.player2_parent_faction_name }}{{ game.player2_parent_faction_name | iif : ' : ' : '' }}{{ game.player2_faction_name }}" />
 					</div>
 				</div>
 			</div>
