@@ -21,8 +21,9 @@
 	getRoute()->get('/factiongroups', array('League', 'getFactiongroups'));
 	getRoute()->get('/factions', array('League', 'getFactions'));
 	getRoute()->get('/games', array('League', 'getGamesHistory'));
-	getRoute()->get('/ranking', array('League', 'getPlayersRanking'));
-	getRoute()->get('/ranking/elo', array('League', 'getELORankings'));
+	
+	getRoute()->get('/ranking', array('League', 'getRanking'));
+	getRoute()->get('/ranking/(games_played|elo_rating|points)', array('League', 'getRanking'));
 	
 	getRoute()->post('/login', array('Admin', 'login'));
 	getRoute()->get('/logout', array('Admin', 'logout'));
@@ -69,6 +70,7 @@
 	
 	
 	class League {
+		
 		public static function nope() {
 			echo "Nope.";
 		}
@@ -114,23 +116,57 @@
 			echo outputSuccess( array( 'games' => $games ) );
 		}
 		
-		public static function getPlayersRanking() {
-			$players = getDatabase()->all(
-				'SELECT * FROM players_ranking ORDER BY games_played DESC'
-			);
-			echo outputSuccess( array( 'ranking' => $players ) );
-		}
 		
-		public static function getELORankings() {
+		public static $pointsDistribution = [
+			'win' => 5,
+			'draw' => 3,
+			'loss' => 1
+		];
+		
+		public static function getRanking($sort_method = 'default') {
+		
 			$games = getDatabase()->all(
 				'SELECT * FROM games_history ORDER BY date ASC'
 			);
 			$players = getDatabase()->all(
-				'SELECT *, 1000 AS ELO_rating FROM players'
+				'SELECT *,
+					1000 AS elo_rating,
+					'.self::$pointsDistribution['win'].'*games_won + '.self::$pointsDistribution['draw'].'*games_tied + '.self::$pointsDistribution['loss'].'*games_lost AS points
+					FROM players_ranking'
 			);
-			$elos = ELO::getELORankings($games, $players);
-			echo outputSuccess( array( 'ranking/elo' => $elos) );
+			$players = ELO::getELORankings($games, $players);
+			
+			if ($sort_method == 'default') { $sort_method = 'points'; }
+			
+			switch ($sort_method) {
+				case 'elo_rating':
+					$sortList = [];
+					foreach ($players as $key => $player) {
+						$sortList[$key]  = $player['elo_rating'];
+					}
+					array_multisort($sortList, SORT_DESC, $players);
+					break;
+					
+				case 'points':
+					$sortList = [];
+					foreach ($players as $key => $player) {
+						$sortList[$key]  = $player['points'];
+					}
+					array_multisort($sortList, SORT_DESC, $players);
+					break;
+					
+				case 'games_played':
+					$sortList = [];
+					foreach ($players as $key => $player) {
+						$sortList[$key]  = $player['games_played'];
+					}
+					array_multisort($sortList, SORT_DESC, $players);
+					break;
+			}
+			
+			echo outputSuccess( array( 'ranking' => $sort_method, 'players' => $players) );
 		}
+		
 		
 	}
 	

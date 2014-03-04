@@ -28,9 +28,9 @@ class ELO {
 	}
 
 	static function cmp($a, $b) {
-		if ($a['ELO_rating'] == $b['ELO_rating'])
+		if ($a['elo_rating'] == $b['elo_rating'])
 		return 0;
-		return ($b['ELO_rating'] < $a['ELO_rating']) ? -1 : 1;
+		return ($b['elo_rating'] < $a['elo_rating']) ? -1 : 1;
 	}
 
 	public static function getELORankings($games, $players) {
@@ -52,8 +52,8 @@ class ELO {
 			//fetch ELO ratings and k factors
 			foreach($players as $player)
 			{
-				if($player['player_id'] == $pl1) $elo1 = $player['ELO_rating'];
-				if($player['player_id'] == $pl2) $elo2 = $player['ELO_rating'];
+				if($player['player_id'] == $pl1) $elo1 = $player['elo_rating'];
+				if($player['player_id'] == $pl2) $elo2 = $player['elo_rating'];
 			}
 			
 			$k1 = ELO::getKFactor($games_played[$pl1], $elo1);
@@ -85,8 +85,8 @@ class ELO {
 
 			for($i=0; $i<$nbPlayers; $i++)
 			{
-				if($players[$i]['player_id'] == $pl1) $players[$i]['ELO_rating'] = $elo1;
-				if($players[$i]['player_id'] == $pl2) $players[$i]['ELO_rating'] = $elo2;
+				if($players[$i]['player_id'] == $pl1) $players[$i]['elo_rating'] = $elo1;
+				if($players[$i]['player_id'] == $pl2) $players[$i]['elo_rating'] = $elo2;
 			}
 			//adjust number of games to influence k factor maybe
 			$games_played[$pl1]++; 
