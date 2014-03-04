@@ -187,15 +187,14 @@ class Admin {
 			if( !array_key_exists($field, $array) ) {
 				$missingFields[] = $field;
 			}
-			if( array_key_exists('take', $_GET) ) {
-				$take = $_GET['take'];
-			}
-			
-			$games = getDatabase()->all(
-				'SELECT * FROM games_history ORDER BY date DESC LIMIT :skip, :take',
-				array(':skip' => $skip, ':take' => $take)
-			);
 		}
+		
+		if( count($missingFields) > 0 ) {
+			echo outputError( array( 'missingFields' => $missingFields ) );
+			exit();
+		}
+		
+		return true;
 	}
 
 	
