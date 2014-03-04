@@ -206,8 +206,6 @@ div#wrapper {
 				}
 				
 				div.game {
-					padding-right: 40px;
-					
 					div.player {
 						i.winner {
 							color: $accent_color;
@@ -218,15 +216,20 @@ div#wrapper {
 					
 					div.moreInfo {
 						width: 40px;
-						float: left;
 						margin-right: -40px;
 						text-align: center;
 						
 						i {
 							display: block;
-							font-size: 14px;
 							color: $xdark_color;
 							margin: 0 0 5px 0;
+						}
+						i.fa-rotate-45 {
+							position: relative;
+							top: -3px;
+						}
+						i:hover {
+							color: $accent_color;
 						}
 					}
 				}
