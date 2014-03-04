@@ -290,7 +290,7 @@ BEGIN
         COALESCE(SUM(games_split.is_win), 0) AS games_won,
         COALESCE(SUM(games_split.is_draw), 0) AS games_tied,
         COALESCE(SUM(games_split.is_loss), 0) AS games_lost,
-        COALESCE(COUNT(*),0) AS games_played
+        COALESCE(SUM(games_split.is_win), 0) + COALESCE(SUM(games_split.is_draw), 0) + COALESCE(SUM(games_split.is_loss), 0) AS games_played
 	FROM  games_split games_split
 		RIGHT JOIN players players on games_split.player_id = players.player_id
 	GROUP BY players.player_id;
