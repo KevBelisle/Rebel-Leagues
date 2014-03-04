@@ -19,6 +19,7 @@ $small_text: 0.8em;
 $normal_text: 0.8em;
 $large_text: 1.2em;
 
+
 /*  COLORS */
 
 $xlight_color: #f6f6f6;
@@ -30,6 +31,9 @@ $xxdark_color: #141414;
 $accent_color: #6652c8;
 
 
+/*  OTHER CONSTANTS */
+$background_image: url("images/background.png");
+$background_color: #0c0c0c;
 
 /* CLEAR FIX */
 .clear:before,
@@ -48,8 +52,8 @@ $accent_color: #6652c8;
 /*  GENERAL STYLING */
 
 body {
-	background-color: #0c0c0c;
-	background-image: url("images/background.png");
+	background-color: $background_color;
+	background-image: $background_image;
 	
 	font-family: $main_font;
 	font-weight: $light_weight;
@@ -116,15 +120,13 @@ div#wrapper {
 					list-style-type: none;
 					
 					li {
-						margin-bottom: 5px;
+						margin-bottom: 10px;
 						
 						span {
 							box-sizing: border-box;
 							transition: padding-left ease 200ms,
 										padding-right ease 200ms;
 										
-							text-transform: uppercase;
-							font-size: $small_text;
 							color: $dark_color;
 						}
 						
@@ -212,6 +214,7 @@ div#wrapper {
 					div.player {
 						i.winner {
 							color: $accent_color;
+							margin-left: 5px;
 						}
 						div.badges {
 						}
@@ -292,7 +295,62 @@ div#wrapper {
 		}
 	}
 
-
+div.tooltip {
+	position: absolute;
+	margin-top: -5px;
+	
+	font-size: $base_font_size;
+	
+	background-color: $xlight_color;
+	border: 1px solid $dark_color;
+	border-bottom: 1px solid $accent_color;
+	border-radius: 1px;
+	
+	div.tooltip-inner {
+		font-size: $small_text;
+		color: $xdark_color;
+		text-align: center;
+		
+		padding: 10px;
+		
+		div.tooltip-content {
+		}
+	}
+	
+	div.tooltip-arrow {
+		width: 5px;
+		height: 5px;
+		border-top: 5px inset $accent_color;
+		border-left: 5px inset transparent;
+		border-right: 5px inset transparent;
+		
+		position: absolute;
+		bottom: -5px;
+		left: 50%;
+		margin-left: -5px;
+	}
+}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 
 

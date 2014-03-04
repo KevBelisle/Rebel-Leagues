@@ -28,6 +28,8 @@ rebelLeaguesControllers.controller('gamesHistoryCtrl', ['$scope', '$http',
 					$scope.games.push( { is_group_title: true, date_string: game.date_string } );
 				}
 				
+				game.showNotes = false;
+				
 				$scope.games.push( game );
 				
 			}
