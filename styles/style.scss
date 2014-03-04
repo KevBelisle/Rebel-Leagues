@@ -180,6 +180,10 @@ div#wrapper {
 				background: $xlight_color;
 				color: $xdark_color;
 				
+				> div {
+					border-bottom: 1px solid $dark_color;
+				}
+				
 				div.date {
 					color: $accent_color;
 					font-weight: $medium_weight;
@@ -191,7 +195,6 @@ div#wrapper {
 				
 				div.game,
 				> div.player {
-					border-bottom: 1px solid $dark_color;
 					
 					div.playerid {
 						span.nickname {
@@ -228,10 +231,15 @@ div#wrapper {
 							position: relative;
 							top: -3px;
 						}
-						i:hover {
+						i:hover,
+						i.active {
 							color: $accent_color;
 						}
 					}
+				}
+				
+				div.notes {
+					font-size: $small_text;
 				}
 				
 				> div.player {
@@ -262,9 +270,7 @@ div#wrapper {
 					}
 				}
 				
-				div:nth-child(2n) div.date,
-				div:nth-child(2n) div.game,
-				> div.player:nth-child(2n) {
+				> div:nth-child(2n) {
 					background: $light_color;
 				}
 			}
