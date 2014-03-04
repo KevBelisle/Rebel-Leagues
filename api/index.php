@@ -378,7 +378,7 @@ class Admin {
 		self::checkFields( array('player1_id', 'player1_faction_id', 'player2_id', 'player2_faction_id', 'date', 'is_draw', 'is_ranked', 'is_time_runout', 'is_online'), $_POST );
 		
 		try {
-			$game_id = getDatabase()->execute('INSERT INTO games (player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online) VALUES (:player1_id, :player1_faction_id, :player2_id, :player2_faction_id, :date, :is_draw, :is_ranked, :is_time_runout, :is_online)',
+			$game_id = getDatabase()->execute('INSERT INTO games (player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES (:player1_id, :player1_faction_id, :player2_id, :player2_faction_id, :date, :is_draw, :is_ranked, :is_time_runout, :is_online, :notes)',
 			array(
 			':player1_id' => $_POST['player1_id'],
 			':player1_faction_id' => $_POST['player1_faction_id'],
@@ -388,7 +388,8 @@ class Admin {
 			':is_draw' => $_POST['is_draw'],
 			':is_ranked' => $_POST['is_ranked'],
 			':is_time_runout' => $_POST['is_time_runout'],
-			':is_online' => $_POST['is_online']
+			':is_online' => $_POST['is_online'],
+			':notes' => $_POST['notes']
 			)
 			);
 			echo outputSuccess( array( 'game_id' => $game_id ) );
