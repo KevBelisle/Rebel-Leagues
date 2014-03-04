@@ -195,7 +195,6 @@ class Admin {
 				'SELECT * FROM games_history ORDER BY date DESC LIMIT :skip, :take',
 				array(':skip' => $skip, ':take' => $take)
 			);
-			echo outputSuccess( array( 'games' => $games ) );
 		}
 	}
 
@@ -220,13 +219,16 @@ class Admin {
 						exit;
 					}
 				} else {
-					return false;
+					header("HTTP/1.1 401 Unauthorized");
+					exit;
 				}
 			} else {
-				return false;
+				header("HTTP/1.1 401 Unauthorized");
+				exit;
 			}
 		} else {
-			return false;
+			header("HTTP/1.1 401 Unauthorized");
+			exit;
 		}
 	}
 	
