@@ -1,8 +1,3 @@
-/* POPULATE faction_groups
-============================================= */
-
-
-
 /* POPULATE factions
 ============================================= */
 
@@ -55,7 +50,7 @@ INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_
 INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(8, 2, 14, 3, 21, '2013-12-11 21:00:00', 0, 1, 0, 0, NULL);
 INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(9, 2, 14, 5, 9, '2013-12-16 19:30:00', 0, 1, 0, 0, NULL);
 INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(10, 5, 14, 2, 21, '2013-12-16 20:30:00', 0, 1, 0, 0, NULL);
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(11, 5, 8, 2, 14, '2013-12-16 21:30:00', 0, 1, 0, 0, NULL);
+INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(11, 5, 11, 2, 14, '2013-12-16 21:30:00', 0, 1, 0, 0, NULL);
 INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(12, 5, 11, 2, 14, '2013-12-16 22:30:00', 0, 1, 0, 0, NULL);
 INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(13, 3, 16, 2, 14, '2014-01-03 20:00:00', 0, 1, 0, 0, NULL);
 INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(14, 6, 15, 4, 20, '2014-01-14 20:00:00', 0, 1, 0, 0, NULL);
