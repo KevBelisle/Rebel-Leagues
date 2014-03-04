@@ -10,7 +10,6 @@ BEGIN
 	
 	CREATE TABLE IF NOT EXISTS admins ( admin_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 	CREATE TABLE IF NOT EXISTS players ( player_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ) ENGINE=InnoDB DEFAULT CHARSET=utf8;  
-	CREATE TABLE IF NOT EXISTS factiongroups ( factiongroup_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 	CREATE TABLE IF NOT EXISTS factions ( faction_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 	CREATE TABLE IF NOT EXISTS games ( game_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -54,22 +53,6 @@ BEGIN
 	
 	ALTER TABLE players ADD UNIQUE (nickname);
 	
-	/* CREATE factiongroups COLUMNS
-	============================================= */
-	
-	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'factiongroups' AND column_name = 'name' ) = 0 THEN
-		ALTER TABLE factiongroups ADD name VARCHAR(40) NOT NULL;
-	END IF;
-	
-	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'factiongroups' AND column_name = 'color' ) = 0 THEN
-		ALTER TABLE factiongroups ADD color VARCHAR(6) NOT NULL;
-	END IF;
-	
-	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'factiongroups' AND column_name = 'logo' ) = 0 THEN
-		ALTER TABLE factiongroups ADD logo VARCHAR(60) NOT NULL;
-	END IF;
-	
-	ALTER TABLE factiongroups ADD UNIQUE (name);
 	
 	/* CREATE factions COLUMNS
 	============================================= */
@@ -78,23 +61,23 @@ BEGIN
 		ALTER TABLE factions ADD name VARCHAR(40) NOT NULL;
 	END IF;
 	
-	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'factions' AND column_name = 'factiongroup_id' ) = 0 THEN
-		ALTER TABLE factions ADD factiongroup_id INT NOT NULL;
+	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'factions' AND column_name = 'parent_faction_id' ) = 0 THEN
+		ALTER TABLE factions ADD parent_faction_id INT;
 	END IF;
 	
 	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'factions' AND column_name = 'color' ) = 0 THEN
-		ALTER TABLE factions ADD color VARCHAR(6) NOT NULL;
+		ALTER TABLE factions ADD color VARCHAR(6);
 	END IF;
 	
 	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'factions' AND column_name = 'logo' ) = 0 THEN
-		ALTER TABLE factions ADD logo VARCHAR(60) NOT NULL;
+		ALTER TABLE factions ADD logo VARCHAR(60);
 	END IF;
 	
 	ALTER TABLE factions ADD UNIQUE (name);
 	
 	ALTER TABLE factions ADD
-		FOREIGN KEY (factiongroup_id)
-		REFERENCES factiongroups(factiongroup_id)
+		FOREIGN KEY (parent_faction_id)
+		REFERENCES factions(faction_id)
 		ON DELETE CASCADE
 		ON UPDATE CASCADE;
 	
@@ -178,8 +161,12 @@ BEGIN
 		player1.nickname				AS player1_nickname,
 		player1.firstname				AS player1_firstname,
 		player1.lastname				AS player1_lastname,
-		factiongroup1.factiongroup_id 	AS player1_factiongroup_id,
-		factiongroup1.name 				AS player1_factiongroup_name,
+		
+		parentfaction1.faction_id 		AS player1_parent_faction_id,
+		parentfaction1.name 			AS player1_parent_faction_name,
+		parentfaction1.color 			AS player1_parent_faction_color,
+		parentfaction1.logo 			AS player1_parent_faction_logo,
+		
 		games.player1_faction_id		AS player1_faction_id,
 		faction1.name					AS player1_faction_name,
 		faction1.color					AS player1_faction_color,
@@ -189,8 +176,12 @@ BEGIN
 		player2.nickname 				AS player2_nickname,
 		player2.firstname				AS player2_firstname,
 		player2.lastname				AS player2_lastname,
-		factiongroup2.factiongroup_id 	AS player2_factiongroup_id,
-		factiongroup2.name 				AS player2_factiongroup_name,
+		
+		parentfaction2.faction_id 		AS player2_parent_faction_id,
+		parentfaction2.name 			AS player2_parent_faction_name,
+		parentfaction2.color 			AS player2_parent_faction_color,
+		parentfaction2.logo 			AS player2_parent_faction_logo,
+		
 		games.player2_faction_id		AS player2_faction_id,
 		faction2.name					AS player2_faction_name,
 		faction2.color					AS player2_faction_color,
@@ -198,17 +189,22 @@ BEGIN
 		
 		date, is_draw, is_ranked, is_time_runout, is_online
 		
-	FROM 		factiongroups AS factiongroup1, 
-				factiongroups AS factiongroup2, 
-				games
-				
-		LEFT JOIN players player1 ON games.player1_id = player1.player_id
-		LEFT JOIN players player2 ON games.player2_id = player2.player_id
-		LEFT JOIN factions faction1 ON games.player1_faction_id = faction1.faction_id
-		LEFT JOIN factions faction2 ON games.player2_faction_id = faction2.faction_id
+	FROM 		games, 
+				players AS player1,
+				players AS player2,
+				factions AS faction1,
+				factions AS faction2,
+				factions AS parentfaction1, 
+				factions AS parentfaction2
+	WHERE 	parentfaction1.faction_id = faction1.parent_faction_id
+	AND		parentfaction2.faction_id = faction2.parent_faction_id
+	AND		games.player1_id = player1.player_id
+	AND 	games.player2_id = player2.player_id
+	AND		games.player1_faction_id = faction1.faction_id
+	AND		games.player2_faction_id = faction2.faction_id;
 	
-	WHERE 	factiongroup1.factiongroup_id = faction1.factiongroup_id
-	AND 	factiongroup2.factiongroup_id = faction2.factiongroup_id;
+	
+	
 	
 	/* CREATE games_split VIEW
 	============================================= */
@@ -218,7 +214,7 @@ BEGIN
 		SELECT
 			game_id,
 			player1_id AS player_id,
-			factions.factiongroup_id AS factiongroup_id,
+			factions.parent_faction_id AS parent_faction_id,
 			player1_faction_id AS faction_id,
 			date,
 			1 AS is_win,
@@ -227,15 +223,15 @@ BEGIN
 			is_ranked,
 			is_time_runout,
 			is_online
-		FROM games, factions
-		WHERE is_draw = 0 AND factions.faction_id = games.player1_faction_id
+		FROM games, factions, factions AS parent
+		WHERE is_draw = 0 AND factions.faction_id = games.player1_faction_id AND factions.parent_faction_id = parent.faction_id
 	)
 	UNION ALL
 	(
 		SELECT
 			game_id,
 			player2_id AS player_id,
-			factions.factiongroup_id AS factiongroup_id,
+			factions.parent_faction_id AS parent_faction_id,
 			player2_faction_id AS faction_id,
 			date,
 			0 AS is_win,
@@ -244,15 +240,15 @@ BEGIN
 			is_ranked,
 			is_time_runout,
 			is_online
-		FROM games, factions
-		WHERE is_draw = 0 AND factions.faction_id = games.player2_faction_id
+		FROM games, factions, factions AS parent
+		WHERE is_draw = 0 AND factions.faction_id = games.player2_faction_id AND factions.parent_faction_id = parent.faction_id
 	)
 	UNION ALL
 	(
 		SELECT
 			game_id,
 			player1_id AS player_id,
-			factions.factiongroup_id AS factiongroup_id,
+			factions.parent_faction_id AS parent_faction_id,
 			player1_faction_id AS faction_id,
 			date,
 			0 AS is_win,
@@ -261,15 +257,15 @@ BEGIN
 			is_ranked,
 			is_time_runout,
 			is_online
-		FROM games, factions
-		WHERE is_draw = 1 AND factions.faction_id = games.player1_faction_id
+		FROM games, factions, factions AS parent
+		WHERE is_draw = 1 AND factions.faction_id = games.player1_faction_id AND factions.parent_faction_id = parent.faction_id
 	)
 	UNION ALL
 	(
 		SELECT
 			game_id,
 			player2_id AS player_id,
-			factions.factiongroup_id AS factiongroup_id,
+			factions.parent_faction_id AS parent_faction_id,
 			player2_faction_id AS faction_id,
 			date,
 			0 AS is_win,
@@ -278,8 +274,8 @@ BEGIN
 			is_ranked,
 			is_time_runout,
 			is_online
-		FROM games, factions
-		WHERE is_draw = 1 AND factions.faction_id = games.player2_faction_id
+		FROM games, factions, factions AS parent
+		WHERE is_draw = 1 AND factions.faction_id = games.player2_faction_id AND factions.parent_faction_id = parent.faction_id
 	);
 
 	
