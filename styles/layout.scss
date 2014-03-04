@@ -88,6 +88,9 @@ div#wrapper { width: $cols4; }
 				}
 				
 				> div.player {
+					div.playerid {
+						width: 100%;
+					}
 					div.player_stats {
 						width: 100%;
 						text-align: center;
@@ -141,14 +144,6 @@ div#wrapper { width: $cols4; }
 		
 		div#left {
 			width: $cols7;
-			
-			div#main {
-				> div.player {
-					div.playerid {
-						width: 30%;
-					}
-				}
-			}
 		}
 }
 			
@@ -192,9 +187,9 @@ div#wrapper { width: $cols4; }
 			section {
 			
 				div#main {
-					div.game,
+					
 					> div.player {
-						padding: 10px;
+						padding: 20px;
 					}
 					
 					div.game {
@@ -247,6 +242,19 @@ div#wrapper { width: $cols4; }
 						}
 						
 						div.moreInfo {
+						}
+					}
+					
+				
+					> div.player {
+						div.playerid {
+							width: 30%;
+							float: left;
+						}
+						div.player_stats {
+							width: 70%;
+							float: left;
+							margin-top: 0;
 						}
 					}
 				}

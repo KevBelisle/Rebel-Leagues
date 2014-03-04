@@ -23,7 +23,7 @@
 	getRoute()->get('/games', array('League', 'getGamesHistory'));
 	
 	getRoute()->get('/ranking', array('League', 'getRanking'));
-	getRoute()->get('/ranking/(played|elo|points)', array('League', 'getRanking'));
+	getRoute()->get('/ranking/(games_played|elo_rating|points)', array('League', 'getRanking'));
 	
 	getRoute()->post('/login', array('Admin', 'login'));
 	getRoute()->get('/logout', array('Admin', 'logout'));
@@ -129,14 +129,17 @@
 				'SELECT * FROM games_history ORDER BY date ASC'
 			);
 			$players = getDatabase()->all(
-				'SELECT *, 1000 AS elo_rating FROM players_ranking'
+				'SELECT *,
+					1000 AS elo_rating,
+					'.self::$pointsDistribution['win'].'*games_won + '.self::$pointsDistribution['draw'].'*games_tied + '.self::$pointsDistribution['loss'].'*games_lost AS points
+					FROM players_ranking'
 			);
 			$players = ELO::getELORankings($games, $players);
 			
-			if ($sort_method == 'default') { $sort_method = 'elo' }
+			if ($sort_method == 'default') { $sort_method = 'elo_rating'; }
 			
 			switch ($sort_method) {
-				case 'elo':
+				case 'elo_rating':
 					$sortList = [];
 					foreach ($players as $key => $player) {
 						$sortList[$key]  = $player['elo_rating'];
@@ -152,7 +155,7 @@
 					array_multisort($sortList, SORT_DESC, $players);
 					break;
 					
-				case 'played':
+				case 'games_played':
 					$sortList = [];
 					foreach ($players as $key => $player) {
 						$sortList[$key]  = $player['games_played'];
@@ -160,28 +163,9 @@
 					array_multisort($sortList, SORT_DESC, $players);
 					break;
 			}
+			
+			echo outputSuccess( array( 'ranking' => $sort_method, 'players' => $players) );
 		}
-		
-		public static function getEloRanking() {
-			echo outputSuccess( array( 'ranking' => 'elo', 'players' => $elos) );
-		}
-		
-		public static function getPlayedRanking() {
-			$players = getDatabase()->all(
-				'SELECT * FROM players_ranking ORDER BY games_played DESC'
-			);
-			echo outputSuccess( array( 'ranking' => 'played', 'players' => $players ) );
-		}
-		
-		public static function getPointsRanking() {
-			// This will eventually be configured in DB
-
-			$players = getDatabase()->all(
-				'SELECT *, '.self::$pointsDistribution['win'].'*games_won + '.self::$pointsDistribution['draw'].'*games_tied + '.self::$pointsDistribution['loss'].'*games_lost AS points FROM players_ranking ORDER BY points DESC'
-			);
-			echo outputSuccess( array( 'ranking' => 'points', 'players' => $players ) );
-		}
-		
 		
 		
 	}
