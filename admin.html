@@ -45,6 +45,14 @@
 	</div>
 	
 	<div>
+		<form id="getLogo">
+			<h3>Temp test getLogo</h3>
+			<input type="text" name="faction_id" placeholder="faction_id" />
+			<input type="submit" value="Submit" />
+		</form>
+	</div>
+	
+	<div>
 		<form id="login">
 			<h3>Login</h3>
 			<input type="text" name="username" placeholder="username" />
@@ -84,17 +92,9 @@
 		<form id="addFaction">
 			<h3>Add faction</h3>
 			<input type="text" name="name" placeholder="name" />
-			<input type="text" name="factiongroup_id" placeholder="factiongroup_id" />
+			<input type="text" name="parent_faction_id" placeholder="parent_faction_id" />
 			<input type="text" name="color" placeholder="color" />
 			Logo: <input name="logo" type="file" />
-			<input type="submit" value="Submit" />
-		</form>
-	</div>
-	
-	<div>
-		<form id="getLogo" enctype="multipart/form-data">
-			<h3>Temp test getLogo</h3>
-			<input type="text" name="faction_id" placeholder="faction_id" />
 			<input type="submit" value="Submit" />
 		</form>
 	</div>
@@ -201,16 +201,6 @@
 			return false;
 		});
 		
-		$("#addFactiongroup").submit( function () {
-			$.post(
-				"api/factiongroups",
-				$("#addFactiongroup").serialize(),
-				function (data) {
-					$("#result").html(data);
-				}
-			);
-			return false;
-		});
 		
 		var factionLogoFile = [];
 		$('#addFaction input[name=logo]').on('change', function(event) {
@@ -226,7 +216,7 @@
 			});
 			
 			data.append( "name", $('#addFaction input[name=name]').val() );
-			data.append( "factiongroup_id", $('#addFaction input[name=factiongroup_id]').val() );
+			data.append( "parent_faction_id", $('#addFaction input[name=parent_faction_id]').val() );
 			data.append( "color", $('#addFaction input[name=color]').val() );
 			
 			$.ajax({
@@ -251,6 +241,7 @@
 			
 			return false;
 		});
+		
 		
 		$("#addGame").submit( function () {
 			$.post(

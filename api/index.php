@@ -18,7 +18,6 @@ EpiDatabase::employ('mysql', $db["database"], $db["host"], $db["username"], $db[
 getRoute()->get('/', array('League', 'nope'));
 
 getRoute()->get('/players', array('League', 'getPlayers'));
-getRoute()->get('/factiongroups', array('League', 'getFactiongroups'));
 getRoute()->get('/factions', array('League', 'getFactions'));
 getRoute()->get('/games', array('League', 'getGamesHistory'));
 getRoute()->get('/ranking', array('League', 'getPlayersRanking'));
@@ -32,7 +31,6 @@ getRoute()->get('/admins', array('Admin', 'getAdmins'));
 
 getRoute()->post('/admins', array('Admin', 'addAdmin'));
 getRoute()->post('/players', array('Admin', 'addPlayer'));
-getRoute()->post('/factiongroups', array('Admin', 'addFactiongroup'));
 getRoute()->post('/factions', array('Admin', 'addFaction'));
 getRoute()->post('/games', array('Admin', 'addGame'));
 
@@ -80,14 +78,6 @@ class League {
 		'SELECT * FROM players ORDER BY nickname'
 		);
 		echo outputSuccess( array( 'players' => $players ) );
-	}
-	
-	
-	public static function getFactiongroups() {
-		$factions = getDatabase()->all(
-		'SELECT * FROM factiongroups ORDER BY name'
-		);
-		echo outputSuccess( array( 'factiongroups' => $factions ) );
 	}
 	
 	
@@ -304,23 +294,9 @@ class Admin {
 	}
 	
 	
-	public static function addFactiongroup() {
-		self::checkLogin(3);
-		self::checkFields( array('name'), $_POST );
-		
-		try {
-			$factiongroup_id = getDatabase()->execute('INSERT INTO factiongroups (name) VALUES(:name)', array(':name' => $_POST['name']) );
-			echo outputSuccess( array( 'factiongroup_id' => $factiongroup_id ) );
-			
-		} catch (Exception $e) {
-			echo outputError($e->getMessage());
-		}
-	}
-	
-	
 	public static function addFaction() {
 		self::checkLogin(3);
-		self::checkFields( array('name', 'factiongroup_id', 'color'), $_POST );
+		self::checkFields( array('name', 'parent_faction_id', 'color'), $_POST );
 		
 		if ( count($_FILES) != 1 ) {
 			echo outputError( array( 'missingFields' => array("logo") ) );
@@ -339,10 +315,10 @@ class Admin {
 		}
 		
 		try {
-			$faction_id = getDatabase()->execute('INSERT INTO factions (name, factiongroup_id, color, logo) VALUES(:name, :factiongroup_id, :color, :logo)',
+			$faction_id = getDatabase()->execute('INSERT INTO factions (name, parent_faction_id, color, logo) VALUES (:name, :parent_faction_id, :color, :logo)',
 			array(
 			':name' => $_POST['name'],
-			':factiongroup_id' => $_POST['factiongroup_id'],
+			':parent_faction_id' => $_POST['parent_faction_id'],
 			':color' => $_POST['color'],
 			':logo' => $filename
 			)
