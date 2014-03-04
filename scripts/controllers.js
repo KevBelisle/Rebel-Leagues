@@ -15,8 +15,8 @@ rebelLeaguesControllers.controller('gamesHistoryCtrl', ['$scope', '$http',
 				var game = data.data.games[i];
 				
 				game.is_draw = game.is_draw == "1" ? true : false;
-				game.is_online = game.isOnline == "1" ? true : false;
-				game.is_time_runout = game.isTimeRunout == "1" ? true : false;
+				game.is_online = game.is_online == "1" ? true : false;
+				game.is_time_runout = game.is_time_runout == "1" ? true : false;
 				game.is_group_title = false;
 				
 				var date = new Date( game.date.substring(0,4), parseInt(game.date.substring(5,7))-1, game.date.substring(8,10) );
