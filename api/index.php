@@ -1,6 +1,6 @@
 <?php
 
-header('content-type: text/html; charset=utf-8');
+//header('content-type: text/html; charset=utf-8');
 
 // Include Epiphany library
 include_once 'lib/epiphany/Epi.php';
@@ -100,20 +100,17 @@ class League {
 	
 	
 	public static function getFactionLogo($faction_id) {
-		$faction = getDatabase()->all(
-		'SELECT * FROM factions WHERE faction_id = $faction_id'
+		$faction = getDatabase()->one(
+			"SELECT child.logo AS child_logo, parent.logo AS parent_logo
+			FROM factions AS child
+			LEFT JOIN factions AS parent ON child.parent_faction_id = parent.faction_id
+			WHERE child.faction_id = $faction_id"
 		);
-		$logo = $faction['logo'];
 		
-		if(isnull($faction['logo']))
-		{
-			$parent_faction_id = $faction['parent_faction_id'];
-			$parent_faction = getDatabase()->all(
-			'SELECT * FROM factions WHERE faction_id = $parent_faction_id)'
-			);
-			$logo = $parent_faction['logo'];
-		}
-		echo outputSuccess( array( 'logo' => $logo ) );
+		$logo = $faction['child_logo'];
+		if($logo=== NULL) $logo = $faction['parent_logo'];
+		header('Content-Type: image/png');
+		readfile($logo);
 	}
 	
 	

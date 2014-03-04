@@ -37,7 +37,6 @@
 	<div>
 		<ul>
 			<li id='getPlayers'>Get players</li>
-			<li id='getFactiongroups'>Get factiongroups</li>
 			<li id='getFactions'>Get factions</li>
 			<li id='getGames'>Get games</li>
 			<li id='getRanking'>Get ranking</li>
@@ -82,20 +81,20 @@
 	</div>
 	
 	<div>
-		<form id="addFactiongroup">
-			<h3>Add factiongroup</h3>
-			<input type="text" name="name" placeholder="name" />
-			<input type="submit" value="Submit" />
-		</form>
-	</div>
-	
-	<div>
-		<form id="addFaction" enctype="multipart/form-data">
+		<form id="addFaction">
 			<h3>Add faction</h3>
 			<input type="text" name="name" placeholder="name" />
 			<input type="text" name="factiongroup_id" placeholder="factiongroup_id" />
 			<input type="text" name="color" placeholder="color" />
 			Logo: <input name="logo" type="file" />
+			<input type="submit" value="Submit" />
+		</form>
+	</div>
+	
+	<div>
+		<form id="getLogo" enctype="multipart/form-data">
+			<h3>Temp test getLogo</h3>
+			<input type="text" name="faction_id" placeholder="faction_id" />
 			<input type="submit" value="Submit" />
 		</form>
 	</div>
@@ -128,12 +127,6 @@
 			});
 		});
 	
-		$("#getFactiongroups").click( function () {
-			$.get("api/factiongroups", function (data) {
-				$("#result").html(data);
-			});
-		});
-	
 		$("#getFactions").click( function () {
 			$.get("api/factions", function (data) {
 				$("#result").html(data);
@@ -156,6 +149,12 @@
 			$.get("api/ranking/elo", function (data) {
 				$("#result").html(data);
 			});
+		});
+		
+		$("#getLogo").submit( function () {
+			var faction_id = $("#getLogo input[name=faction_id]").val();
+			$("#result").html( "<img src='api/factions/" + faction_id + "/logo' />" );
+			return false;
 		});
 		
 		$("#login").submit( function () {
