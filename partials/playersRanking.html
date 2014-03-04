@@ -12,18 +12,21 @@
 			
 				<div ng-switch-when="elo_rating">
 					{{ player.elo_rating | number:0 }}
-					<div class="stats_bar" style="height: 10px; background: red;
-					width: {{ 10 + 90 * (player.elo_rating - min) / (max - min) | number:0 }}%"></div>
+					<div class="stats_bar" style="width: {{ 10 + 90 * (player.elo_rating - min) / (max - min) | number:0 }}%"></div>
 				</div>
 				
 				<div ng-switch-when="games_played">
 					{{ player.games_played }}
-					<div class="stats_bar" style="height: 10px; background: red; width: {{ 100 * player.games_played / max | number:0 }}%"></div>
+					<div class="stats_bar" style="width: {{ 100 * player.games_played / max | number:0 }}%">
+						<div class="lighter" style="width: {{ player.games_won | number:0 }}%"></div>
+						<div style="width: {{ player.games_tied | number:0 }}%"></div>
+						<div class="darker" style="width: {{ player.games_lost | number:0 }}%"></div>
+					</div>
 				</div>
 				
 				<div ng-switch-when="points">
 					{{ player.points }} pts ({{ player.games_won }}, {{ player.games_tied }}, {{ player.games_lost }})
-					<div class="stats_bar" style="height: 10px; background: red; width: {{ 100 * player.points / max | number:0 }}%"></div>
+					<div class="stats_bar" style="width: {{ 100 * player.points / max | number:0 }}%"></div>
 				</div>
 				
 			</div>
