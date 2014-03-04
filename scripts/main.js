@@ -24,7 +24,8 @@ var rebelLeaguesApp = angular.module('rebelLeaguesApp', [
 	'ngRoute',
 	'ngAnimate',
 	'rebelLeaguesControllers',
-	'link'
+	'link',
+	'ui.bootstrap'
 ]);
 
 
@@ -46,6 +47,18 @@ rebelLeaguesApp.config([
 			.otherwise({
 				redirectTo: '/gamesHistory'
 			});
+	}
+]);
+
+rebelLeaguesApp.config([
+	'$tooltipProvider',
+	function ($tooltipProvider) {
+		$tooltipProvider.options({
+			placement: 'top',
+			animation: false,
+			popupDelay: 0,
+			appendToBody: true
+		});
 	}
 ]);
 
