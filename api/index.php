@@ -136,7 +136,7 @@
 			);
 			$players = ELO::getELORankings($games, $players);
 			
-			if ($sort_method == 'default') { $sort_method = 'games_played'; }
+			if ($sort_method == 'default') { $sort_method = 'points'; }
 			
 			switch ($sort_method) {
 				case 'elo_rating':

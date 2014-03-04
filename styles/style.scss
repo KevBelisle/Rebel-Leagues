@@ -217,6 +217,28 @@ div#wrapper {
 					div.playerid {
 						text-align: center;
 					}
+					
+					div.player_stats {
+						font-size: $small_text;
+						color: $xxdark_color;
+					
+						div.stats_bar {
+							height: 15px;
+							background-color: $accent-color;
+							margin-top: 5px;
+							
+							div {
+								height: 100%;
+								float: left;
+							}
+							div.lighter {
+								background-color: lighten( $accent-color, 10%);
+							}
+							div.darker {
+								background-color: darken( $accent-color, 10%);
+							}
+						}
+					}
 				}
 				
 				div:nth-child(2n) div.date,
