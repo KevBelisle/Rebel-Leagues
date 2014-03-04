@@ -3,6 +3,7 @@
 @import 'frameless';
 @import 'layout';
 @import 'animations';
+@import 'font-awesome/font-awesome.scss';
 
 /*  FONTS */
 @import url(http://fonts.googleapis.com/css?family=Signika:400,600,300);
@@ -208,7 +209,24 @@ div#wrapper {
 					padding-right: 40px;
 					
 					div.player {
+						i.winner {
+							color: $accent_color;
+						}
 						div.badges {
+						}
+					}
+					
+					div.moreInfo {
+						width: 40px;
+						float: left;
+						margin-right: -40px;
+						text-align: center;
+						
+						i {
+							display: block;
+							font-size: 14px;
+							color: $xdark_color;
+							margin: 0 0 5px 0;
 						}
 					}
 				}

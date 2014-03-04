@@ -8,11 +8,10 @@
 		<div class="game clear" ng-if="!game.is_group_title">
 			<div class="player player1">
 				<div class="playerid">
-					<span class="nickname">{{ game.player1_nickname }}</span>
+					<span class="nickname">{{ game.player1_nickname }} <i class="winner fa fa-trophy" ng-if="!game.is_draw"></i></span>
 					<span class="fullname">({{ game.player1_firstname }} {{ game.player1_lastname }})</span>
 				</div>
 				<div class="badges">
-					<img class="badge" src="images/VictoryLogo.png" ng-if="!game.is_draw" />
 					<img class="badge" src="api/factions/{{ game.player1_faction_id }}/logo" />
 				</div>
 			</div>
@@ -26,6 +25,9 @@
 				</div>
 			</div>
 			<div class="moreInfo">
+				<i class="fa fa-clock-o" ng-if="game.is_time_runout"></i>
+				<i class="fa fa-rss fa-rotate-45" ng-if="game.is_online"></i>
+				<i class="fa fa-file-text-o" ng-hide="!game.notes"></i>
 			</div>
 		</div>
 		
