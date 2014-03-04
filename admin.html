@@ -150,7 +150,7 @@
 		});
 		
 		$("#getEloRanking").click( function () {
-			$.get("api/ranking/elo", function (data) {
+			$.get("api/ranking/elo_rating", function (data) {
 				$("#result").html(data);
 			});
 		});
