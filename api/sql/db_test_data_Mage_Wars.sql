@@ -76,4 +76,7 @@ INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_
 INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(34, 9, 14, 1, 21, '2014-02-26 21:30:00', 0, 1, 0, 0, NULL);
 INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(35, 8, 14, 1, 21, '2014-02-27 21:30:00', 0, 1, 0, 0, NULL);
 INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(36, 1, 17, 8, 14, '2014-02-27 22:00:00', 0, 1, 0, 0, NULL);
+INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(37, 2, 12, 3, 21, '2014-03-04 22:00:00', 0, 1, 0, 0, 'victoire à l arrachée!');
+INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(38, 5, 9, 8, 14, '2014-03-04 22:00:00', 0, 1, 0, 0, '');
+INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(39, 8, 9, 5, 20, '2014-03-04 23:00:00', 0, 1, 0, 0, 'Remi à 1 dé de la victoire');
   
