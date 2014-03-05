@@ -341,24 +341,24 @@ BEGIN
 			is_draw,
 			0 AS is_loss
 		FROM games_history
-		WHERE is_draw = 1
+		WHERE is_draw = 1;
 		
 	/* CREATE factions_centric VIEW
 	============================================= */
 	
-	CREATE OR REPLACE VIEW factions_centric AS
+	CREATE OR REPLACE VIEW factions_stats AS
 	SELECT
 		player1_parent_faction_id,
 		player1_faction_id,
 		player2_parent_faction_id,
 		player2_faction_id,
-        COALESCE(SUM(factions_games_split.is_win), 0) AS games_won,
-        COALESCE(SUM(factions_games_split.is_draw), 0) AS games_tied,
-        COALESCE(SUM(factions_games_split.is_loss), 0) AS games_lost,
-        COALESCE(SUM(factions_games_split.is_win), 0) + COALESCE(SUM(factions_games_split.is_draw), 0) + COALESCE(SUM(factions_games_split.is_loss), 0) AS games_played
-	FROM  factions_games_split factions_games_split
+        COALESCE(SUM(is_win), 0) AS games_won,
+        COALESCE(SUM(is_draw), 0) AS games_tied,
+        COALESCE(SUM(is_loss), 0) AS games_lost,
+        COALESCE(SUM(is_win), 0) + COALESCE(SUM(is_draw), 0) + COALESCE(SUM(is_loss), 0) AS games_played
+	FROM  factions_games_split
 	GROUP BY player1_faction_id, player2_faction_id
-	ORDER BY player1_faction_id
+	ORDER BY player1_faction_id;
 	
 END //
 DELIMITER ;
