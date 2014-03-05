@@ -18,13 +18,14 @@ EpiDatabase::employ('mysql', $db["database"], $db["host"], $db["username"], $db[
 getRoute()->get('/', array('League', 'nope'));
 
 getRoute()->get('/players', array('League', 'getPlayers'));
-getRoute()->get('/factions', array('League', 'getFactions'));
 getRoute()->get('/games', array('League', 'getGamesHistory'));
 getRoute()->get('/ranking', array('League', 'getRanking'));
 getRoute()->get('/ranking/(games_played|elo_rating|points)', array('League', 'getRanking'));
 
-getRoute()->get('/factions/(\d+)/stats', array('League', 'getFactionStats'));
-getRoute()->get('/factions/(\d+)/logo', array('League', 'getFactionLogo'));
+getRoute()->get('/factions', array('League', 'getFactions'));
+getRoute()->get('/factions/(\d+)(?:/?)', array('League', 'getFaction'));
+getRoute()->get('/factions/(\d+)/stats(?:/?)', array('League', 'getFactionStats'));
+getRoute()->get('/factions/(\d+)/logo(?:/?)', array('League', 'getFactionLogo'));
 
 getRoute()->post('/login', array('Admin', 'login'));
 getRoute()->get('/logout', array('Admin', 'logout'));
@@ -91,9 +92,28 @@ class League {
 	}
 	
 	
+	public static function getFaction($faction_id) {
+		$faction = getDatabase()->one(
+		'SELECT
+			factions.faction_id AS faction_id,
+			factions.name AS faction_name,
+			factions.color AS faction_color,
+			
+			parent_factions.faction_id AS parent_faction_id,
+			parent_factions.name AS parent_faction_name,
+			parent_factions.color AS parent_faction_color
+		FROM factions factions
+		LEFT OUTER JOIN factions parent_factions ON parent_factions.faction_id = factions.parent_faction_id
+		WHERE factions.faction_id = :faction_id',
+			array( ':faction_id' => $faction_id )
+		);
+		echo outputSuccess( $faction );
+	}
+	
+	
 	public static function getFactionStats($faction_id) {
 		$factions = getDatabase()->all(
-			"SELECT * FROM factions_stats WHERE faction_id = :faction_id",
+			"SELECT * FROM factions_stats WHERE faction_id = :faction_id ORDER BY games_played DESC",
 			array( ':faction_id' => $faction_id )
 		);
 		echo outputSuccess( array( 'factions' => $factions ) );

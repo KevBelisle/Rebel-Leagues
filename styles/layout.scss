@@ -131,6 +131,20 @@ div#wrapper { width: $cols4; }
 		}
 	}
 
+	.modal {
+		width: $cols4;
+		margin-left: -( $cols4/2 );
+	}
+	
+	div.modal.faction {
+		header {
+			padding: 10px;
+		
+			img {
+				margin-right: 10px;
+			}
+		}
+	}
 
 // Little larger screen
 @media only screen and (min-width: 480px) {
@@ -147,6 +161,11 @@ div#wrapper { width: $cols4; }
 		div#left {
 			width: $cols6;
 		}
+
+	.modal {
+		width: $cols6;
+		margin-left: -( $cols6/2 );
+	}
 }
 
 // Pads and larger phones
@@ -164,6 +183,11 @@ div#wrapper { width: $cols4; }
 		div#left {
 			width: $cols7;
 		}
+
+	.modal {
+		width: $cols7;
+		margin-left: -( $cols7/2 );
+	}
 }
 			
 
@@ -189,6 +213,21 @@ div#wrapper { width: $cols4; }
 			width: $cols6;
 			float: left;
 		}
+
+	.modal {
+		width: $cols8;
+		margin-left: -( $cols8/2 );
+	}
+	
+	div.modal.faction {
+		header {
+			padding: 20px;
+		
+			img {
+				margin-right: 20px;
+			}
+		}
+	}
 }
 
 // Larger screens
@@ -311,6 +350,7 @@ div#wrapper { width: $cols4; }
 				}
 			}
 		}
+		
 }
 
 // Horizontal pads and laptops

@@ -1,11 +1,47 @@
 var monthNames = [ "janvier", "février", "mars", "avril", "mai", "juin",
 	"juillet", "août", "septembre", "octobre", "novembre", "décembre" ];
 
-var rebelLeaguesControllers = angular.module('rebelLeaguesControllers', []);
+var rebelLeaguesControllers = angular.module('rebelLeaguesControllers', ['ui.bootstrap']);
 
-rebelLeaguesControllers.controller('gamesHistoryCtrl', ['$scope', '$http',
-	function($scope, $http) {
+rebelLeaguesControllers.controller('gamesHistoryCtrl', ['$scope', '$http', '$modal',
+	function ($scope, $http, $modal) {
 		$http.get('api/games').success(function(data) {
+		
+			$scope.showFactionModal = function ($factionId) {
+				console.log("Faction ID : " + $factionId);
+				
+				$modal.open({
+					'templateUrl' : 'partials/factionModal.html',
+					'controller' : 'factionModalCtrl',
+					'windowClass' : 'faction',
+					"resolve": {
+						"faction": [
+							'$http',
+							function($http) {
+								return $http.get('api/factions/' + $factionId)
+									.then(
+										function success(response) { return response.data.data; },
+										function error(reason)     { return false; }
+									);
+							}
+						],
+						"faction_stats": [
+							'$http',
+							function($http) {
+								return $http.get('api/factions/' + $factionId + "/stats")
+									.then(
+										function success(response) { return response.data.data; },
+										function error(reason)     { return false; }
+									);
+							}
+						]
+					}
+					/*resolve : {
+						'faction' : $http.get('api/factions/' + $factionId),
+						'faction_stats' : $http.get('api/factions/' + $factionId + '/stats')
+					}*/
+				});
+			};
 		
 			$scope.games = [];
 			var prev_date_string = "";
@@ -41,8 +77,8 @@ rebelLeaguesControllers.controller('gamesHistoryCtrl', ['$scope', '$http',
 ]);
 
 
-rebelLeaguesControllers.controller('playersRankingCtrl', ['$scope', '$http',
-	function($scope, $http) {
+rebelLeaguesControllers.controller('playersRankingCtrl', ['$scope', '$http', '$modal',
+	function ($scope, $http, $modal) {
 		$http.get('api/ranking').success(function(data) {
 		
 			if (data.data.ranking == "elo_rating") {
@@ -64,3 +100,22 @@ rebelLeaguesControllers.controller('playersRankingCtrl', ['$scope', '$http',
 		});
 	}
 ]);
+
+
+
+rebelLeaguesControllers.controller('factionModalCtrl', ['$scope', '$http', 'faction', 'faction_stats',
+	function ($scope, $http, faction, faction_stats) {
+		$scope.faction = faction;
+		$scope.faction_stats = faction_stats.factions;
+		
+		$scope.min = Math.min.apply(null, $scope.faction_stats.map(function(a){return a.games_played;}));
+		$scope.max = Math.max.apply(null, $scope.faction_stats.map(function(a){return a.games_played;}));
+				
+		console.log($scope);
+	}
+]);
+
+
+
+
+
