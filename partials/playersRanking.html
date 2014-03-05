@@ -18,9 +18,9 @@
 				<div ng-switch-when="games_played">
 					{{ player.games_played }} parties jouées
 					<div ng-show="player.games_played" class="stats_bar" style="width: {{ 100 * player.games_played / max | number:0 }}%">
-						<div class="darker" style="width: {{ 100 * player.games_won / player.games_played | number:0 }}%" tooltip="{{ player.games_won }} parties gagnées"></div>
-						<div style="width: {{ 100 * player.games_tied / player.games_played | number:0 }}%" tooltip="{{ player.games_tied }} parties annulées"></div>
-						<div class="lighter" style="width: {{ 100 * player.games_lost / player.games_played | number:0 }}%" tooltip="{{ player.games_lost }} parties perdues"></div>
+						<div class="darker" style="width: {{ 100 * player.games_won / player.games_played | number:2 }}%" tooltip="{{ player.games_won }} parties gagnées"></div>
+						<div style="width: {{ 100 * player.games_tied / player.games_played | number:2 }}%" tooltip="{{ player.games_tied }} parties annulées"></div>
+						<div class="lighter" style="width: {{ 100 * player.games_lost / player.games_played | number:2 }}%" tooltip="{{ player.games_lost }} parties perdues"></div>
 					</div>
 				</div>
 				

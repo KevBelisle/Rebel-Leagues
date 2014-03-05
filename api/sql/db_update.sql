@@ -311,10 +311,10 @@ BEGIN
 		WHERE is_draw = 0
 	UNION ALL
 		SELECT
-			player1_parent_faction_id AS parent_faction_id,
-			player1_faction_id AS faction_id,
-			player2_parent_faction_id AS rival_parent_faction_id,
-			player2_faction_id AS rival_faction_id,
+			player2_parent_faction_id AS parent_faction_id,
+			player2_faction_id AS faction_id,
+			player1_parent_faction_id AS rival_parent_faction_id,
+			player1_faction_id AS rival_faction_id,
 			0 AS is_win,
 			is_draw,
 			1 AS is_loss
@@ -333,10 +333,10 @@ BEGIN
 		WHERE is_draw = 1
 	UNION ALL
 		SELECT
-			player1_parent_faction_id AS parent_faction_id,
-			player1_faction_id AS faction_id,
-			player2_parent_faction_id AS rival_parent_faction_id,
-			player2_faction_id AS rival_faction_id,
+			player2_parent_faction_id AS parent_faction_id,
+			player2_faction_id AS faction_id,
+			player1_parent_faction_id AS rival_parent_faction_id,
+			player1_faction_id AS rival_faction_id,
 			0 AS is_win,
 			is_draw,
 			0 AS is_loss

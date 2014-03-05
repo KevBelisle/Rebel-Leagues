@@ -54,6 +54,7 @@ $background_color: #0c0c0c;
 body {
 	background-color: $background_color;
 	background-image: $background_image;
+	background-position: center;
 	
 	font-family: $main_font;
 	font-weight: $light_weight;
@@ -124,6 +125,7 @@ div#wrapper {
 						
 						span {
 							box-sizing: border-box;
+							-moz-box-sizing: border-box;
 							transition: padding-left ease 200ms,
 										padding-right ease 200ms;
 										
@@ -256,12 +258,12 @@ div#wrapper {
 					
 						div.stats_bar {
 							height: 15px;
-							background-color: $accent-color;
 							margin-top: 5px;
 							
 							div {
 								height: 100%;
 								float: left;
+								background-color: $accent-color;
 							}
 							div.lighter {
 								background-color: lighten( $accent-color, 10%);
@@ -297,6 +299,7 @@ div#wrapper {
 
 div.tooltip {
 	position: absolute;
+	z-index: 2000;
 	margin-top: -5px;
 	
 	font-size: $base_font_size;
@@ -331,9 +334,159 @@ div.tooltip {
 	}
 }
 	
+
 	
 	
+div.modal-backdrop {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
 	
+	background-color: rgba(0,0,0, 0.75);
+}
+
+div.modal {
+	position: fixed;
+	top: 5%;
+	height: 90%;
+	left: 50%;
+	
+	border: none;
+	
+	overflow: hidden;
+	
+	div.modal-dialog {
+		height: 100%;
+	
+		div.modal-content {
+			height: 100%;
+			overflow: auto
+		}
+	}
+}
+div.modal:focus {
+	outline: none
+}
+
+div.modal.faction {
+	
+	header {
+		display: table;
+		width: 100%;
+		
+		background-color: $light_color;
+		border-bottom: 1px solid $accent_color;
+	
+		div.logo {
+			display: table-cell;
+			width: 60px;
+			font-size: 0;
+			
+			img {
+				height: 50px;
+				width: 50px;
+			}
+		}
+		
+		div.name {
+			display: table-cell;
+			vertical-align: middle;
+			
+			h2 {
+				font-size: $small_text;
+				color: $xdark_color;
+			}
+			
+			h1 {
+				font-weight: $heavy_weight;
+				color: $xxdark_color;
+			}
+		}
+	}
+	
+	section {
+		background-color: $xlight_color;
+		
+		ul {
+			li {
+				display: table;
+				width: 100%;
+				padding: 10px;
+					
+				border-bottom: 1px solid $dark_color;
+				
+				div.faction {
+					display: table-cell;
+					width: 40%;
+					
+					> div {
+						display: table;
+					
+						div.logo {
+							display: table-cell;
+							width: 50px;
+							font-size: 0;
+							
+							img {
+								height: 40px;
+								width: 40px;
+							}
+						}
+						
+						div.name {
+							display: table-cell;
+							vertical-align: middle;
+							
+							h2 {
+								font-size: $small_text;
+								color: $xdark_color;
+							}
+							
+							h1 {
+								font-weight: $heavy_weight;
+								color: $xxdark_color;
+							}
+						}
+					}
+				}
+				
+				
+				div.stats {
+					display: table-cell;
+					width: 60%;
+					vertical-align: middle;
+					
+					font-size: $small_text;
+					color: $xxdark_color;
+				
+					div.stats_bar {
+						height: 15px;
+						margin-top: 5px;
+						
+						div {
+							height: 100%;
+							float: left;
+							background-color: $accent-color;
+						}
+						div.lighter {
+							background-color: lighten( $accent-color, 10%);
+						}
+						div.darker {
+							background-color: darken( $accent-color, 10%);
+						}
+					}
+				}
+				
+			}
+			li:nth-child(2n) {
+				background-color: $light_color;
+			}
+		}
+	}
+	
+}
 	
 	
 	
