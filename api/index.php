@@ -23,6 +23,7 @@ getRoute()->get('/games', array('League', 'getGamesHistory'));
 getRoute()->get('/ranking', array('League', 'getRanking'));
 getRoute()->get('/ranking/(games_played|elo_rating|points)', array('League', 'getRanking'));
 
+getRoute()->get('/factions/(\d+)/stats', array('League', 'getFactionStats'));
 getRoute()->get('/factions/(\d+)/logo', array('League', 'getFactionLogo'));
 
 getRoute()->post('/login', array('Admin', 'login'));
@@ -90,16 +91,26 @@ class League {
 	}
 	
 	
+	public static function getFactionStats($faction_id) {
+		$factions = getDatabase()->all(
+			"SELECT * FROM factions_stats WHERE faction_id = :faction_id",
+			array( ':faction_id' => $faction_id )
+		);
+		echo outputSuccess( array( 'factions' => $factions ) );
+	}
+	
+	
 	public static function getFactionLogo($faction_id) {
 		$faction = getDatabase()->one(
 			"SELECT child.logo AS child_logo, parent.logo AS parent_logo
 			FROM factions AS child
 			LEFT JOIN factions AS parent ON child.parent_faction_id = parent.faction_id
-			WHERE child.faction_id = $faction_id"
+			WHERE child.faction_id = :faction_id",
+			array( ':faction_id' => $faction_id )
 		);
 		
 		$logo = $faction['child_logo'];
-		if($logo=== NULL) $logo = $faction['parent_logo'];
+		if($logo === NULL) $logo = $faction['parent_logo'];
 		header('Content-Type: image/png');
 		readfile($logo);
 	}
@@ -117,8 +128,8 @@ class League {
 		}
 		
 		$games = getDatabase()->all(
-		'SELECT * FROM games_history ORDER BY date DESC LIMIT :skip, :take',
-		array(':skip' => $skip, ':take' => $take)
+			'SELECT * FROM games_history ORDER BY date DESC LIMIT :skip, :take',
+			array(':skip' => $skip, ':take' => $take)
 		);
 		echo outputSuccess( array( 'games' => $games ) );
 	}
@@ -136,9 +147,9 @@ class League {
 		);
 		$players = getDatabase()->all(
 			'SELECT *,
-				1000 AS elo_rating,
-				'.self::$pointsDistribution['win'].'*games_won + '.self::$pointsDistribution['draw'].'*games_tied + '.self::$pointsDistribution['loss'].'*games_lost AS points
-				FROM players_ranking'
+			1000 AS elo_rating,
+			'.self::$pointsDistribution['win'].'*games_won + '.self::$pointsDistribution['draw'].'*games_tied + '.self::$pointsDistribution['loss'].'*games_lost AS points
+			FROM players_ranking'
 		);
 		$players = ELO::getELORankings($games, $players);
 		

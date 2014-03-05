@@ -300,21 +300,21 @@ BEGIN
 	
 	CREATE OR REPLACE VIEW factions_games_split AS
 		SELECT
-			player1_parent_faction_id,
-			player1_faction_id,
-			player2_parent_faction_id,
-			player2_faction_id,
+			player1_parent_faction_id AS parent_faction_id,
+			player1_faction_id AS faction_id,
+			player2_parent_faction_id AS rival_parent_faction_id,
+			player2_faction_id AS rival_faction_id,
 			1 AS is_win,
 			is_draw,
 			0 AS is_loss
 		FROM games_history
 		WHERE is_draw = 0
 	UNION ALL
-		SELECT 
-			player2_parent_faction_id,
-			player2_faction_id,
-			player1_parent_faction_id,
-			player1_faction_id,
+		SELECT
+			player1_parent_faction_id AS parent_faction_id,
+			player1_faction_id AS faction_id,
+			player2_parent_faction_id AS rival_parent_faction_id,
+			player2_faction_id AS rival_faction_id,
 			0 AS is_win,
 			is_draw,
 			1 AS is_loss
@@ -322,21 +322,21 @@ BEGIN
 		WHERE is_draw = 0
 	UNION ALL
 		SELECT
-			player1_parent_faction_id,
-			player1_faction_id,
-			player2_parent_faction_id,
-			player2_faction_id,
+			player1_parent_faction_id AS parent_faction_id,
+			player1_faction_id AS faction_id,
+			player2_parent_faction_id AS rival_parent_faction_id,
+			player2_faction_id AS rival_faction_id,
 			0 AS is_win,
 			is_draw,
 			0 AS is_loss
 		FROM games_history
 		WHERE is_draw = 1
 	UNION ALL
-		SELECT 
-			player2_parent_faction_id,
-			player2_faction_id,
-			player1_parent_faction_id,
-			player1_faction_id,
+		SELECT
+			player1_parent_faction_id AS parent_faction_id,
+			player1_faction_id AS faction_id,
+			player2_parent_faction_id AS rival_parent_faction_id,
+			player2_faction_id AS rival_faction_id,
 			0 AS is_win,
 			is_draw,
 			0 AS is_loss
@@ -348,17 +348,17 @@ BEGIN
 	
 	CREATE OR REPLACE VIEW factions_stats AS
 	SELECT
-		player1_parent_faction_id,
-		player1_faction_id,
-		player2_parent_faction_id,
-		player2_faction_id,
+		parent_faction_id,
+		faction_id,
+		rival_parent_faction_id,
+		rival_faction_id,
         COALESCE(SUM(is_win), 0) AS games_won,
         COALESCE(SUM(is_draw), 0) AS games_tied,
         COALESCE(SUM(is_loss), 0) AS games_lost,
         COALESCE(SUM(is_win), 0) + COALESCE(SUM(is_draw), 0) + COALESCE(SUM(is_loss), 0) AS games_played
 	FROM  factions_games_split
-	GROUP BY player1_faction_id, player2_faction_id
-	ORDER BY player1_faction_id;
+	GROUP BY faction_id, rival_faction_id
+	ORDER BY faction_id;
 	
 END //
 DELIMITER ;
