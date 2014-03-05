@@ -348,17 +348,26 @@ BEGIN
 	
 	CREATE OR REPLACE VIEW factions_stats AS
 	SELECT
-		parent_faction_id,
-		faction_id,
-		rival_parent_faction_id,
-		rival_faction_id,
+		factions_games_split.faction_id,
+		
+		rival_factions.faction_id AS rival_faction_id,
+		rival_factions.name AS rival_faction_name,
+		rival_factions.color AS rival_faction_color,
+		
+		rival_parent_factions.faction_id AS rival_parent_faction_id,
+		rival_parent_factions.name AS rival_parent_faction_name,
+		rival_parent_factions.color AS rival_parent_faction_color,
+		
         COALESCE(SUM(is_win), 0) AS games_won,
         COALESCE(SUM(is_draw), 0) AS games_tied,
         COALESCE(SUM(is_loss), 0) AS games_lost,
         COALESCE(SUM(is_win), 0) + COALESCE(SUM(is_draw), 0) + COALESCE(SUM(is_loss), 0) AS games_played
-	FROM  factions_games_split
+	FROM  factions_games_split factions_games_split
+		LEFT OUTER JOIN factions rival_factions ON rival_factions.faction_id = factions_games_split.rival_faction_id
+		LEFT OUTER JOIN factions rival_parent_factions ON rival_parent_factions.faction_id = factions_games_split.rival_parent_faction_id
 	GROUP BY faction_id, rival_faction_id
-	ORDER BY faction_id;
+	ORDER BY factions_games_split.faction_id, factions_games_split.rival_parent_faction_id, factions_games_split.rival_faction_id;
+	
 	
 END //
 DELIMITER ;
