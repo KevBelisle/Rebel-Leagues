@@ -1,39 +1,16 @@
 
 /* IMPORT FRAMELESS */
 @import 'frameless';
+@import 'constants';
 @import 'layout';
 @import 'animations';
 @import 'font-awesome/font-awesome.scss';
+
 
 /*  FONTS */
 @import url(http://fonts.googleapis.com/css?family=Signika:400,600,300);
 $main_font: "Signika", sans-serif;
 
-$light_weight: 300;
-$medium_weight: 400;
-$heavy_weight: 700;
-
-$base_font_size: 19px;
-
-$small_text: 0.8em;
-$normal_text: 0.8em;
-$large_text: 1.2em;
-
-
-/*  COLORS */
-
-$xlight_color: #f6f6f6;
-$light_color: #eeeeee;
-$dark_color: #e1e1e1;
-$xdark_color: #929395;
-$xxdark_color: #141414;
-
-$accent_color: #6652c8;
-
-
-/*  OTHER CONSTANTS */
-$background_image: url("images/background.png");
-$background_color: #0c0c0c;
 
 /* CLEAR FIX */
 .clear:before,
@@ -54,7 +31,7 @@ $background_color: #0c0c0c;
 body {
 	background-color: $background_color;
 	background-image: $background_image;
-	background-position: center;
+	background-position: center top;
 	
 	font-family: $main_font;
 	font-weight: $light_weight;
@@ -175,7 +152,7 @@ div#wrapper {
 					color: $xdark_color;
 				}
 				a.active {
-					border-bottom: 3px solid $accent_color;
+					border-bottom: 4px solid $accent_color;
 					color: $accent_color;
 					font-weight: $heavy_weight;
 				}
@@ -346,8 +323,15 @@ div.modal-backdrop {
 	
 	background-color: rgba(0,0,0, 0.75);
 }
-
 div.modal {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+}
+
+div.modal-dialog {
 	position: fixed;
 	top: 5%;
 	height: 90%;
@@ -355,15 +339,10 @@ div.modal {
 	
 	border: none;
 	
-	overflow: hidden;
+	overflow: auto;
 	
-	div.modal-dialog {
-		height: 100%;
-	
-		div.modal-content {
-			height: 100%;
-			overflow: auto
-		}
+	div.modal-content {
+		overflow: auto
 	}
 }
 div.modal:focus {
@@ -375,7 +354,7 @@ div.modal.faction {
 	header {
 		display: table;
 		width: 100%;
-		
+			
 		background-color: $light_color;
 		border-bottom: 1px solid $accent_color;
 	
@@ -387,6 +366,8 @@ div.modal.faction {
 			img {
 				height: 50px;
 				width: 50px;
+				
+				margin-right: 10px;
 			}
 		}
 		
@@ -404,6 +385,21 @@ div.modal.faction {
 				color: $xxdark_color;
 			}
 		}
+		
+		i.close {
+			position: absolute;
+			
+			height: $small_text;
+			width: $small_text;
+			
+			font-size: $small_text;
+			line-height: $small_text;
+			
+			color: $xdark_color;
+		}
+		i.close:hover {
+			color: $xxdark_color;
+		}
 	}
 	
 	section {
@@ -419,14 +415,11 @@ div.modal.faction {
 				
 				div.faction {
 					display: table-cell;
+					vertical-align: middle;
 					width: 40%;
-					
+						
 					> div {
-						display: table;
-					
 						div.logo {
-							display: table-cell;
-							width: 50px;
 							font-size: 0;
 							
 							img {
@@ -436,9 +429,6 @@ div.modal.faction {
 						}
 						
 						div.name {
-							display: table-cell;
-							vertical-align: middle;
-							
 							h2 {
 								font-size: $small_text;
 								color: $xdark_color;
@@ -457,7 +447,7 @@ div.modal.faction {
 					display: table-cell;
 					width: 60%;
 					vertical-align: middle;
-					
+						
 					font-size: $small_text;
 					color: $xxdark_color;
 				
