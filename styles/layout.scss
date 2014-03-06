@@ -131,17 +131,33 @@ div#wrapper { width: $cols4; }
 		}
 	}
 
-	.modal {
+	.modal-dialog {
 		width: $cols4;
 		margin-left: -( $cols4/2 );
 	}
 	
 	div.modal.faction {
+	
 		header {
 			padding: 10px;
+			
+			i.close {
+				top: 10px;
+				right: 10px;
+			}
+		}
 		
-			img {
-				margin-right: 10px;
+		section {
+			ul {
+				li {
+					div.faction {
+						> div {
+							div.logo {
+								display: none;
+							}
+						}
+					}
+				}
 			}
 		}
 	}
@@ -162,7 +178,7 @@ div#wrapper { width: $cols4; }
 			width: $cols6;
 		}
 
-	.modal {
+	.modal-dialog {
 		width: $cols6;
 		margin-left: -( $cols6/2 );
 	}
@@ -184,7 +200,7 @@ div#wrapper { width: $cols4; }
 			width: $cols7;
 		}
 
-	.modal {
+	.modal-dialog {
 		width: $cols7;
 		margin-left: -( $cols7/2 );
 	}
@@ -214,17 +230,52 @@ div#wrapper { width: $cols4; }
 			float: left;
 		}
 
-	.modal {
+	.modal-dialog {
 		width: $cols8;
 		margin-left: -( $cols8/2 );
 	}
 	
 	div.modal.faction {
+		
 		header {
 			padding: 20px;
 		
-			img {
-				margin-right: 20px;
+			div.logo {
+				img {
+					margin-right: 20px;
+				}
+			}
+			
+			div.name {
+				display: table-cell;
+				vertical-align: middle;
+			}
+			
+			i.close {
+				top: 15px;
+				right: 15px;
+			}
+		}
+		
+		section {
+			ul {
+				li {
+					div.faction {
+						> div {
+							display: table;
+						
+							div.logo {
+								display: table-cell;
+								width: 50px;
+							}
+							
+							div.name {
+								display: table-cell;
+								vertical-align: middle;
+							}
+						}
+					}
+				}
 			}
 		}
 	}
@@ -350,7 +401,6 @@ div#wrapper { width: $cols4; }
 				}
 			}
 		}
-		
 }
 
 // Horizontal pads and laptops
