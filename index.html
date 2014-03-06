@@ -41,19 +41,19 @@
 		</header>
 		
 		<aside>
-			<div id="stats">
+			<div id="stats" ng-controller="leagueStatsCtrl">
 				<ul>
 					<li class="clear">
 						<span class="left">Parties jouées</span>
-						<span class="right">28</span>
+						<span class="right">{{ games_played }}</span>
 					</li>
 					<li class="clear">
 						<span class="left">Joueurs actifs</span>
-						<span class="right">7</span>
+						<span class="right">{{ active_players }}</span>
 					</li>
 					<li class="clear">
 						<span class="left">Joueurs inscrits</span>
-						<span class="right">19</span>
+						<span class="right">{{ total_players }}</span>
 					</li>
 				</ul>
 			</div>
