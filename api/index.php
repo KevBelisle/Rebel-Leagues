@@ -17,24 +17,26 @@ EpiDatabase::employ('mysql', $db["database"], $db["host"], $db["username"], $db[
 // Define routes
 getRoute()->get('/', array('League', 'nope'));
 
-getRoute()->get('/players', array('League', 'getPlayers'));
-getRoute()->get('/games', array('League', 'getGamesHistory'));
-getRoute()->get('/ranking', array('League', 'getRanking'));
-getRoute()->get('/ranking/(games_played|elo_rating|points)', array('League', 'getRanking'));
+getRoute()->get('/players(?:/?)', array('League', 'getPlayers'));
+getRoute()->get('/games(?:/?)', array('League', 'getGamesHistory'));
+getRoute()->get('/ranking(?:/?)', array('League', 'getRanking'));
+getRoute()->get('/ranking/(games_played|elo_rating|points)(?:/?)', array('League', 'getRanking'));
 
-getRoute()->get('/factions', array('League', 'getFactions'));
+getRoute()->get('/factions(?:/?)', array('League', 'getFactions'));
 getRoute()->get('/factions/(\d+)(?:/?)', array('League', 'getFaction'));
 getRoute()->get('/factions/(\d+)/stats(?:/?)', array('League', 'getFactionStats'));
 getRoute()->get('/factions/(\d+)/logo(?:/?)', array('League', 'getFactionLogo'));
 
-getRoute()->post('/login', array('Admin', 'login'));
-getRoute()->get('/logout', array('Admin', 'logout'));
-getRoute()->get('/admins', array('Admin', 'getAdmins'));
+getRoute()->get('/stats(?:/?)', array('League', 'getStats'));
 
-getRoute()->post('/admins', array('Admin', 'addAdmin'));
-getRoute()->post('/players', array('Admin', 'addPlayer'));
-getRoute()->post('/factions', array('Admin', 'addFaction'));
-getRoute()->post('/games', array('Admin', 'addGame'));
+getRoute()->post('/login(?:/?)', array('Admin', 'login'));
+getRoute()->get('/logout(?:/?)', array('Admin', 'logout'));
+getRoute()->get('/admins(?:/?)', array('Admin', 'getAdmins'));
+
+getRoute()->post('/admins(?:/?)', array('Admin', 'addAdmin'));
+getRoute()->post('/players(?:/?)', array('Admin', 'addPlayer'));
+getRoute()->post('/factions(?:/?)', array('Admin', 'addFaction'));
+getRoute()->post('/games(?:/?)', array('Admin', 'addGame'));
 
 // Run router
 getRoute()->run();
@@ -204,6 +206,30 @@ class League {
 		echo outputSuccess( array( 'ranking' => $sort_method, 'players' => $players) );
 	}
 	
+	
+	public static function getStats() {
+	
+		$stats = getDatabase()->one("
+			SELECT *
+			FROM
+				(
+					SELECT COUNT(*) AS total_players
+					FROM players
+				) tp,
+				(
+					SELECT COUNT(DISTINCT player_id) AS active_players
+					FROM games_split
+					WHERE date > DATE_SUB(NOW(), INTERVAL 14 DAY)
+				) ap,
+				(
+					SELECT COUNT(*) AS games_played
+					FROM games
+				) gp
+		");
+		
+		echo outputSuccess( array( 'stats' => $stats ) );
+		
+	}
 }
 
 
