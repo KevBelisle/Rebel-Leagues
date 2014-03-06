@@ -116,6 +116,20 @@ rebelLeaguesControllers.controller('factionModalCtrl', ['$scope', '$http', 'fact
 ]);
 
 
+rebelLeaguesControllers.controller('leagueStatsCtrl', ['$scope', '$http',
+	function ($scope, $http) {
+		$http.get('api/stats').success(function(data) {
+			$scope.games_played = data.data.stats.games_played;
+			$scope.total_players = data.data.stats.total_players;
+			$scope.active_players = data.data.stats.active_players;
+			console.log($scope);
+		});
+				
+	}
+]);
+
+
+
 
 
 
