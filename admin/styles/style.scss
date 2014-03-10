@@ -1,0 +1,181 @@
+
+/* IMPORT FRAMELESS */
+@import 'frameless';
+@import 'constants';
+@import 'layout';
+@import 'font-awesome/font-awesome.scss';
+
+
+/*  FONTS */
+@import url(http://fonts.googleapis.com/css?family=Signika:400,600,300);
+$main_font: "Signika", sans-serif;
+
+
+/* CLEAR FIX */
+.clear:before,
+.clear:after {
+    content: " ";
+    display: table;
+}
+
+.clear:after {
+    clear: both;
+}
+
+
+
+
+/*  GENERAL STYLING */
+
+body {
+	background-color: $background_color;
+	background-image: $background_image;
+	background-position: center top;
+	
+	font-family: $main_font;
+	font-weight: $light_weight;
+	font-size: $base_font_size;
+}
+
+div#topBar {
+	background-color: #c30008;
+	border-bottom: 1px solid #e92b32;
+	color: $xlight_color;
+	
+	div {
+		line-height: 40px;
+		text-align: right;
+		strong {
+			font-weight: $heavy_weight;
+		}
+	}
+}
+
+div#wrapper {
+
+	div#main {
+		margin-top: 40px;
+		background: $xlight_color;
+		padding: 20px;
+		
+		h1 {
+			font-size: $large_text;
+			font-weight: $heavy_weight;
+		}
+		
+		form {
+			width: 100%;
+			margin-top: 20px;
+			font-size: $small_text;
+			
+			div.left {
+				width: 50%;
+				float: left;
+				padding-right: 10px;
+			}
+			div.right {
+				width: 50%;
+				float: left;
+				padding-left: 10px;
+			}
+			
+			select, input, textarea, label {
+				box-sizing: border-box;
+				display: block;
+				padding: 5px 0;
+				margin: 10px 0;
+			}
+			label input[type=checkbox] {
+				display: inline-block;
+			}
+			textarea {
+				resize: vertical;
+			}
+			
+			.datepicker,
+			.timepicker {
+				margin-bottom: 30px;
+			}
+			
+			.fullWidth {
+				width: 100%;
+			}
+			
+			textarea {
+				min-height: 100px;
+			}
+		}
+		
+	}
+	
+	footer {
+		color: $xdark_color;
+		padding: 20px 20px 60px 20px;
+		font-size: $small_text;
+		
+		strong {
+			font-weight: $light_weight;
+			color: $dark-color;
+			
+			strong {
+				font-weight: $heavy_weight;
+			}
+		}
+	}
+	
+}
+
+	
+	
+div.timepicker,
+div.datepicker {
+	i.fa {
+		font-size: $small_text;
+	}
+}
+
+.datepicker,
+.timepicker {
+	table {
+		width: 100%;
+		tr.h6 {
+			font-weight: $heavy_weight;
+			line-height: 30px;
+		}
+	}
+	button {
+		background: $light_color;
+		border: none;
+		padding: 5px;
+	}
+	button.btn-info,
+	button:hover {
+		background: $accent-color;
+	}
+	.text-center {
+		text-align: center;
+	}
+}
+
+.timepicker {
+	button {
+		width: 100%;
+	}
+	input {
+		margin: 0 !important;
+	}
+}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+
+
+

@@ -133,19 +133,19 @@
 	$(function() {
 	
 		$("#getPlayers").click( function () {
-			$.get("api/players", function (data) {
+			$.get("../api/players", function (data) {
 				$("#result").html(data);
 			});
 		});
 	
 		$("#getFactions").click( function () {
-			$.get("api/factions", function (data) {
+			$.get("../api/factions", function (data) {
 				$("#result").html(data);
 			});
 		});
 	
 		$("#getGames").click( function () {
-			$.get("api/games", function (data) {
+			$.get("../api/games", function (data) {
 				$("#result").html(data);
 			});
 		});
@@ -153,25 +153,25 @@
 	
 	
 		$("#getRanking").click( function () {
-			$.get("api/ranking", function (data) {
+			$.get("../api/ranking", function (data) {
 				$("#result").html(data);
 			});
 		});
 		
 		$("#getEloRanking").click( function () {
-			$.get("api/ranking/elo_rating", function (data) {
+			$.get("../api/ranking/elo_rating", function (data) {
 				$("#result").html(data);
 			});
 		});
 		
 		$("#getPlayedRanking").click( function () {
-			$.get("api/ranking/games_played", function (data) {
+			$.get("../api/ranking/games_played", function (data) {
 				$("#result").html(data);
 			});
 		});
 		
 		$("#getPointsRanking").click( function () {
-			$.get("api/ranking/points", function (data) {
+			$.get("../api/ranking/points", function (data) {
 				$("#result").html(data);
 			});
 		});
@@ -179,7 +179,7 @@
 		
 		$("#getPlayerStats").submit( function () {
 			var player_id = $("#getPlayerStats input[name=player_id]").val();
-			$.get("api/players/" + player_id + "/stats", function (data) {
+			$.get("../api/players/" + player_id + "/stats", function (data) {
 				$("#result").html(data);
 			});
 			return false;
@@ -188,14 +188,14 @@
 		
 		$("#getLogo").submit( function () {
 			var faction_id = $("#getLogo input[name=faction_id]").val();
-			$("#result").html( "<img src='api/factions/" + faction_id + "/logo' />" );
+			$("#result").html( "<img src='../api/factions/" + faction_id + "/logo' />" );
 			return false;
 		});
 		
 
 		$("#login").submit( function () {
 			$.post(
-				"api/login",
+				"../api/login",
 				$("#login").serialize(),
 				function (data) {
 					$("#result").html(data);
@@ -205,19 +205,19 @@
 		});
 	
 		$("#logout").click( function () {
-			$.get("api/logout", function (data) {
+			$.get("../api/logout", function (data) {
 				$("#result").html(data);
 			});
 		});
 		$("#getAdmins").click( function () {
-			$.get("api/admins", function (data) {
+			$.get("../api/admins", function (data) {
 				$("#result").html(data);
 			});
 		});
 		
 		$("#addAdmin").submit( function () {
 			$.post(
-				"api/admins",
+				"../api/admins",
 				$("#addAdmin").serialize(),
 				function (data) {
 					$("#result").html(data);
@@ -228,7 +228,7 @@
 		
 		$("#addPlayer").submit( function () {
 			$.post(
-				"api/players",
+				"../api/players",
 				$("#addPlayer").serialize(),
 				function (data) {
 					$("#result").html(data);
@@ -256,7 +256,7 @@
 			data.append( "color", $('#addFaction input[name=color]').val() );
 			
 			$.ajax({
-				url: 'api/factions',
+				url: '../api/factions',
 				type: 'POST',
 				data: data,
 				cache: false,
@@ -281,7 +281,7 @@
 		
 		$("#addGame").submit( function () {
 			$.post(
-				"api/games",
+				"../api/games",
 				$("#addGame").serialize(),
 				function (data) {
 					$("#result").html(data);
