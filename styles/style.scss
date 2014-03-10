@@ -349,7 +349,7 @@ div.modal:focus {
 	outline: none
 }
 
-div.modal.faction {
+div.modal {
 	
 	header {
 		display: table;
@@ -413,7 +413,8 @@ div.modal.faction {
 					
 				border-bottom: 1px solid $dark_color;
 				
-				div.faction {
+				div.faction,
+				div.player {
 					display: table-cell;
 					vertical-align: middle;
 					width: 40%;

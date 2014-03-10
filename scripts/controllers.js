@@ -34,15 +34,13 @@ rebelLeaguesControllers.controller('gamesHistoryCtrl', ['$scope', '$http', '$mod
 										function error(reason)     { return false; }
 									);
 							}
-						]
+						]						
 					}
-					/*resolve : {
-						'faction' : $http.get('api/factions/' + $factionId),
-						'faction_stats' : $http.get('api/factions/' + $factionId + '/stats')
-					}*/
+					
 				});
+				
 			};
-		
+			
 			$scope.games = [];
 			var prev_date_string = "";
 		
@@ -93,6 +91,39 @@ rebelLeaguesControllers.controller('playersRankingCtrl', ['$scope', '$http', '$m
 				$scope.min = Math.min.apply(null, data.data.players.map(function(a){return a.points;}));
 				$scope.max = Math.max.apply(null, data.data.players.map(function(a){return a.points;}));
 			}
+
+
+			$scope.showPlayerModal = function ($playerId) {
+				console.log("Player ID : " + $playerId);			
+						
+				$modal.open({
+					'templateUrl' : 'partials/playerModal.html',
+					'controller' : 'playerModalCtrl',
+					'windowClass' : 'player',
+					"resolve": {
+						"player": [
+							'$http',
+							function($http) {
+								return $http.get('api/players/' + $playerId)
+									.then(
+										function success(response) { return response.data.data; },
+										function error(reason)     { return false; }
+									);
+							}
+						],
+						"players_stats": [
+							'$http',
+							function($http) {
+								return $http.get('api/players/' + $playerId + "/stats")
+									.then(
+										function success(response) { return response.data.data; },
+										function error(reason)     { return false; }
+									);
+							}
+						]						
+					}
+				});	
+			};
 		
 			$scope.players = data.data.players;
 			$scope.ranking = data.data.ranking;
@@ -110,6 +141,19 @@ rebelLeaguesControllers.controller('factionModalCtrl', ['$scope', '$http', 'fact
 		
 		$scope.min = Math.min.apply(null, $scope.faction_stats.map(function(a){return a.games_played;}));
 		$scope.max = Math.max.apply(null, $scope.faction_stats.map(function(a){return a.games_played;}));
+				
+		console.log($scope);
+	}
+]);
+
+
+rebelLeaguesControllers.controller('playerModalCtrl', ['$scope', '$http', 'player', 'players_stats',
+	function ($scope, $http, player, players_stats) {
+		$scope.player = player;
+		$scope.players_stats = players_stats.players;
+		
+		$scope.min = Math.min.apply(null, $scope.players_stats.map(function(a){return a.games_played;}));
+		$scope.max = Math.max.apply(null, $scope.players_stats.map(function(a){return a.games_played;}));
 				
 		console.log($scope);
 	}

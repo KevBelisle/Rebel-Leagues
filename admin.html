@@ -55,6 +55,14 @@
 	</div>
 	
 	<div>
+		<form id="getPlayerStats">
+			<h3>Temp test get players_stat</h3>
+			<input type="text" name="player_id" placeholder="player_id" />
+			<input type="submit" value="Submit" />
+		</form>
+	</div>
+	
+	<div>
 		<form id="login">
 			<h3>Login</h3>
 			<input type="text" name="username" placeholder="username" />
@@ -166,6 +174,15 @@
 			$.get("api/ranking/points", function (data) {
 				$("#result").html(data);
 			});
+		});
+		
+		
+		$("#getPlayerStats").submit( function () {
+			var player_id = $("#getPlayerStats input[name=player_id]").val();
+			$.get("api/players/" + player_id + "/stats", function (data) {
+				$("#result").html(data);
+			});
+			return false;
 		});
 		
 		
