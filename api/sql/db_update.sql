@@ -206,6 +206,10 @@ BEGIN
 			player1_id AS player_id,
 			factions.parent_faction_id AS parent_faction_id,
 			player1_faction_id AS faction_id,
+			
+			player2_id AS rival_player_id,
+			factions2.parent_faction_id AS rival_parent_faction_id,
+			player2_faction_id AS rival_faction_id,
 			date,
 			1 AS is_win,
 			is_draw,
@@ -216,6 +220,9 @@ BEGIN
 		FROM games
 		LEFT OUTER JOIN factions ON factions.faction_id = games.player1_faction_id
 		LEFT OUTER JOIN factions AS parent_factions ON factions.parent_faction_id = parent_factions.faction_id
+		
+		LEFT OUTER JOIN factions AS factions2 ON factions2.faction_id = games.player2_faction_id
+		LEFT OUTER JOIN factions AS rival_parent_factions ON factions2.parent_faction_id = factions2.faction_id
 		WHERE is_draw = 0
 	)
 	UNION ALL
@@ -225,6 +232,10 @@ BEGIN
 			player2_id AS player_id,
 			factions.parent_faction_id AS parent_faction_id,
 			player2_faction_id AS faction_id,
+			
+			player1_id AS rival_player_id,
+			factions1.parent_faction_id AS rival_parent_faction_id,
+			player1_faction_id AS rival_faction_id,
 			date,
 			0 AS is_win,
 			is_draw,
@@ -235,6 +246,9 @@ BEGIN
 		FROM games
 		LEFT OUTER JOIN factions ON factions.faction_id = games.player2_faction_id
 		LEFT OUTER JOIN factions AS parent_factions ON factions.parent_faction_id = parent_factions.faction_id
+		
+		LEFT OUTER JOIN factions AS factions1 ON factions1.faction_id = games.player1_faction_id
+		LEFT OUTER JOIN factions AS rival_parent_factions ON factions1.parent_faction_id = factions1.faction_id
 		WHERE is_draw = 0
 	)
 	UNION ALL
@@ -244,6 +258,10 @@ BEGIN
 			player1_id AS player_id,
 			factions.parent_faction_id AS parent_faction_id,
 			player1_faction_id AS faction_id,
+			
+			player2_id AS rival_player_id,
+			factions2.parent_faction_id AS rival_parent_faction_id,
+			player2_faction_id AS rival_faction_id,
 			date,
 			0 AS is_win,
 			is_draw,
@@ -254,6 +272,9 @@ BEGIN
 		FROM games
 		LEFT OUTER JOIN factions ON factions.faction_id = games.player1_faction_id
 		LEFT OUTER JOIN factions AS parent_factions ON factions.parent_faction_id = parent_factions.faction_id
+		
+		LEFT OUTER JOIN factions AS factions2 ON factions2.faction_id = games.player2_faction_id
+		LEFT OUTER JOIN factions AS rival_parent_factions ON factions2.parent_faction_id = factions2.faction_id
 		WHERE is_draw = 1
 	)
 	UNION ALL
@@ -263,6 +284,10 @@ BEGIN
 			player2_id AS player_id,
 			factions.parent_faction_id AS parent_faction_id,
 			player2_faction_id AS faction_id,
+			
+			player1_id AS rival_player_id,
+			factions1.parent_faction_id AS rival_parent_faction_id,
+			player1_faction_id AS rival_faction_id,
 			date,
 			0 AS is_win,
 			is_draw,
@@ -273,6 +298,9 @@ BEGIN
 		FROM games
 		LEFT OUTER JOIN factions ON factions.faction_id = games.player2_faction_id
 		LEFT OUTER JOIN factions AS parent_factions ON factions.parent_faction_id = parent_factions.faction_id
+		
+		LEFT OUTER JOIN factions AS factions1 ON factions1.faction_id = games.player1_faction_id
+		LEFT OUTER JOIN factions AS rival_parent_factions ON factions1.parent_faction_id = factions1.faction_id
 		WHERE is_draw = 1
 	);
 
@@ -343,7 +371,7 @@ BEGIN
 		FROM games_history
 		WHERE is_draw = 1;
 		
-	/* CREATE factions_centric VIEW
+	/* CREATE factions_stats VIEW -- factions against other factions
 	============================================= */
 	
 	CREATE OR REPLACE VIEW factions_stats AS
@@ -368,6 +396,31 @@ BEGIN
 	GROUP BY faction_id, rival_faction_id
 	ORDER BY factions_games_split.faction_id, factions_games_split.rival_parent_faction_id, factions_games_split.rival_faction_id;
 	
+	
+		/* CREATE players_stats VIEW -- players against other players (use this to detect rivalries + dominations with a future view)
+	============================================= */
+	
+	CREATE OR REPLACE VIEW players_stats AS
+	SELECT
+		games_split.player_id,
+		players.nickname AS nickname,
+		players.firstname AS firstname,
+		players.lastname AS lastname,
+		
+		rival_players.player_id AS rival_player_id,
+		rival_players.nickname AS rival_nickname,
+		rival_players.firstname AS rival_firstname,
+		rival_players.lastname AS rival_lastname,
+		
+        COALESCE(SUM(is_win), 0) AS games_won,
+        COALESCE(SUM(is_draw), 0) AS games_tied,
+        COALESCE(SUM(is_loss), 0) AS games_lost,
+        COALESCE(SUM(is_win), 0) + COALESCE(SUM(is_draw), 0) + COALESCE(SUM(is_loss), 0) AS games_played
+	FROM  games_split games_split
+		LEFT OUTER JOIN players players ON players.player_id = games_split.player_id
+		LEFT OUTER JOIN players rival_players ON rival_players.player_id = games_split.rival_player_id
+	GROUP BY player_id, rival_player_id
+	ORDER BY games_split.player_id, games_split.rival_player_id;
 	
 END //
 DELIMITER ;
