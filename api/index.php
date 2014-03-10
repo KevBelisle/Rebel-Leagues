@@ -18,6 +18,7 @@ EpiDatabase::employ('mysql', $db["database"], $db["host"], $db["username"], $db[
 getRoute()->get('/', array('League', 'nope'));
 
 getRoute()->get('/players(?:/?)', array('League', 'getPlayers'));
+getRoute()->get('/players/(\d+)(?:/?)', array('League', 'getPlayer'));
 getRoute()->get('/players/(\d+)/stats(?:/?)', array('League', 'getPlayerStats'));
 
 getRoute()->get('/games(?:/?)', array('League', 'getGamesHistory'));
@@ -88,6 +89,18 @@ class League {
 	}
 	
 	
+	public static function getPlayer($player_id) {
+		$player = getDatabase()->one(
+		'SELECT
+			player_id, nickname, firstname, lastname
+		FROM players
+		WHERE player_id = :player_id',
+			array( ':player_id' => $player_id )
+		);
+		echo outputSuccess( $player );
+	}
+	
+	
 	public static function getFactions() {
 		$factions = getDatabase()->all(
 		'SELECT * FROM factions ORDER BY name'
@@ -123,7 +136,7 @@ class League {
 		echo outputSuccess( array( 'factions' => $factions ) );
 	}
 	
-/////// -*/-*/-*/-*/-*/ ICITTE \*-\*-\*-\*-	
+
 	public static function getPlayerStats($player_id) {
 		$players = getDatabase()->all(
 			"SELECT * FROM players_stats WHERE player_id = :player_id ORDER BY games_played DESC",

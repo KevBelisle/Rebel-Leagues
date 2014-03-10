@@ -2,8 +2,8 @@
 <header>
 	
 	<div class="name">
-		<h2>{{ player.nickname }}</h2>
-		<h1>{{ player.firstname }} {{ player.lastname }}</h1>
+		<h1>{{ player.nickname }}</h1>
+		<h2>{{ player.firstname }} {{ player.lastname }}</h2>
 	</div>
 	
 	<i class="fa fa-times close" ng-click="$close($event)"></i>
@@ -12,7 +12,7 @@
 <section>
 
 	<ul>
-		<li ng-repeat="player in player_stats">
+		<li ng-repeat="player in players_stats">
 			<div class="player">
 				<div>
 					<div class="name">

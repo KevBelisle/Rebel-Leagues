@@ -403,9 +403,6 @@ BEGIN
 	CREATE OR REPLACE VIEW players_stats AS
 	SELECT
 		games_split.player_id,
-		players.nickname AS nickname,
-		players.firstname AS firstname,
-		players.lastname AS lastname,
 		
 		rival_players.player_id AS rival_player_id,
 		rival_players.nickname AS rival_nickname,
@@ -421,6 +418,8 @@ BEGIN
 		LEFT OUTER JOIN players rival_players ON rival_players.player_id = games_split.rival_player_id
 	GROUP BY player_id, rival_player_id
 	ORDER BY games_split.player_id, games_split.rival_player_id;
+	
+	
 	
 END //
 DELIMITER ;
