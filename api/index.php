@@ -29,6 +29,7 @@ getRoute()->get('/ranking(?:/?)', array('League', 'getRanking'));
 getRoute()->get('/ranking/(games_played|elo_rating|points)(?:/?)', array('League', 'getRanking'));
 
 getRoute()->get('/factions(?:/?)', array('League', 'getFactions'));
+getRoute()->get('/factions/leafs(?:/?)', array('League', 'getLeafFactions'));
 getRoute()->get('/factions/(\d+)(?:/?)', array('League', 'getFaction'));
 getRoute()->get('/factions/(\d+)/stats(?:/?)', array('League', 'getFactionStats'));
 getRoute()->get('/factions/(\d+)/logo(?:/?)', array('League', 'getFactionLogo'));
@@ -106,7 +107,35 @@ class League {
 	
 	public static function getFactions() {
 		$factions = getDatabase()->all(
-		'SELECT * FROM factions ORDER BY name'
+		'SELECT
+			c.faction_id AS faction_id,
+			c.name AS name,
+			c.color AS color,
+			c.parent_faction_id AS parent_faction_id,
+			p.name AS parent_faction_name
+		FROM factions c
+		LEFT JOIN factions p ON c.parent_faction_id = p.faction_id
+		ORDER BY c.faction_id'
+		);
+		echo outputSuccess( array( 'factions' => $factions ) );
+	}
+	
+	public static function getLeafFactions() {
+		$factions = getDatabase()->all(
+		'SELECT
+			c.faction_id AS faction_id,
+			c.name AS name,
+			c.color AS color,
+			c.parent_faction_id AS parent_faction_id,
+			p.name AS parent_faction_name
+		FROM factions c
+		LEFT JOIN factions p ON c.parent_faction_id = p.faction_id
+		WHERE c.faction_id NOT IN (
+				SELECT parent_faction_id AS faction_id
+				FROM factions
+				WHERE parent_faction_id IS NOT NULL
+			)
+		ORDER BY c.faction_id'
 		);
 		echo outputSuccess( array( 'factions' => $factions ) );
 	}
