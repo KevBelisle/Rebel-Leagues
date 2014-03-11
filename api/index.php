@@ -1,6 +1,9 @@
 <?php
 
-//header('content-type: text/html; charset=utf-8');
+$jsonData = json_decode(file_get_contents('php://input'), true);
+if ( count($_POST) == 0 && count($jsonData) > 0 ) {
+	$_POST = $jsonData;
+}
 
 // Include Epiphany library
 include_once 'lib/epiphany/Epi.php';
@@ -455,7 +458,10 @@ class Admin {
 	
 	
 	public static function addGame() {
-		self::checkLogin(3);
+		//self::checkLogin(3);
+		
+		print_r($_POST);
+		
 		self::checkFields( array('player1_id', 'player1_faction_id', 'player2_id', 'player2_faction_id', 'date', 'is_draw', 'is_ranked', 'is_time_runout', 'is_online'), $_POST );
 		
 		try {
@@ -478,6 +484,7 @@ class Admin {
 		} catch (Exception $e) {
 			echo outputError($e->getMessage());
 		}
+		
 	}
 }
 
