@@ -9,7 +9,7 @@
 			<option value="">Choisir premier joueur (vainqueur)</option>
 		</select>
 		
-		<select class="fullWidth" ng-model="game.player1_faction_id" ng-options="faction.faction_id as faction.name for faction in factions">
+		<select class="fullWidth" ng-model="game.player1_faction_id" ng-options="f.faction_id as f.name group by f.parent_faction_name for f in factions">
 			<option value="">Choisir faction du premier joueur</option>
 		</select>
 		
@@ -17,7 +17,7 @@
 			<option value="">Choisir deuxième joueur</option>
 		</select>
 		
-		<select class="fullWidth" ng-model="game.player2_faction_id" ng-options="faction.faction_id as faction.name for faction in factions">
+		<select class="fullWidth" ng-model="game.player2_faction_id" ng-options="f.faction_id as f.name group by f.parent_faction_name for f in factions">
 			<option value="">Choisir faction du deuxième joueur</option>
 		</select>
 		
