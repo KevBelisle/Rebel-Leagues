@@ -20,6 +20,9 @@ EpiDatabase::employ('mysql', $db["database"], $db["host"], $db["username"], $db[
 // Define routes
 getRoute()->get('/', array('League', 'nope'));
 
+getRoute()->get('/leagues(?:/?)', array('League', 'getLeague'));
+getRoute()->get('/leagues/logo(?:/?)', array('League', 'getLeagueLogo'));
+
 getRoute()->get('/players(?:/?)', array('League', 'getPlayers'));
 getRoute()->get('/players/(\d+)(?:/?)', array('League', 'getPlayer'));
 getRoute()->get('/players/(\d+)/stats(?:/?)', array('League', 'getPlayerStats'));
@@ -82,6 +85,33 @@ function outputError($data) {
 class League {
 	public static function nope() {
 		echo "Nope.";
+	}
+	
+	
+	public static function getLeague($league_id = 1) {
+		$league = getDatabase()->one(
+		'SELECT
+			title, subtitle
+		FROM leagues
+		WHERE league_id = :league_id',
+			array( ':league_id' => $league_id )
+		);
+		echo outputSuccess( $league );
+	}
+	
+	
+	public static function getLeagueLogo($league_id = 1) {
+		$league = getDatabase()->one(
+			"SELECT logo
+			FROM leagues
+			WHERE league_id = :league_id",
+			array( ':league_id' => $league_id )
+		);
+		
+		$logo = $league['logo'];
+		if($logo === NULL) exit;
+		header('Content-Type: image/png');
+		readfile($logo);
 	}
 	
 
