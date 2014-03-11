@@ -29,10 +29,10 @@
 			
 			<div class="stats">
 				{{ faction.games_played }} parties jouées
-				<div ng-show="faction.games_played" class="stats_bar" style="width: {{ 100 * faction.games_played / max | number:0 }}%">
-					<div class="darker" style="width: {{ 99.99 * faction.games_won / faction.games_played | number:2 }}%" tooltip="{{ faction.games_won }} parties gagnées"></div>
-					<div style="width: {{ 99.99 * faction.games_tied / faction.games_played | number:2 }}%" tooltip="{{ faction.games_tied }} parties annulées"></div>
-					<div class="lighter" style="width: {{ 99.99 * faction.games_lost / faction.games_played | number:2 }}%" tooltip="{{ faction.games_lost }} parties perdues"></div>
+				<div ng-show="faction.games_played" class="stats_bar" ng-attr-style="width: {{ 100 * faction.games_played / max | number:0 }}%">
+					<div class="darker" ng-attr-style="width: {{ 99.99 * faction.games_won / faction.games_played | number:2 }}%" tooltip="{{ faction.games_won }} parties gagnées"></div>
+					<div ng-attr-style="width: {{ 99.99 * faction.games_tied / faction.games_played | number:2 }}%" tooltip="{{ faction.games_tied }} parties annulées"></div>
+					<div class="lighter" ng-attr-style="width: {{ 99.99 * faction.games_lost / faction.games_played | number:2 }}%" tooltip="{{ faction.games_lost }} parties perdues"></div>
 				</div>
 			</div>
 		</li>

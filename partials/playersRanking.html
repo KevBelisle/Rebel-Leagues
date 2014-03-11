@@ -12,21 +12,21 @@
 			
 				<div ng-switch-when="elo_rating">
 					Points Elo : {{ player.elo_rating | number:0 }}
-					<div class="stats_bar" style="width: {{ 10 + 90 * (player.elo_rating - min) / (max - min) | number:0 }}%"></div>
+					<div class="stats_bar" ng-attr-style="width: {{ 10 + 90 * (player.elo_rating - min) / (max - min) | number:0 }} px"></div>
 				</div>
 				
 				<div ng-switch-when="games_played">
 					{{ player.games_played }} parties jouées
-					<div ng-show="player.games_played" class="stats_bar" style="width: {{ 100 * player.games_played / max | number:0 }}%">
-						<div class="darker" style="width: {{ 99.99 * player.games_won / player.games_played | number:2 }}%" tooltip="{{ player.games_won }} parties gagnées"></div>
-						<div style="width: {{ 99.99 * player.games_tied / player.games_played | number:2 }}%" tooltip="{{ player.games_tied }} parties annulées"></div>
-						<div class="lighter" style="width: {{ 99.99 * player.games_lost / player.games_played | number:2 }}%" tooltip="{{ player.games_lost }} parties perdues"></div>
+					<div ng-show="player.games_played" class="stats_bar" ng-attr-style="width: {{ 100 * player.games_played / max | number:0 }}%">
+						<div class="darker" ng-attr-style="width: {{ 99.99 * player.games_won / player.games_played | number:2 }}%" tooltip="{{ player.games_won }} parties gagnées"></div>
+						<div ng-attr-style="width: {{ 99.99 * player.games_tied / player.games_played | number:2 }}%" tooltip="{{ player.games_tied }} parties annulées"></div>
+						<div class="lighter" ng-attr-style="width: {{ 99.99 * player.games_lost / player.games_played | number:2 }}%" tooltip="{{ player.games_lost }} parties perdues"></div>
 					</div>
 				</div>
 				
 				<div ng-switch-when="points">
 					{{ player.points }} points ({{ player.games_won }} victoires, {{ player.games_tied }} nulles, {{ player.games_lost }} défaites)
-					<div class="stats_bar" style="width: {{ 100 * player.points / max | number:0 }}%"></div>
+					<div class="stats_bar" ng-attr-style="width: {{ 100 * player.points / max | number:0 }}%"></div>
 				</div>
 				
 			</div>
