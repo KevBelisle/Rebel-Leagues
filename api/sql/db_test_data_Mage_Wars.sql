@@ -2,7 +2,7 @@
 /* POPULATE leagues
 ============================================= */
 
-INSERT INTO leagues (league_id, title, subtitle, logo) VALUES (1,'Star Wars X-Wing Miniatures Game', 'RebelLeagues Québec', 'uploads/leagues/f53d276f50d10a527e35b945260226a1.png');
+INSERT INTO leagues (league_id, title, subtitle, logo) VALUES (1,'Mage Wars', 'RebelLeagues Québec', 'uploads/leagues/f53d276f50d10a527e35b945260226a1.png');
 
 /* POPULATE factions
 ============================================= */
