@@ -5,48 +5,41 @@
 
 	<div class="left">
 
-		<select class="fullWidth" name="player1_id" ng-model="player1_id" ng-options="player.player_id as (player.nickname + ' (' + player.firstname + ' ' + player.lastname + ')') for player in players">
+		<select class="fullWidth" ng-model="game.player1_id" ng-options="player.player_id as (player.nickname + ' (' + player.firstname + ' ' + player.lastname + ')') for player in players">
 			<option value="">Choisir premier joueur (vainqueur)</option>
 		</select>
 		
-		<select class="fullWidth" ng-model="player1_faction_id" ng-options="faction.faction_id as faction.name for faction in factions">
+		<select class="fullWidth" ng-model="game.player1_faction_id" ng-options="faction.faction_id as faction.name for faction in factions">
 			<option value="">Choisir faction du premier joueur</option>
 		</select>
 		
-		<select class="fullWidth" ng-model="player2_id" ng-options="player.player_id as player.nickname for player in players">
+		<select class="fullWidth" ng-model="game.player2_id" ng-options="player.player_id as (player.nickname + ' (' + player.firstname + ' ' + player.lastname + ')') for player in players">
 			<option value="">Choisir deuxième joueur</option>
 		</select>
 		
-		<select class="fullWidth" ng-model="player2_faction_id" ng-options="faction.faction_id as faction.name for faction in factions">
+		<select class="fullWidth" ng-model="game.player2_faction_id" ng-options="faction.faction_id as faction.name for faction in factions">
 			<option value="">Choisir faction du deuxième joueur</option>
 		</select>
 		
-		<label class="fullWidth"> <input type="checkbox" name="is_draw" /> Finie en nulle</label>
-		<label class="fullWidth"> <input type="checkbox" name="is_ranked" checked /> Comptabilisée au classement</label>
-		<label class="fullWidth"> <input type="checkbox" name="is_time_runout" /> Terminée par manque de temps</label>
-		<label class="fullWidth"> <input type="checkbox" name="is_online" /> Jouée en ligne (VASSAL)</label>
+		<label class="fullWidth"> <input type="checkbox" ng-model="game.is_draw" /> Finie en nulle</label>
+		<label class="fullWidth"> <input type="checkbox" ng-model="game.is_ranked" /> Comptabilisée au classement</label>
+		<label class="fullWidth"> <input type="checkbox" ng-model="game.is_time_runout" /> Terminée par manque de temps</label>
+		<label class="fullWidth"> <input type="checkbox" ng-model="game.is_online" /> Jouée en ligne (VASSAL)</label>
 	
 	</div>
 	
 	<div class="right">
-		<div ng-model="date" class="datepicker">
+		<div ng-model="game.datetime" class="datepicker">
 			<datepicker show-weeks="false"></datepicker>
 		</div>
 		
-		<div ng-model="time" class="timepicker">
+		<div ng-model="game.datetime" class="timepicker">
 			<timepicker hour-step="1" minute-step="15" show-meridian="false"></timepicker>
 		</div>
 		
-		<!--<input type="text" name="player1_id" placeholder="player1_id" value="{{ player1_id  }}" />
-		<input type="text" name="player1_faction_id" placeholder="player1_faction_id" value="{{ player1_faction_id  }}" />
-		<input type="text" name="player2_id" placeholder="player2_id" value="{{ player2_id  }}" />
-		<input type="text" name="player2_faction_id" placeholder="player2_faction_id" value="{{ player2_faction_id  }}" />-->
+		<textarea class="fullWidth" ng-model="game.notes" placeholder="Notes"></textarea>
 		
-		<!--<input type="text" name="date" placeholder="date" />-->
-		
-		<textarea class="fullWidth" name="notes" placeholder="Notes"></textarea>
-		
-		<input  class="fullWidth" type="submit" value="Submit" />
+		<button ng-click="submit(game)" class="fullWidth">Submit</button>
 	</div>
 	
 </form>
