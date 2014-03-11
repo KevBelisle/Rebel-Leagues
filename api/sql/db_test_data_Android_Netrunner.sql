@@ -1,3 +1,9 @@
+
+/* POPULATE leagues
+============================================= */
+
+INSERT INTO leagues (league_id, title, subtitle, logo) VALUES (1,'Android: Netrunner', 'RebelLeagues Québec', 'uploads/leagues/e6db1baa29d3df1eb307ff6a12c778da.png');
+
 /* POPULATE factions
 ============================================= */
 

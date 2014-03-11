@@ -1,4 +1,9 @@
 
+/* POPULATE leagues
+============================================= */
+
+INSERT INTO leagues (league_id, title, subtitle, logo) VALUES (1,'Star Wars X-Wing Miniatures Game', 'RebelLeagues Québec', 'uploads/leagues/e034fb6b66aacc1d48f445ddfb08da98.png');
+
 
 /* POPULATE factions
 ============================================= */

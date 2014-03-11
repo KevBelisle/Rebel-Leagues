@@ -8,11 +8,28 @@ BEGIN
 	/* CREATE TABLES
 	============================================= */
 	
+	CREATE TABLE IF NOT EXISTS leagues ( league_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 	CREATE TABLE IF NOT EXISTS admins ( admin_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 	CREATE TABLE IF NOT EXISTS players ( player_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ) ENGINE=InnoDB DEFAULT CHARSET=utf8;  
 	CREATE TABLE IF NOT EXISTS factions ( faction_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 	CREATE TABLE IF NOT EXISTS games ( game_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+	
+	/* CREATE leagues COLUMNS
+	============================================= */
+	
+	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'leagues' AND column_name = 'title' ) = 0 THEN
+		ALTER TABLE leagues ADD title VARCHAR(60) NOT NULL;
+	END IF;
+	
+	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'leagues' AND column_name = 'subtitle' ) = 0 THEN
+		ALTER TABLE leagues ADD subtitle VARCHAR(60) NOT NULL;
+	END IF;
+
+	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'leagues' AND column_name = 'logo' ) = 0 THEN
+		ALTER TABLE leagues ADD logo VARCHAR(60);
+	END IF;
+	
 	
 	/* CREATE admins COLUMNS
 	============================================= */
