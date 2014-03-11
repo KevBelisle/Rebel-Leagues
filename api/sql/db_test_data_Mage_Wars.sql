@@ -22,7 +22,7 @@ INSERT INTO factions (faction_id, name, parent_faction_id, color, logo) VALUES(1
 INSERT INTO factions (faction_id, name, parent_faction_id, color, logo) VALUES(18, 'Fire Sortilege', 5, '', 'uploads/factions/0d0566ed7bc32b79df498f4311bdc229.png');
 INSERT INTO factions (faction_id, name, parent_faction_id, color, logo) VALUES(19, 'Water Sortilege', 5, '', 'uploads/factions/a303a10ecc68afdd4a7b4fd0f5d79187.png');
 INSERT INTO factions (faction_id, name, parent_faction_id, color, logo) VALUES(20, 'Wychwood', 6, '', 'uploads/factions/20aa554893c7f677fa1aaf1e9e4a5f66.png');
-INSERT INTO factions (faction_id, name, parent_faction_id, color, logo) VALUES(21, 'Darkfenne', 7, '', 'uploads/factions/14b22ddbcdbb13e8d9bae05119bd18cd.png');
+INSERT INTO factions (faction_id, name, parent_faction_id, color, logo) VALUES(21, 'Darkfenne', 8, '', 'uploads/factions/14b22ddbcdbb13e8d9bae05119bd18cd.png');
 
 /* POPULATE players
 ============================================= */
