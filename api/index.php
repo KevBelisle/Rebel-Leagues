@@ -1,6 +1,9 @@
 <?php
 
-//header('content-type: text/html; charset=utf-8');
+$jsonData = json_decode(file_get_contents('php://input'), true);
+if ( count($_POST) == 0 && count($jsonData) > 0 ) {
+	$_POST = $jsonData;
+}
 
 // Include Epiphany library
 include_once 'lib/epiphany/Epi.php';
@@ -26,6 +29,7 @@ getRoute()->get('/ranking(?:/?)', array('League', 'getRanking'));
 getRoute()->get('/ranking/(games_played|elo_rating|points)(?:/?)', array('League', 'getRanking'));
 
 getRoute()->get('/factions(?:/?)', array('League', 'getFactions'));
+getRoute()->get('/factions/leafs(?:/?)', array('League', 'getLeafFactions'));
 getRoute()->get('/factions/(\d+)(?:/?)', array('League', 'getFaction'));
 getRoute()->get('/factions/(\d+)/stats(?:/?)', array('League', 'getFactionStats'));
 getRoute()->get('/factions/(\d+)/logo(?:/?)', array('League', 'getFactionLogo'));
@@ -103,7 +107,35 @@ class League {
 	
 	public static function getFactions() {
 		$factions = getDatabase()->all(
-		'SELECT * FROM factions ORDER BY name'
+		'SELECT
+			c.faction_id AS faction_id,
+			c.name AS name,
+			c.color AS color,
+			c.parent_faction_id AS parent_faction_id,
+			p.name AS parent_faction_name
+		FROM factions c
+		LEFT JOIN factions p ON c.parent_faction_id = p.faction_id
+		ORDER BY c.faction_id'
+		);
+		echo outputSuccess( array( 'factions' => $factions ) );
+	}
+	
+	public static function getLeafFactions() {
+		$factions = getDatabase()->all(
+		'SELECT
+			c.faction_id AS faction_id,
+			c.name AS name,
+			c.color AS color,
+			c.parent_faction_id AS parent_faction_id,
+			p.name AS parent_faction_name
+		FROM factions c
+		LEFT JOIN factions p ON c.parent_faction_id = p.faction_id
+		WHERE c.faction_id NOT IN (
+				SELECT parent_faction_id AS faction_id
+				FROM factions
+				WHERE parent_faction_id IS NOT NULL
+			)
+		ORDER BY c.faction_id'
 		);
 		echo outputSuccess( array( 'factions' => $factions ) );
 	}
@@ -455,7 +487,10 @@ class Admin {
 	
 	
 	public static function addGame() {
-		self::checkLogin(3);
+		//self::checkLogin(3);
+		
+		print_r($_POST);
+		
 		self::checkFields( array('player1_id', 'player1_faction_id', 'player2_id', 'player2_faction_id', 'date', 'is_draw', 'is_ranked', 'is_time_runout', 'is_online'), $_POST );
 		
 		try {
@@ -478,6 +513,7 @@ class Admin {
 		} catch (Exception $e) {
 			echo outputError($e->getMessage());
 		}
+		
 	}
 }
 

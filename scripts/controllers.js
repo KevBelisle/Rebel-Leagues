@@ -34,7 +34,7 @@ rebelLeaguesControllers.controller('gamesHistoryCtrl', ['$scope', '$http', '$mod
 										function error(reason)     { return false; }
 									);
 							}
-						]						
+						]
 					}
 					
 				});

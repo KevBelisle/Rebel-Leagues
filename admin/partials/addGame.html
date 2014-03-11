@@ -1,0 +1,45 @@
+
+<h1>Enregistrer une partie</h1>
+
+<form id="addGame" class="clear">
+
+	<div class="left">
+
+		<select class="fullWidth" ng-model="game.player1_id" ng-options="player.player_id as (player.nickname + ' (' + player.firstname + ' ' + player.lastname + ')') for player in players">
+			<option value="">Choisir premier joueur (vainqueur)</option>
+		</select>
+		
+		<select class="fullWidth" ng-model="game.player1_faction_id" ng-options="f.faction_id as f.name group by f.parent_faction_name for f in factions">
+			<option value="">Choisir faction du premier joueur</option>
+		</select>
+		
+		<select class="fullWidth" ng-model="game.player2_id" ng-options="player.player_id as (player.nickname + ' (' + player.firstname + ' ' + player.lastname + ')') for player in players">
+			<option value="">Choisir deuxième joueur</option>
+		</select>
+		
+		<select class="fullWidth" ng-model="game.player2_faction_id" ng-options="f.faction_id as f.name group by f.parent_faction_name for f in factions">
+			<option value="">Choisir faction du deuxième joueur</option>
+		</select>
+		
+		<label class="fullWidth"> <input type="checkbox" ng-model="game.is_draw" /> Finie en nulle</label>
+		<label class="fullWidth"> <input type="checkbox" ng-model="game.is_ranked" /> Comptabilisée au classement</label>
+		<label class="fullWidth"> <input type="checkbox" ng-model="game.is_time_runout" /> Terminée par manque de temps</label>
+		<label class="fullWidth"> <input type="checkbox" ng-model="game.is_online" /> Jouée en ligne (VASSAL)</label>
+	
+	</div>
+	
+	<div class="right">
+		<div ng-model="game.datetime" class="datepicker">
+			<datepicker show-weeks="false"></datepicker>
+		</div>
+		
+		<div ng-model="game.datetime" class="timepicker">
+			<timepicker hour-step="1" minute-step="15" show-meridian="false"></timepicker>
+		</div>
+		
+		<textarea class="fullWidth" ng-model="game.notes" placeholder="Notes"></textarea>
+		
+		<button ng-click="submit(game)" class="fullWidth">Submit</button>
+	</div>
+	
+</form>
