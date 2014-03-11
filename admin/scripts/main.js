@@ -76,7 +76,7 @@ rebelLeaguesApp.config([
 					"factions": [
 						'$http',
 						function($http) {
-							return $http.get('../api/factions/')
+							return $http.get('../api/factions/leafs')
 								.then(
 									function success(response) { return response.data.data.factions; },
 									function error(reason)     { return false; }
