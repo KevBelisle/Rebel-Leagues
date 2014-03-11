@@ -55,17 +55,16 @@ INSERT INTO players (player_id, nickname, firstname, lastname) VALUES (9, 'Hugo'
 
 /* POPULATE games
 ============================================= */
-
-
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES (1, 2, 25, 3, 15, '2014-03-03 19:15:00', 0, 1, 0, 0, 'score: 7-5');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES (2, 3, 15, 2, 18, '2014-03-03 19:30:00', 0, 1, 0, 0, 'score: 7-4');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES (3, 3, 25, 2, 13, '2014-03-03 19:45:00', 0, 1, 0, 0, 'score: 7-6');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES (4, 3, 23, 2, 13, '2014-03-03 20:15:00', 0, 1, 0, 0, 'score: 6-4 flatline');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES (5, 2, 25, 3, 8, '2014-03-03 20:30:00', 0, 1, 0, 0, 'score: 7-4');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES (6, 1, 10, 7, 27, '2014-03-08 18:45:00', 0, 1, 0, 0, 'score: 7-5');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES (7, 1, 24, 7, 15, '2014-03-08 19:00:00', 0, 1, 0, 0, 'score: 8-2');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES (8, 1, 25, 7, 11, '2014-03-08 19:45:00', 0, 1, 0, 0, 'score: 0-0 flatline');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES (9, 7, 11, 1, 25, '2014-03-08 20:15:00', 0, 1, 0, 0, 'score: 7-3');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES (10, 6, 12, 11, 25, '2014-03-10 19:00:00', 1, 1, 1, 0, 'score: ?-?');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES (11, 6, 12, 3, 25, '2014-03-10 19:30:00', 0, 1, 0, 0, 'score: ?-?');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES (12, 6, 18, 3, 15, '2014-03-10 20:00:00', 1, 1, 1, 0, 'score: ?-?');
+INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES
+(1, 2, 25, 3, 15, '2014-03-03 19:15:00', 0, 1, 0, 0, 'score: 7-5'),
+(2, 3, 15, 2, 18, '2014-03-03 19:30:00', 0, 1, 0, 0, 'score: 7-4'),
+(3, 3, 25, 2, 13, '2014-03-03 19:45:00', 0, 1, 0, 0, 'score: 7-6'),
+(4, 3, 23, 2, 13, '2014-03-03 20:15:00', 0, 1, 0, 0, 'score: 6-4 flatline'),
+(5, 2, 25, 3, 8, '2014-03-03 20:30:00', 0, 1, 0, 0, 'score: 7-4'),
+(6, 1, 10, 7, 27, '2014-03-08 18:45:00', 0, 1, 0, 0, 'score: 7-5'),
+(7, 1, 24, 7, 15, '2014-03-08 19:00:00', 0, 1, 0, 0, 'score: 8-2'),
+(8, 1, 25, 7, 11, '2014-03-08 19:45:00', 0, 1, 0, 0, 'score: 0-0 flatline'),
+(9, 7, 11, 1, 25, '2014-03-08 20:15:00', 0, 1, 0, 0, 'score: 7-3'),
+(10, 6, 12, 11, 25, '2014-03-10 19:00:00', 1, 1, 1, 0, 'score: ?-?'),
+(11, 6, 12, 3, 25, '2014-03-10 19:30:00', 0, 1, 0, 0, 'score: ?-?'),
+(12, 6, 18, 3, 15, '2014-03-10 20:00:00', 1, 1, 1, 0, 'score: ?-?');
