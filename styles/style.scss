@@ -45,6 +45,10 @@ div#topBar {
 	div {
 		line-height: 40px;
 		text-align: right;
+		a {
+			text-decoration: none;
+			color: inherit;
+		}
 		strong {
 			font-weight: $heavy_weight;
 		}
@@ -195,6 +199,9 @@ div#wrapper {
 							margin-left: 5px;
 						}
 						div.badges {
+							img {
+								cursor: pointer;
+							}
 						}
 					}
 					
@@ -212,6 +219,9 @@ div#wrapper {
 							position: relative;
 							top: -3px;
 						}
+						i.notes-icon {
+							cursor: pointer;
+						}
 						i:hover,
 						i.active {
 							color: $accent_color;
@@ -225,6 +235,7 @@ div#wrapper {
 				
 				> div.player {
 					div.playerid {
+						cursor: pointer;
 						text-align: center;
 					}
 					
@@ -261,6 +272,10 @@ div#wrapper {
 			color: $xdark_color;
 			padding: 20px 20px 60px 20px;
 			font-size: $small_text;
+			
+			a {
+				color: inherit;
+			}
 			
 			strong {
 				font-weight: $light_weight;
@@ -395,6 +410,7 @@ div.modal {
 			line-height: $small_text;
 			
 			color: $xdark_color;
+			cursor: pointer;
 		}
 		i.close:hover {
 			color: $xxdark_color;
