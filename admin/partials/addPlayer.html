@@ -1,8 +1,16 @@
 
-<h1>Ajouter une partie</h1>
+<h1>Ajouter un joueur</h1>
 
-<form id="addGame" class="clear">
+<form id="addPlayer" class="clear">
 
+	<div>
+	
+	<textarea class="fullWidth" ng-model="player.nickname" placeholder="Nickname"></textarea>
+	<textarea class="fullWidth" ng-model="player.prenom" placeholder="Prénom"></textarea>
+	<textarea class="fullWidth" ng-model="player.nom" placeholder="Nom"></textarea>
+	<button ng-click="submit(player)" class="fullWidth">Submit</button>
+	</div>
+	<!--
 	<div class="left">
 
 		<select class="fullWidth" ng-model="game.player1_id" ng-options="player.player_id as (player.nickname + ' (' + player.firstname + ' ' + player.lastname + ')') for player in players">
@@ -41,6 +49,6 @@
 		
 		<button ng-click="submit(game)" class="fullWidth">Submit</button>
 	</div>
-	
+	-->
 	
 </form>
