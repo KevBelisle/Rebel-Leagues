@@ -97,19 +97,7 @@ rebelLeaguesApp.config([
 			})
 			when('/addPlayer', {
 				templateUrl: 'partials/addPlayer.html',
-				controller: 'addPlayerCtrl',
-				resolve: {
-					"players": [
-						'$http',
-						function($http) {
-							return $http.get('../api/players/')
-								.then(
-									function success(response) { return response.data.data.players; },
-									function error(reason)     { return false; }
-								);
-						}
-					]
-				}
+				controller: 'addPlayerCtrl'
 			})			
 			.otherwise({
 				redirectTo: '/addGame'
