@@ -70,9 +70,9 @@ rebelLeaguesControllers.controller('addPlayerCtrl', ['$scope', '$http',
 	function ($scope, $http) {
 		
 		$scope.player = {
-			nickname: 'bobo',
-			firstname: 'leclown',
-			lastname: 'magique'
+			nickname: null,
+			firstname: null,
+			lastname: null
 		};
 
 		$scope.submit = function (player) {
