@@ -66,7 +66,30 @@ rebelLeaguesControllers.controller('addGameCtrl', ['$scope', '$http', 'factions'
 	}
 ]);
 
+rebelLeaguesControllers.controller('addPlayerCtrl', ['$scope', '$http',
+	function ($scope, $http) {
+		
+		$scope.player = {
+			nickname: 'bobo',
+			firstname: 'leclown',
+			lastname: 'magique'
+		};
 
+		$scope.submit = function (player) {
+			
+			//console.log(encodeURIComponent(angular.toJson(game)));
+			
+			$http.post('../api/players', player).success( function (data) {
+				alert(data);
+				console.log(data);
+			});
+		
+			console.log(player);
+		};
+		
+		console.log($scope);
+	}
+]);
 
 
 
