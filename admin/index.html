@@ -5,7 +5,6 @@
 <head>
 	<meta charset="utf-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-	<meta name="viewport" content="width=device-width, initial-scale=1"/>
 	
 	<title>RebelLeagues - Admin</title>
 	
@@ -24,26 +23,74 @@
 
 <div id="topBar">
 	<div>
-		Rebel<strong>Leagues</strong>
+		<a href="//rebelleagues.com">Rebel<strong>Leagues</strong></a>
 	</div>
 </div>
 
-<div id="wrapper" class="clear">
+<div id="wrapper" class="clear" ng-controller="mainCtrl" >
+		
+	<div id="login" class="clear" ng-if="!loggedIn">
+		<div class="left">
+			<h3>Continuer sans authentification</h3>
+			<p>Cette option vous permet d'ajouter un nouveau joueur ou une nouvelle partie.</p>
+			<button ng-click="noLogin()">Ne pas s'authentifier</button>
+		</div>
+		<div class="right">
+			<h3>S'authentifier</h3>
+			<p>Pour avoir accès plus de fonctionnalités</p>
+			<form ng-class="{invalid: loginInfo.invalid}">
+				<input type="text" ng-model="loginInfo.username" placeholder="Nom d'utilisateur" />
+				<input type="password" ng-model="loginInfo.password" placeholder="Mot de passe" />
+				<button ng-click="login(loginInfo)">S'authentifier</button>
+			</form>
+		</div>
+	</div>
+	
+	<div class="userInfo anonymous" ng-if="loggedIn && anonymousUser">
+		<h3>Vous êtes un utilisateur anonyme.</h3>
+		<p>Voulez-vous vous <a ng-click="resetLogin()">authentifier</a>?</p>
+	</div>
+	
+	<div class="userInfo" ng-if="loggedIn && !anonymousUser">
+		<h3>Bonjour, {{ user.username }}!</h3>
+		<p>Voulez-vous vous <a ng-click="logout()">déconnecter</a>?</p>
+	</div>
+		
+		
+		
+	<div id="main" ng-if="loggedIn">
+	
+		<div ng-controller="addPlayerCtrl" ng-class="{expanded: expanded}">
+			<h1 ng-click="toggle()">{{ title }} <i class="fa fa-chevron-down"></i></h1>
+			<div class="partial" ng-include="partial" ng-if="expanded"></div>
+		</div>
+	
+		<div ng-controller="addGameCtrl" ng-class="{expanded: expanded}">
+			<h1 ng-click="toggle()">{{ title }} <i class="fa fa-chevron-down"></i></h1>
+			<div class="partial" ng-include="partial" ng-if="expanded"></div>
+		</div>
+	
+		<div ng-controller="tier2Ctrl" ng-class="{expanded: expanded}" ng-if="user.tier <= 2">
+			<h1 ng-click="toggle()">{{ title }} <i class="fa fa-chevron-down"></i></h1>
+			<div class="partial" ng-include="partial" ng-if="expanded"></div>
+		</div>
+	
+		<div ng-controller="tier1Ctrl" ng-class="{expanded: expanded}" ng-if="user.tier <= 1">
+			<h1 ng-click="toggle()">{{ title }} <i class="fa fa-chevron-down"></i></h1>
+			<div class="partial" ng-include="partial" ng-if="expanded"></div>
+		</div>
+		
+	</div>
 
-	<nav class="clear">
-		<a active-link="active" href="#/addGame">Ajouter une partie</a>
-		<a active-link="active" href="#/addPlayer">Ajouter un joueur</a>
-	</nav>
-
-	<div id="main" ng-view></div>
-
+	
+	
 	<footer class="clear">
 		<div class="left">
 			Cette ligue utilise le système <strong>Rebel<strong>Leagues</strong></strong>,<br />
 			développé par <strong>Kevin Bélisle</strong> et <strong>Michaël Juneau</strong>.
 		</div>
 		<div class="right">
-			<!--Accéder à l'administration<br />-->
+			<a href="../">Retour à la ligue</a><br />
 			RebelLeagues v0.1
 		</div>
 	</footer>

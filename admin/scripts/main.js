@@ -19,13 +19,21 @@ angular.module('link', [])
 		};
 	}]);
 
-var rebelLeaguesApp = angular.module('rebelLeaguesAdminApp', [
+var rebelLeaguesAdminApp = angular.module('rebelLeaguesAdminApp', [
 	'ngRoute',
 	'rebelLeaguesAdminControllers',
 	'link',
 	'ui.bootstrap'
-]).run(
+]);
+
+rebelLeaguesAdminApp.run(
+	['$rootScope', function($rootScope){
+	}
+]);
+
+rebelLeaguesAdminApp.run(
 	['$templateCache', function($templateCache){
+	
 		$templateCache.put('template/datepicker/datepicker.html',
 			"<table>\n" +
 			"  <thead>\n" +
@@ -78,49 +86,5 @@ var rebelLeaguesApp = angular.module('rebelLeaguesAdminApp', [
 			"	</tbody>\n" +
 			"</table>\n" +
 			"");
-	}
-]);
-
-
-rebelLeaguesApp.config([
-	'$routeProvider',
-	function ($routeProvider) {
-	
-		console.log("routeProvider CHECKING IN!");
-		
-		$routeProvider
-			.when('/addGame', {
-				templateUrl: 'partials/addGame.html',
-				controller: 'addGameCtrl',
-				resolve: {
-					"factions": [
-						'$http',
-						function($http) {
-							return $http.get('../api/factions/leafs')
-								.then(
-									function success(response) { return response.data.data.factions; },
-									function error(reason)     { return false; }
-								);
-						}
-					],
-					"players": [
-						'$http',
-						function($http) {
-							return $http.get('../api/players/')
-								.then(
-									function success(response) { return response.data.data.players; },
-									function error(reason)     { return false; }
-								);
-						}
-					]
-				}
-			})
-			.when('/addPlayer', {
-				templateUrl: 'partials/addPlayer.html',
-				controller: 'addPlayerCtrl'
-			})			
-			.otherwise({
-				redirectTo: '/addGame'
-			});
 	}
 ]);
