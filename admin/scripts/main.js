@@ -1,11 +1,39 @@
 
+angular.module('link', [])
+	.directive('activeLink', ['$location', function(location) {
+		return {
+			restrict: 'A',
+			link: function(scope, element, attrs, controller) {
+				var clazz = attrs.activeLink;
+				var path = attrs.href;
+				path = path.substring(1); //hack because path does not return including hashbang
+				scope.location = location;
+				scope.$watch('location.path()', function(newPath) {
+					if (path === newPath) {
+						element.addClass(clazz);
+					} else {
+						element.removeClass(clazz);
+					}
+				});
+			}
+		};
+	}]);
 
-var rebelLeaguesApp = angular.module('rebelLeaguesAdminApp', [
+var rebelLeaguesAdminApp = angular.module('rebelLeaguesAdminApp', [
 	'ngRoute',
 	'rebelLeaguesAdminControllers',
+	'link',
 	'ui.bootstrap'
-]).run(
+]);
+
+rebelLeaguesAdminApp.run(
+	['$rootScope', function($rootScope){
+	}
+]);
+
+rebelLeaguesAdminApp.run(
 	['$templateCache', function($templateCache){
+	
 		$templateCache.put('template/datepicker/datepicker.html',
 			"<table>\n" +
 			"  <thead>\n" +
@@ -58,45 +86,5 @@ var rebelLeaguesApp = angular.module('rebelLeaguesAdminApp', [
 			"	</tbody>\n" +
 			"</table>\n" +
 			"");
-	}
-]);
-
-
-rebelLeaguesApp.config([
-	'$routeProvider',
-	function ($routeProvider) {
-	
-		console.log("routeProvider CHECKING IN!");
-		
-		$routeProvider
-			.when('/addGame', {
-				templateUrl: 'partials/addGame.html',
-				controller: 'addGameCtrl',
-				resolve: {
-					"factions": [
-						'$http',
-						function($http) {
-							return $http.get('../api/factions/leafs')
-								.then(
-									function success(response) { return response.data.data.factions; },
-									function error(reason)     { return false; }
-								);
-						}
-					],
-					"players": [
-						'$http',
-						function($http) {
-							return $http.get('../api/players/')
-								.then(
-									function success(response) { return response.data.data.players; },
-									function error(reason)     { return false; }
-								);
-						}
-					]
-				}
-			})			
-			.otherwise({
-				redirectTo: '/addGame'
-			});
 	}
 ]);

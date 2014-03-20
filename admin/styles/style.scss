@@ -45,22 +45,101 @@ div#topBar {
 	div {
 		line-height: 40px;
 		text-align: right;
-		strong {
-			font-weight: $heavy_weight;
+		a {
+			color: $xlight_color;
+			text-decoration: none;
+			strong {
+				font-weight: $heavy_weight;
+			}
 		}
 	}
 }
 
 div#wrapper {
 
+	div#login {
+		margin-top: 40px;
+		background: $xlight_color;
+	
+		div {
+			padding: 20px;
+			width: 50%;
+			float: left;
+			position: relative;
+			
+			h3 {
+				font-weight: $heavy_weight;
+				margin-bottom: 10px;
+			}
+			p {
+				font-size: $small_text;
+				margin-bottom: 10px;
+			}
+			input, button {
+				width: 100%;
+				margin: 5px 0;
+				font-size: $small_text;
+				padding: 5px;
+				box-sizing: border-box;
+			}
+			
+			form.invalid input {
+				border: 2px solid red;
+			}
+		}
+		
+		div.right {
+			background-color: $light_color;
+			border-left: 1px solid $dark_color;
+		}
+	
+	}
+
+	div.userInfo {
+		margin-top: 40px;
+		color: $light-color;
+		h3 {
+			font-weight: $heavy_weight;
+		}
+		p {
+			font-size: $small_text;
+		}
+		a {
+			color: $accent_color;
+			cursor: pointer;
+		}
+	}
+	div.userInfo.anonymous {
+	}
+	
 	div#main {
 		margin-top: 40px;
 		background: $xlight_color;
-		padding: 20px;
+		padding: 0;
+		
+		> div {
+			padding: 20px;
+			border-top: 1px solid $dark_color;
+		}
+		> div:nth-child(2n) {
+			background-color: $light_color
+		}
+		
+		> div.expanded h1 i {
+			transform:rotate(-180deg);
+			-ms-transform:rotate(-180deg);
+			-webkit-transform:rotate(-180deg);
+		}
 		
 		h1 {
 			font-size: $large_text;
 			font-weight: $heavy_weight;
+			
+			i.fa-chevron-down {
+				float: right;
+				-webkit-transition: all 0.5s;
+				transition: all 0.5s;
+			}
 		}
 		
 		form {
@@ -114,6 +193,10 @@ div#wrapper {
 		padding: 20px 20px 60px 20px;
 		font-size: $small_text;
 		
+		a {
+			color: $xdark_color;
+		}
+		
 		strong {
 			font-weight: $light_weight;
 			color: $dark-color;
@@ -145,7 +228,7 @@ div.datepicker {
 		}
 	}
 	button {
-		background: $light_color;
+		background: $dark_color;
 		border: none;
 		padding: 5px;
 	}
