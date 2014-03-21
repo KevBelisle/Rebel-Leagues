@@ -463,7 +463,7 @@ class Admin {
 	
 	
 	public static function addPlayer() {
-		self::checkLogin(3);
+		//self::checkLogin(3);
 		self::checkFields( array('nickname', 'firstname', 'lastname'), $_POST );
 		
 		try {
