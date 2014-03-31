@@ -42,6 +42,7 @@ getRoute()->get('/factions/(\d+)/logo(?:/?)', array('League', 'getFactionLogo'))
 
 getRoute()->get('/stats(?:/?)', array('League', 'getStats'));
 
+getRoute()->get('/login(?:/?)', array('Admin', 'checkLogin'));
 getRoute()->post('/login(?:/?)', array('Admin', 'login'));
 getRoute()->get('/logout(?:/?)', array('Admin', 'logout'));
 getRoute()->get('/admins(?:/?)', array('Admin', 'getAdmins'));
@@ -334,7 +335,7 @@ class League {
 
 class Admin {
 	
-	private static function checkFields($fields, $array) {
+	private static function checkFields($fields, $array, $forceQuit = true) {
 		$missingFields = array();
 		foreach ($fields as $index => $field) {
 			if( !array_key_exists($field, $array) ) {
@@ -343,15 +344,19 @@ class Admin {
 		}
 		
 		if( count($missingFields) > 0 ) {
-			echo outputError( array( 'missingFields' => $missingFields ) );
-			exit();
+			if ($forceQuit) {
+				echo outputError( array( 'missingFields' => $missingFields ) );
+				exit();
+			} else {
+				return false;
+			}
 		}
 		
 		return true;
 	}
 
 	
-	private static function checkLogin($requiredTier) {
+	private static function checkTier($requiredTier) {
 		sec_session_start();
 		
 		if (isset($_SESSION['login_string'], $_SESSION['username'], $_SESSION['tier'])) {
@@ -384,6 +389,24 @@ class Admin {
 		}
 	}
 	
+	public static function checkLogin() {
+		sec_session_start();
+		
+		if (self::checkFields(array('username', 'tier', 'login_string'), $_SESSION, false)) {
+			$dbUser = getDatabase()->one("SELECT username, password, salt, tier FROM admins WHERE username = :username", array(':username' => $_SESSION['username']));
+			
+			if ($_SESSION['login_string'] == hash('sha512', $dbUser['password'] . $dbUser['salt'] . $_SERVER['HTTP_USER_AGENT'])) {
+				$_SESSION['tier'] = $dbUser['tier'];
+				echo outputSuccess(array( 'username' => $_SESSION['username'], 'tier' => $_SESSION['tier'] ));
+			} else {
+				# Données de session invalides.
+				self::logout();
+			}
+		} else {
+			# No session cookie available
+			echo outputError( array( 'error' => 'Aucune session en cours.' ) );
+		}
+	}
 	
 	public static function login() {
 		sec_session_start();
@@ -442,7 +465,7 @@ class Admin {
 	
 	
 	public static function getAdmins() {
-		self::checkLogin(1);
+		self::checkTier(1);
 		
 		$admins = getDatabase()->all(
 		'SELECT username, tier FROM admins ORDER BY username'
@@ -453,7 +476,7 @@ class Admin {
 	
 	
 	public static function addAdmin() {
-		self::checkLogin(1);
+		self::checkTier(1);
 		self::checkFields( array('username', 'password', 'tier'), $_POST );
 		
 		try {
@@ -473,7 +496,7 @@ class Admin {
 	
 	
 	public static function addPlayer() {
-		//self::checkLogin(3);
+		//self::checkTier(3);
 		self::checkFields( array('nickname', 'firstname', 'lastname'), $_POST );
 		
 		try {
@@ -489,7 +512,7 @@ class Admin {
 	
 	
 	public static function addFaction() {
-		self::checkLogin(3);
+		self::checkTier(3);
 		self::checkFields( array('name', 'parent_faction_id', 'color'), $_POST );
 		
 		if ( count($_FILES) != 1 ) {
@@ -527,7 +550,7 @@ class Admin {
 	
 	
 	public static function addGame() {
-		//self::checkLogin(3);
+		//self::checkTier(3);
 		
 		print_r($_POST);
 		
