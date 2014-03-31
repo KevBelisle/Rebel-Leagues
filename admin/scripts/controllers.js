@@ -209,7 +209,20 @@ rebelLeaguesAdminControllers.controller('editGameCtrl', ['$scope', '$http',
 		$scope.expanded = false;
 		$scope.toggle = function () { $scope.expanded = !$scope.expanded };
 		
-		$scope.gameSelected = false;
+		$scope.selectedGame = false;
+		$scope.selectedGameId = false;
+		
+		$scope.change = function (selectedGameId) {
+			$scope.selectedGame =  $scope.games.filter(function(obj) { if(obj.game_id == selectedGameId) { return obj } })[0];
+			$scope.selectedGame.datetime = new Date( $scope.selectedGame.date );
+			
+			$scope.selectedGame.is_draw = $scope.selectedGame.is_draw == 1 ? true : false;
+			$scope.selectedGame.is_online = $scope.selectedGame.is_online == 1 ? true : false;
+			$scope.selectedGame.is_ranked = $scope.selectedGame.is_ranked == 1 ? true : false;
+			$scope.selectedGame.is_time_runout = $scope.selectedGame.is_time_runout == 1 ? true : false;
+			
+			console.log($scope.selectedGame);
+		};
 	
 		(function() {
 			Date.prototype.toYMDHMS = Date_toYMDHMS;
@@ -252,36 +265,29 @@ rebelLeaguesAdminControllers.controller('editGameCtrl', ['$scope', '$http',
 				function error(reason)     { return false; }
 			);
 		
-		$scope.game = {
-			player1_id: null,
-			player1_faction_id: null,
-			player2_id: null,
-			player2_faction_id: null,
-			is_draw: false,
-			is_ranked: true,
-			is_time_runout: false,
-			is_online: false,
-			datetime: new Date(),
-			notes: ""
-		};
-		
-		$scope.game.datetime.setHours( ((($scope.game.datetime.getMinutes()/105 + .5) | 0) + $scope.game.datetime.getHours()) % 24 );
-		$scope.game.datetime.setMinutes( ((($scope.game.datetime.getMinutes() + 7.5)/15 | 0) * 15) % 60 );
-		$scope.game.datetime.setSeconds(0);
-		
-		$scope.submit = function (game) {
+		$scope.submit = function (selectedGame) {
 			
-			game.date = game.datetime.toYMDHMS();
+			selectedGame.date = selectedGame.datetime.toYMDHMS();
 			
-			//console.log(encodeURIComponent(angular.toJson(game)));
-			
-			$http.post('../api/games', game).success( function (data) {
+			$http.put('../api/games/'+selectedGame.game_id, selectedGame).success( function (data) {
 				alert(data);
 				console.log(data);
 			});
 		
-			console.log(game);
-			console.log(game.datetime.toYMDHMS());
+			console.log(selectedGame);
+			console.log(selectedGame.datetime.toYMDHMS());
+		};
+		
+		$scope.delete = function (selectedGame) {
+		
+			if (window.confirm("Êtes-vous certain de vouloir supprimer la partie?\nCette action ne peut être annulée.")) {
+				$http.delete('../api/games/'+selectedGame.game_id).success( function (data) {
+					alert(data);
+					console.log(data);
+				});
+			} else {
+				return false;
+			}
 		};
 		
 		console.log($scope);
