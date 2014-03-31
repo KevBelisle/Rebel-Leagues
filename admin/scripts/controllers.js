@@ -148,19 +148,26 @@ rebelLeaguesAdminControllers.controller('addGameCtrl', ['$scope', '$http',
 			
 			game.date = game.datetime.toYMDHMS();
 			
-			//console.log(encodeURIComponent(angular.toJson(game)));
-			
 			$http.post('../api/games', game).success( function (data) {
-				alert(data);
+				alert("Partie ajoutée.");
+				$scope.game = {
+					player1_id: null,
+					player1_faction_id: null,
+					player2_id: null,
+					player2_faction_id: null,
+					is_draw: false,
+					is_ranked: true,
+					is_time_runout: false,
+					is_online: false,
+					datetime: new Date(),
+					notes: ""
+				};
+				console.log(data);
+			}).error( function(data) {
+				alert("Une erreur est survenue.");
 				console.log(data);
 			});
-		
-			console.log(game);
-			console.log(game.datetime.toYMDHMS());
 		};
-		
-		console.log($scope);
-		
 	}
 ]);
 
@@ -185,16 +192,18 @@ rebelLeaguesAdminControllers.controller('addPlayerCtrl', ['$scope', '$http',
 			//console.log(encodeURIComponent(angular.toJson(game)));
 			
 			$http.post('../api/players', player).success( function (data) {
-				alert(data);
+				alert("Joueur ajouté.");
+				$scope.player = {
+					nickname: null,
+					firstname: null,
+					lastname: null
+				};
 				console.log(data);
 			}).error( function(data) {
+				alert("Une erreur est survenue.");
 				console.log(data);
 			});
-		
-			console.log(player);
 		};
-		
-		console.log($scope);
 	}
 ]);
 
@@ -270,7 +279,12 @@ rebelLeaguesAdminControllers.controller('editGameCtrl', ['$scope', '$http',
 			selectedGame.date = selectedGame.datetime.toYMDHMS();
 			
 			$http.put('../api/games/'+selectedGame.game_id, selectedGame).success( function (data) {
-				alert(data);
+				alert("Partie modifiée.");
+				$scope.selectedGameId = false;
+				$scope.selectedGame = false;
+				console.log(data);
+			}).error( function(data) {
+				alert("Une erreur est survenue.");
 				console.log(data);
 			});
 		
@@ -282,7 +296,12 @@ rebelLeaguesAdminControllers.controller('editGameCtrl', ['$scope', '$http',
 		
 			if (window.confirm("Êtes-vous certain de vouloir supprimer la partie?\nCette action ne peut être annulée.")) {
 				$http.delete('../api/games/'+selectedGame.game_id).success( function (data) {
-					alert(data);
+					alert("Partie supprimée.");
+					$scope.selectedGameId = false;
+					$scope.selectedGame = false;
+					console.log(data);
+				}).error( function(data) {
+					alert("Une erreur est survenue.");
 					console.log(data);
 				});
 			} else {
