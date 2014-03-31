@@ -158,7 +158,7 @@ div#wrapper {
 				padding-left: 10px;
 			}
 			
-			select, input, textarea, label {
+			select, input, textarea, label, button.fullWidth {
 				box-sizing: border-box;
 				display: block;
 				padding: 5px 0;
@@ -183,6 +183,11 @@ div#wrapper {
 			textarea {
 				min-height: 100px;
 				padding: 5px;
+			}
+			
+			button.danger {
+				border-color: red;
+				color: red;
 			}
 		}
 		

@@ -70,6 +70,11 @@
 			<div class="partial" ng-include="partial" ng-if="expanded"></div>
 		</div>
 	
+		<div ng-controller="editGameCtrl" ng-class="{expanded: expanded}" ng-if="user.tier <= 2">
+			<h1 ng-click="toggle()">{{ title }} <i class="fa fa-chevron-down"></i></h1>
+			<div class="partial" ng-include="partial" ng-if="expanded"></div>
+		</div>
+	
 		<div ng-controller="tier2Ctrl" ng-class="{expanded: expanded}" ng-if="user.tier <= 2">
 			<h1 ng-click="toggle()">{{ title }} <i class="fa fa-chevron-down"></i></h1>
 			<div class="partial" ng-include="partial" ng-if="expanded"></div>
