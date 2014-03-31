@@ -28,6 +28,9 @@ getRoute()->get('/players/(\d+)(?:/?)', array('League', 'getPlayer'));
 getRoute()->get('/players/(\d+)/stats(?:/?)', array('League', 'getPlayerStats'));
 
 getRoute()->get('/games(?:/?)', array('League', 'getGamesHistory'));
+getRoute()->get('/games/(\d+)(?:/?)', array('League', 'getGamesHistory'));
+getRoute()->get('/games/(\d+)/(\d+)(?:/?)', array('League', 'getGamesHistory'));
+getRoute()->get('/games(?:/?)/all', array('League', 'getGamesHistoryAll'));
 getRoute()->get('/ranking(?:/?)', array('League', 'getRanking'));
 getRoute()->get('/ranking/(games_played|elo_rating|points)(?:/?)', array('League', 'getRanking'));
 
@@ -224,10 +227,7 @@ class League {
 	}
 	
 	
-	public static function getGamesHistory() {
-		$skip = 0;
-		$take = 20;
-		
+	public static function getGamesHistory($skip = 0, $take = 20) {
 		if( array_key_exists('skip', $_GET) ) {
 			$skip = $_GET['skip'];
 		}
@@ -242,11 +242,21 @@ class League {
 		echo outputSuccess( array( 'games' => $games ) );
 	}
 	
+	
+	public static function getGamesHistoryAll() {
+		$games = getDatabase()->all(
+			'SELECT * FROM games_history ORDER BY date DESC'
+		);
+		echo outputSuccess( array( 'games' => $games ) );
+	}
+	
+	
 	public static $pointsDistribution = [
 		'win' => 5,
 		'draw' => 3,
 		'loss' => 1
 	];
+	
 	
 	public static function getRanking($sort_method = 'default') {
 	
