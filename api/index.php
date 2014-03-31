@@ -51,6 +51,7 @@ getRoute()->post('/admins(?:/?)', array('Admin', 'addAdmin'));
 getRoute()->post('/players(?:/?)', array('Admin', 'addPlayer'));
 getRoute()->post('/factions(?:/?)', array('Admin', 'addFaction'));
 getRoute()->post('/games(?:/?)', array('Admin', 'addGame'));
+getRoute()->put('/games/(\d+)(?:/?)', array('Admin', 'editGame'));
 
 // Run router
 getRoute()->run();
@@ -576,7 +577,48 @@ class Admin {
 		} catch (Exception $e) {
 			echo outputError($e->getMessage());
 		}
+	}
+	
+	
+	public static function editGame($gameId) {
+		self::checkTier(2);
 		
+		print_r($_POST);
+		
+		self::checkFields( array('player1_id', 'player1_faction_id', 'player2_id', 'player2_faction_id', 'date', 'is_draw', 'is_ranked', 'is_time_runout', 'is_online'), $_POST );
+		
+		try {
+			$game_id = getDatabase()->execute('UPDATE games SET
+				player1_id = :player1_id,
+				player1_faction_id = :player1_faction_id,
+				player2_id = :player2_id,
+				player2_faction_id = :player2_faction_id,
+				date = :date,
+				is_draw = :is_draw,
+				is_ranked = :is_ranked,
+				is_time_runout = :is_time_runout,
+				is_online = :is_online,
+				notes = :notes
+				WHERE game_id = :game_id',
+			array(
+			':player1_id' => $_POST['player1_id'],
+			':player1_faction_id' => $_POST['player1_faction_id'],
+			':player2_id' => $_POST['player2_id'],
+			':player2_faction_id' => $_POST['player2_faction_id'],
+			':date' => $_POST['date'],
+			':is_draw' => $_POST['is_draw'],
+			':is_ranked' => $_POST['is_ranked'],
+			':is_time_runout' => $_POST['is_time_runout'],
+			':is_online' => $_POST['is_online'],
+			':notes' => $_POST['notes'],
+			':game_id' => $gameId
+			)
+			);
+			echo outputSuccess( array( 'game_id' => $gameId ) );
+			
+		} catch (Exception $e) {
+			echo outputError($e->getMessage());
+		}
 	}
 }
 
