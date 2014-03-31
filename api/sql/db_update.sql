@@ -174,6 +174,8 @@ BEGIN
 	
 	CREATE OR REPLACE VIEW games_history AS
 	SELECT
+		games.game_id					AS game_id,
+	
 		games.player1_id				AS player1_id,
 		player1.nickname				AS player1_nickname,
 		player1.firstname				AS player1_firstname,

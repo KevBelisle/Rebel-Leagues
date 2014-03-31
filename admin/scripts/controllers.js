@@ -15,6 +15,15 @@ rebelLeaguesAdminControllers.controller('mainCtrl', ['$scope', '$http',
 			tier: 5
 		};
 		
+		$http.get("../api/login").success(function(data) {
+			console.log(data);
+			if (data.status == "success") {
+				$scope.loggedIn = true;
+				$scope.user.username = data.data.username;
+				$scope.user.tier = data.data.tier;
+			}
+		});
+		
 		$scope.loginInfo = {
 			username: "",
 			password: "",
@@ -139,19 +148,26 @@ rebelLeaguesAdminControllers.controller('addGameCtrl', ['$scope', '$http',
 			
 			game.date = game.datetime.toYMDHMS();
 			
-			//console.log(encodeURIComponent(angular.toJson(game)));
-			
 			$http.post('../api/games', game).success( function (data) {
-				alert(data);
+				alert("Partie ajoutée.");
+				$scope.game = {
+					player1_id: null,
+					player1_faction_id: null,
+					player2_id: null,
+					player2_faction_id: null,
+					is_draw: false,
+					is_ranked: true,
+					is_time_runout: false,
+					is_online: false,
+					datetime: new Date(),
+					notes: ""
+				};
+				console.log(data);
+			}).error( function(data) {
+				alert("Une erreur est survenue.");
 				console.log(data);
 			});
-		
-			console.log(game);
-			console.log(game.datetime.toYMDHMS());
 		};
-		
-		console.log($scope);
-		
 	}
 ]);
 
@@ -176,16 +192,129 @@ rebelLeaguesAdminControllers.controller('addPlayerCtrl', ['$scope', '$http',
 			//console.log(encodeURIComponent(angular.toJson(game)));
 			
 			$http.post('../api/players', player).success( function (data) {
-				alert(data);
+				alert("Joueur ajouté.");
+				$scope.player = {
+					nickname: null,
+					firstname: null,
+					lastname: null
+				};
+				console.log(data);
+			}).error( function(data) {
+				alert("Une erreur est survenue.");
+				console.log(data);
+			});
+		};
+	}
+]);
+
+
+
+rebelLeaguesAdminControllers.controller('editGameCtrl', ['$scope', '$http',
+	function ($scope, $http) {
+	
+		$scope.title = "Modifier une partie";
+		$scope.partial = "partials/editGame.html";
+		
+		$scope.expanded = false;
+		$scope.toggle = function () { $scope.expanded = !$scope.expanded };
+		
+		$scope.selectedGame = false;
+		$scope.selectedGameId = false;
+		
+		$scope.change = function (selectedGameId) {
+			$scope.selectedGame =  $scope.games.filter(function(obj) { if(obj.game_id == selectedGameId) { return obj } })[0];
+			$scope.selectedGame.datetime = new Date( $scope.selectedGame.date );
+			
+			$scope.selectedGame.is_draw = $scope.selectedGame.is_draw == 1 ? true : false;
+			$scope.selectedGame.is_online = $scope.selectedGame.is_online == 1 ? true : false;
+			$scope.selectedGame.is_ranked = $scope.selectedGame.is_ranked == 1 ? true : false;
+			$scope.selectedGame.is_time_runout = $scope.selectedGame.is_time_runout == 1 ? true : false;
+			
+			console.log($scope.selectedGame);
+		};
+	
+		(function() {
+			Date.prototype.toYMDHMS = Date_toYMDHMS;
+			function Date_toYMDHMS() {
+				var year, month, day, hours, minute, seconds;
+				year = String(this.getFullYear());
+				month = String(this.getMonth() + 1);
+				if (month.length == 1) {
+					month = "0" + month;
+				}
+				day = String(this.getDate());
+				if (day.length == 1) {
+					day = "0" + day;
+				}
+				hours = ("00" + this.getHours()).slice(-2);
+				minutes = ("00" + this.getMinutes()).slice(-2);
+				seconds = ("00" + this.getSeconds()).slice(-2);
+				return year + "-" + month + "-" + day + " " + hours + ":" + minutes + ":" + seconds;
+			}
+		})();
+		
+		$scope.games = [];
+		$scope.factions = [];
+		$scope.players = [];
+		
+		
+		$http.get('../api/games/all')
+			.then(
+				function success(response) { $scope.games = response.data.data.games; },
+				function error(reason)     { return false; }
+			);
+		$http.get('../api/factions/leafs')
+			.then(
+				function success(response) { $scope.factions = response.data.data.factions; },
+				function error(reason)     { return false; }
+			);
+		$http.get('../api/players/')
+			.then(
+				function success(response) { $scope.players = response.data.data.players; },
+				function error(reason)     { return false; }
+			);
+		
+		$scope.submit = function (selectedGame) {
+			
+			selectedGame.date = selectedGame.datetime.toYMDHMS();
+			
+			$http.put('../api/games/'+selectedGame.game_id, selectedGame).success( function (data) {
+				alert("Partie modifiée.");
+				$scope.selectedGameId = false;
+				$scope.selectedGame = false;
+				console.log(data);
+			}).error( function(data) {
+				alert("Une erreur est survenue.");
 				console.log(data);
 			});
 		
-			console.log(player);
+			console.log(selectedGame);
+			console.log(selectedGame.datetime.toYMDHMS());
+		};
+		
+		$scope.delete = function (selectedGame) {
+		
+			if (window.confirm("Êtes-vous certain de vouloir supprimer la partie?\nCette action ne peut être annulée.")) {
+				$http.delete('../api/games/'+selectedGame.game_id).success( function (data) {
+					alert("Partie supprimée.");
+					$scope.selectedGameId = false;
+					$scope.selectedGame = false;
+					console.log(data);
+				}).error( function(data) {
+					alert("Une erreur est survenue.");
+					console.log(data);
+				});
+			} else {
+				return false;
+			}
 		};
 		
 		console.log($scope);
+		
 	}
 ]);
+
+
 
 
 rebelLeaguesAdminControllers.controller('tier1Ctrl', ['$scope', '$http',
