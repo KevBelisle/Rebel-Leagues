@@ -52,6 +52,7 @@ getRoute()->post('/players(?:/?)', array('Admin', 'addPlayer'));
 getRoute()->post('/factions(?:/?)', array('Admin', 'addFaction'));
 getRoute()->post('/games(?:/?)', array('Admin', 'addGame'));
 getRoute()->put('/games/(\d+)(?:/?)', array('Admin', 'editGame'));
+getRoute()->delete('/games/(\d+)(?:/?)', array('Admin', 'deleteGame'));
 
 // Run router
 getRoute()->run();
@@ -560,16 +561,16 @@ class Admin {
 		try {
 			$game_id = getDatabase()->execute('INSERT INTO games (player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES (:player1_id, :player1_faction_id, :player2_id, :player2_faction_id, :date, :is_draw, :is_ranked, :is_time_runout, :is_online, :notes)',
 			array(
-			':player1_id' => $_POST['player1_id'],
-			':player1_faction_id' => $_POST['player1_faction_id'],
-			':player2_id' => $_POST['player2_id'],
-			':player2_faction_id' => $_POST['player2_faction_id'],
-			':date' => $_POST['date'],
-			':is_draw' => $_POST['is_draw'],
-			':is_ranked' => $_POST['is_ranked'],
-			':is_time_runout' => $_POST['is_time_runout'],
-			':is_online' => $_POST['is_online'],
-			':notes' => $_POST['notes']
+				':player1_id' => $_POST['player1_id'],
+				':player1_faction_id' => $_POST['player1_faction_id'],
+				':player2_id' => $_POST['player2_id'],
+				':player2_faction_id' => $_POST['player2_faction_id'],
+				':date' => $_POST['date'],
+				':is_draw' => $_POST['is_draw'],
+				':is_ranked' => $_POST['is_ranked'],
+				':is_time_runout' => $_POST['is_time_runout'],
+				':is_online' => $_POST['is_online'],
+				':notes' => $_POST['notes']
 			)
 			);
 			echo outputSuccess( array( 'game_id' => $game_id ) );
@@ -601,17 +602,34 @@ class Admin {
 				notes = :notes
 				WHERE game_id = :game_id',
 			array(
-			':player1_id' => $_POST['player1_id'],
-			':player1_faction_id' => $_POST['player1_faction_id'],
-			':player2_id' => $_POST['player2_id'],
-			':player2_faction_id' => $_POST['player2_faction_id'],
-			':date' => $_POST['date'],
-			':is_draw' => $_POST['is_draw'],
-			':is_ranked' => $_POST['is_ranked'],
-			':is_time_runout' => $_POST['is_time_runout'],
-			':is_online' => $_POST['is_online'],
-			':notes' => $_POST['notes'],
-			':game_id' => $gameId
+				':player1_id' => $_POST['player1_id'],
+				':player1_faction_id' => $_POST['player1_faction_id'],
+				':player2_id' => $_POST['player2_id'],
+				':player2_faction_id' => $_POST['player2_faction_id'],
+				':date' => $_POST['date'],
+				':is_draw' => $_POST['is_draw'],
+				':is_ranked' => $_POST['is_ranked'],
+				':is_time_runout' => $_POST['is_time_runout'],
+				':is_online' => $_POST['is_online'],
+				':notes' => $_POST['notes'],
+				':game_id' => $gameId
+			)
+			);
+			echo outputSuccess( array( 'game_id' => $gameId ) );
+			
+		} catch (Exception $e) {
+			echo outputError($e->getMessage());
+		}
+	}
+	
+	
+	public static function deleteGame($gameId) {
+		self::checkTier(1);
+		
+		try {
+			$game_id = getDatabase()->execute('DELETE FROM games WHERE game_id = :game_id',
+			array(
+				':game_id' => $gameId
 			)
 			);
 			echo outputSuccess( array( 'game_id' => $gameId ) );
