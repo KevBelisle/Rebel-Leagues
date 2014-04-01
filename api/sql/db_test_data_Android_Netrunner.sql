@@ -2,7 +2,7 @@
 /* POPULATE leagues
 ============================================= */
 
-INSERT INTO leagues (league_id, title, subtitle, logo, defaultGameNotes, pointsWinValue, pointsTieValue, pointsLossValue, eloStartRank, eloMasterRank, eloStartKFactor, eloSeasonedKFactor, eloMasterKFactor, eloSeasonedGameCountRequirement) VALUES (1,'Android: Netrunner', 'RebelLeagues Québec', 'uploads/leagues/e6db1baa29d3df1eb307ff6a12c778da.png','Format suggéré: Score: 7-4 flatline (au cas échéant)', 5, 3, 1, 1000, 2400, 25, 15, 10, 30);
+INSERT INTO leagues (league_id, title, subtitle, logo, defaultGameNotes, pointsWinValue, pointsTieValue, pointsLossValue, eloStartRank, eloMasterRank, eloStartKFactor, eloSeasonedKFactor, eloMasterKFactor, eloSeasonedGameCountRequirement) VALUES (1,'Android: Netrunner', 'RebelLeagues Québec', 'uploads/leagues/e6db1baa29d3df1eb307ff6a12c778da.png','Exemple= Score: 7-4 flatline (au cas échéant)', 5, 3, 1, 1000, 2400, 25, 15, 10, 30);
 
 /* POPULATE factions
 ============================================= */
