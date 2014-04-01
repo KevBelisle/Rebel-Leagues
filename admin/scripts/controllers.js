@@ -115,7 +115,7 @@ rebelLeaguesAdminControllers.controller('addGameCtrl', ['$scope', '$http',
 		
 		$scope.factions = [];
 		$scope.players = [];
-		$scope.leagues = [];
+		$scope.league = [];
 		
 		$http.get('../api/factions/leafs')
 			.then(
@@ -129,7 +129,7 @@ rebelLeaguesAdminControllers.controller('addGameCtrl', ['$scope', '$http',
 			);
 		$http.get('../api/leagues/')
 			.then(
-				function success(response) { $scope.leagues = response.data.data; },
+				function success(response) { $scope.league = response.data.data.league; },
 				function error(reason)     { return false; }
 			);
 		
@@ -149,7 +149,6 @@ rebelLeaguesAdminControllers.controller('addGameCtrl', ['$scope', '$http',
 		$scope.game.datetime.setHours( ((($scope.game.datetime.getMinutes()/105 + .5) | 0) + $scope.game.datetime.getHours()) % 24 );
 		$scope.game.datetime.setMinutes( ((($scope.game.datetime.getMinutes() + 7.5)/15 | 0) * 15) % 60 );
 		$scope.game.datetime.setSeconds(0);
-		$scope.leagues.defaultGameNotes = 'abc';
 		
 		$scope.submit = function (game) {
 			
