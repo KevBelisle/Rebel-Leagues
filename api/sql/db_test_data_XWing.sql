@@ -2,7 +2,7 @@
 /* POPULATE leagues
 ============================================= */
 
-INSERT INTO leagues (league_id, title, subtitle, logo) VALUES (1,'Star Wars X-Wing Miniatures Game', 'RebelLeagues Québec', 'uploads/leagues/e034fb6b66aacc1d48f445ddfb08da98.png');
+INSERT INTO leagues (league_id, title, subtitle, logo, defaultGameNotes) VALUES (1,'Star Wars X-Wing Miniatures Game', 'RebelLeagues Québec', 'uploads/leagues/e034fb6b66aacc1d48f445ddfb08da98.png','Suggestion: ajouter des liens webs vers les squads utilisés dans Yet Another Squad Builder, description des faits saillants, etc.');
 
 
 /* POPULATE factions
