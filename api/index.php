@@ -102,7 +102,7 @@ class League {
 		WHERE league_id = :league_id',
 			array( ':league_id' => $league_id )
 		);
-		echo outputSuccess( $league );
+		echo outputSuccess( array( 'league' => $league) );
 	}
 	
 	
