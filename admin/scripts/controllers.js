@@ -129,7 +129,7 @@ rebelLeaguesAdminControllers.controller('addGameCtrl', ['$scope', '$http',
 			);
 		$http.get('../api/leagues/')
 			.then(
-				function success(response) { $scope.leagues = response.data.data.leagues; },
+				function success(response) { $scope.leagues = response.data.data; },
 				function error(reason)     { return false; }
 			);
 		
