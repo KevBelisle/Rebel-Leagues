@@ -97,7 +97,7 @@ class League {
 	public static function getLeague($league_id = 1) {
 		$league = getDatabase()->one(
 		'SELECT
-			title, subtitle
+			title, subtitle, defaultGameNotes
 		FROM leagues
 		WHERE league_id = :league_id',
 			array( ':league_id' => $league_id )
