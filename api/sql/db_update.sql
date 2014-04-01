@@ -34,6 +34,41 @@ BEGIN
 		ALTER TABLE leagues ADD defaultGameNotes VARCHAR(500);
 	END IF;
 	
+	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'leagues' AND column_name = 'pointsWinValue' ) = 0 THEN
+		ALTER TABLE leagues ADD pointsWinValue INT NOT NULL;
+	END IF;
+	
+	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'leagues' AND column_name = 'pointsTieValue' ) = 0 THEN
+		ALTER TABLE leagues ADD pointsTieValue INT NOT NULL;
+	END IF;
+	
+	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'leagues' AND column_name = 'pointsLossValue' ) = 0 THEN
+		ALTER TABLE leagues ADD pointsLossValue INT NOT NULL;
+	END IF;
+	
+	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'leagues' AND column_name = 'eloStartRank' ) = 0 THEN
+		ALTER TABLE leagues ADD eloStartRank INT NOT NULL;
+	END IF;
+	
+	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'leagues' AND column_name = 'eloMasterRank' ) = 0 THEN
+		ALTER TABLE leagues ADD eloMasterRank INT NOT NULL;
+	END IF;
+	
+	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'leagues' AND column_name = 'eloStartKFactor' ) = 0 THEN
+		ALTER TABLE leagues ADD eloStartKFactor INT NOT NULL;
+	END IF;
+	
+	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'leagues' AND column_name = 'eloSeasonedKFactor' ) = 0 THEN
+		ALTER TABLE leagues ADD eloSeasonedKFactor INT NOT NULL;
+	END IF;
+	
+	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'leagues' AND column_name = 'eloMasterKFactor' ) = 0 THEN
+		ALTER TABLE leagues ADD eloMasterKFactor INT NOT NULL;
+	END IF;
+	
+	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'leagues' AND column_name = 'eloSeasonedGameCountRequirement' ) = 0 THEN
+		ALTER TABLE leagues ADD eloSeasonedGameCountRequirement INT NOT NULL;
+	END IF;
 	
 	/* CREATE admins COLUMNS
 	============================================= */
