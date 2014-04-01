@@ -2,8 +2,7 @@
 /* POPULATE leagues
 ============================================= */
 
-INSERT INTO leagues (league_id, title, subtitle, logo) VALUES (1,'Mage Wars', 'RebelLeagues Québec', 'uploads/leagues/f53d276f50d10a527e35b945260226a1.png');
-
+INSERT INTO leagues (league_id, title, subtitle, logo, defaultGameNotes, pointsWinValue, pointsTieValue, pointsLossValue, eloStartRank, eloMasterRank, eloStartKFactor, eloSeasonedKFactor, eloMasterKFactor, eloSeasonedGameCountRequirement) VALUES (1,'Mage Wars', 'RebelLeagues Québec', 'uploads/leagues/f53d276f50d10a527e35b945260226a1.png','Notes facultatives sur la partie', 5, 3, 1, 1000, 2400, 25, 15, 10, 30);
 /* POPULATE factions
 ============================================= */
 
