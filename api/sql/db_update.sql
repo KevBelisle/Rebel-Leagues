@@ -30,6 +30,10 @@ BEGIN
 		ALTER TABLE leagues ADD logo VARCHAR(60);
 	END IF;
 	
+	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'leagues' AND column_name = 'defaultGameNotes' ) = 0 THEN
+		ALTER TABLE leagues ADD defaultGameNotes VARCHAR(500);
+	END IF;
+	
 	
 	/* CREATE admins COLUMNS
 	============================================= */
