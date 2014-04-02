@@ -32,7 +32,7 @@ getRoute()->get('/games/(\d+)(?:/?)', array('League', 'getGamesHistory'));
 getRoute()->get('/games/(\d+)/(\d+)(?:/?)', array('League', 'getGamesHistory'));
 getRoute()->get('/games(?:/?)/all', array('League', 'getGamesHistoryAll'));
 getRoute()->get('/ranking(?:/?)', array('League', 'getRanking'));
-getRoute()->get('/ranking/(games_played|elo_rating|points)(?:/?)', array('League', 'getRanking'));
+getRoute()->get('/ranking/(\d+)(?:/?)', array('League', 'getRanking'));
 
 getRoute()->get('/factions(?:/?)', array('League', 'getFactions'));
 getRoute()->get('/factions/leafs(?:/?)', array('League', 'getLeafFactions'));
@@ -93,16 +93,44 @@ class League {
 		echo "Nope.";
 	}
 	
-	
-	public static function getLeague($league_id = 1) {
+	public static function internal_getLeague($league_id = 1) {
 		$league = getDatabase()->one(
 		'SELECT
-			title, subtitle
+			title,
+			subtitle,
+			defaultGameNotes,
+			pointsWinValue,
+			pointsDrawValue,
+			pointsLossValue,
+			eloMasterRank,
+			eloStartKFactor,
+			eloSeasonedKFactor,
+			eloMasterKFactor,
+			eloSeasonedGameCountRequirement,
+			eloStartRank
 		FROM leagues
 		WHERE league_id = :league_id',
 			array( ':league_id' => $league_id )
 		);
-		echo outputSuccess( $league );
+		
+		$ranking_methods = getDatabase()->all(
+		'SELECT
+			rm.ranking_method_id,
+			rm.ranking_method_name,
+			lrm.default_ranking
+		FROM ranking_methods rm
+		LEFT OUTER JOIN leagues_ranking_methods lrm
+			ON lrm.ranking_method_id = rm.ranking_method_id
+			AND lrm.league_id = :league_id',
+			array( ':league_id' => $league_id )
+		);
+		
+		return array($league, $ranking_methods);
+	}
+	
+	public static function getLeague($league_id = 1) {
+		list($league, $ranking_methods) = self::internal_getLeague($league_id);
+		echo outputSuccess( array( 'league' => $league, 'ranking_methods' => $ranking_methods ) );
 	}
 	
 	
@@ -254,46 +282,60 @@ class League {
 	}
 	
 	
-	public static $pointsDistribution = [
-		'win' => 5,
-		'draw' => 3,
-		'loss' => 1
-	];
+	public static function getRanking($requested_ranking_method_id = -1) {
 	
-	
-	public static function getRanking($sort_method = 'default') {
+		list($league, $possible_ranking_methods) = self::internal_getLeague();
+		
+		$ranking_method = -1;
+		$default_ranking_method = -1;
+		foreach ($possible_ranking_methods as $possible_ranking_method) {
+			if ($possible_ranking_method["default_ranking"] == 1) {
+				// Found default sort
+				$default_ranking_method = $possible_ranking_method["ranking_method_id"];
+			} else if ( $requested_ranking_method_id == $possible_ranking_method["ranking_method_id"] && !is_null($possible_ranking_method["default_ranking"]) ) {
+				// Requested ranking method is allowed
+				$ranking_method = $requested_ranking_method_id;
+				break;
+			}
+		}
+		if ($default_ranking_method == -1) // No default ranking method defined -> assume default ranking of 1 (games_played)
+			$default_ranking_method = 1;
+		if ($ranking_method == -1) // Requested ranking method not allowed -> revert to default
+			$ranking_method = $default_ranking_method;
 	
 		$games = getDatabase()->all(
 			'SELECT * FROM games_history ORDER BY date ASC'
 		);
 		$players = getDatabase()->all(
 			'SELECT *,
-			1000 AS elo_rating,
-			'.self::$pointsDistribution['win'].'*games_won + '.self::$pointsDistribution['draw'].'*games_tied + '.self::$pointsDistribution['loss'].'*games_lost AS points
-			FROM players_ranking'
+			1000 AS elo_rating, :winPoints*games_won + :drawPoints*games_tied + :lossPoints*games_lost AS points
+			FROM players_ranking',
+			array(":winPoints" => $league["pointsWinValue"], ":drawPoints" => $league["pointsDrawValue"], ":lossPoints" => $league["pointsLossValue"])
 		);
-		$players = ELO::getELORankings($games, $players);
 		
-		if ($sort_method == 'default') { $sort_method = 'games_played'; }
-		
-		switch ($sort_method) {
-			case 'elo_rating':
+		switch ($ranking_method) {
+			// ELO rating
+			case 3:
+				$players = ELO::getELORankings($games, $players);
 				$sortList = [];
 				foreach ($players as $key => $player) {
 					$sortList[$key]  = $player['elo_rating'];
 				}
 				array_multisort($sortList, SORT_DESC, $players);
 				break;
-				
-			case 'points':
+			
+			// Points
+			case 2:
 				$sortList = [];
 				foreach ($players as $key => $player) {
 					$sortList[$key]  = $player['points'];
 				}
 				array_multisort($sortList, SORT_DESC, $players);
 				break;
-				
-			case 'games_played':
+			
+			// Games played
+			case 1:
+			default:
 				$sortList = [];
 				foreach ($players as $key => $player) {
 					$sortList[$key]  = $player['games_played'];
@@ -302,7 +344,7 @@ class League {
 				break;
 		}
 		
-		echo outputSuccess( array( 'ranking' => $sort_method, 'players' => $players) );
+		echo outputSuccess( array( 'ranking' => $ranking_method, 'players' => $players) );
 	}
 	
 	

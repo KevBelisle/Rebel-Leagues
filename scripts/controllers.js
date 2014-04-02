@@ -79,15 +79,15 @@ rebelLeaguesControllers.controller('playersRankingCtrl', ['$scope', '$http', '$m
 	function ($scope, $http, $modal) {
 		$http.get('api/ranking').success(function(data) {
 		
-			if (data.data.ranking == "elo_rating") {
+			if (data.data.ranking == 3) { // ELO rating
 				$scope.min = Math.min.apply(null, data.data.players.map(function(a){return a.elo_rating;}));
 				$scope.max = Math.max.apply(null, data.data.players.map(function(a){return a.elo_rating;}));
 				
-			} else if (data.data.ranking == "games_played") {
+			} else if (data.data.ranking == 1) { // Games played
 				$scope.min = Math.min.apply(null, data.data.players.map(function(a){return a.games_played;}));
 				$scope.max = Math.max.apply(null, data.data.players.map(function(a){return a.games_played;}));
 				
-			} else if (data.data.ranking == "points") {
+			} else if (data.data.ranking == 2) { // Points
 				$scope.min = Math.min.apply(null, data.data.players.map(function(a){return a.points;}));
 				$scope.max = Math.max.apply(null, data.data.players.map(function(a){return a.points;}));
 			}
@@ -127,6 +127,8 @@ rebelLeaguesControllers.controller('playersRankingCtrl', ['$scope', '$http', '$m
 		
 			$scope.players = data.data.players;
 			$scope.ranking = data.data.ranking;
+			
+			console.log($scope);
 		});
 	}
 ]);
@@ -170,8 +172,9 @@ rebelLeaguesControllers.controller('leagueStatsCtrl', ['$scope', '$http',
 rebelLeaguesControllers.controller('leagueInfoCtrl', ['$scope', '$http',
 	function ($scope, $http) {
 		$http.get('api/leagues').success(function(data) {
-			$scope.title = data.data.title;
-			$scope.subtitle = data.data.subtitle;
+			console.log(data);
+			$scope.title = data.data.league.title;
+			$scope.subtitle = data.data.league.subtitle;
 		});
 				
 	}

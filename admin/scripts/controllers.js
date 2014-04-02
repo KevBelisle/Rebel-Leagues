@@ -115,6 +115,7 @@ rebelLeaguesAdminControllers.controller('addGameCtrl', ['$scope', '$http',
 		
 		$scope.factions = [];
 		$scope.players = [];
+		$scope.league = [];
 		
 		$http.get('../api/factions/leafs')
 			.then(
@@ -124,6 +125,11 @@ rebelLeaguesAdminControllers.controller('addGameCtrl', ['$scope', '$http',
 		$http.get('../api/players/')
 			.then(
 				function success(response) { $scope.players = response.data.data.players; },
+				function error(reason)     { return false; }
+			);
+		$http.get('../api/leagues/')
+			.then(
+				function success(response) { $scope.league = response.data.data.league; },
 				function error(reason)     { return false; }
 			);
 		

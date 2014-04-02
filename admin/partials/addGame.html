@@ -22,7 +22,7 @@
 		<label class="fullWidth"> <input type="checkbox" ng-model="game.is_draw" /> Finie en nulle</label>
 		<label class="fullWidth"> <input type="checkbox" ng-model="game.is_ranked" /> Comptabilisée au classement</label>
 		<label class="fullWidth"> <input type="checkbox" ng-model="game.is_time_runout" /> Terminée par manque de temps</label>
-		<label class="fullWidth"> <input type="checkbox" ng-model="game.is_online" /> Jouée en ligne (VASSAL)</label>
+		<label class="fullWidth"> <input type="checkbox" ng-model="game.is_online" /> Jouée en ligne (VASSAL, OCTGN, etc.)</label>
 	
 	</div>
 	
@@ -35,7 +35,7 @@
 			<timepicker hour-step="1" minute-step="15" show-meridian="false"></timepicker>
 		</div>
 		
-		<textarea class="fullWidth" ng-model="game.notes" placeholder="Notes"></textarea>
+		<textarea class="fullWidth" ng-model="game.notes" placeholder="{{league.defaultGameNotes}}"></textarea>
 		
 		<button ng-click="submit(game)" class="fullWidth">Submit</button>
 	</div>
