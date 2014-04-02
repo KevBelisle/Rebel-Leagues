@@ -26,7 +26,9 @@
 				
 				<div ng-switch-when="2">
 					{{ player.points }} points ({{ player.games_won }} victoires, {{ player.games_tied }} nulles, {{ player.games_lost }} défaites)
-					<div class="stats_bar" ng-attr-style="width: {{ 100 * player.points / max | number:0 }}%"></div>
+					<div class="stats_bar" ng-attr-style="width: {{ 100 * player.points / max | number:0 }}%">
+						<div class="darker" style="width: 100%" tooltip="{{ player.points }} points"></div>
+					</div>
 				</div>
 				
 			</div>
