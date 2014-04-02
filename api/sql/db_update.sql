@@ -9,6 +9,8 @@ BEGIN
 	============================================= */
 	
 	CREATE TABLE IF NOT EXISTS leagues ( league_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+	CREATE TABLE IF NOT EXISTS ranking_methods ( ranking_method_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+	CREATE TABLE IF NOT EXISTS leagues_ranking_methods ( league_id INT NOT NULL, ranking_method_id INT NOT NULL ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 	CREATE TABLE IF NOT EXISTS admins ( admin_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 	CREATE TABLE IF NOT EXISTS players ( player_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ) ENGINE=InnoDB DEFAULT CHARSET=utf8;  
 	CREATE TABLE IF NOT EXISTS factions ( faction_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -69,6 +71,35 @@ BEGIN
 	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'leagues' AND column_name = 'eloSeasonedGameCountRequirement' ) = 0 THEN
 		ALTER TABLE leagues ADD eloSeasonedGameCountRequirement INT NOT NULL;
 	END IF;
+	
+	/* CREATE ranking_methods COLUMNS
+	============================================= */
+	
+	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'ranking_methods' AND column_name = 'ranking_method_name' ) = 0 THEN
+		ALTER TABLE ranking_methods ADD ranking_method_name VARCHAR(60) NOT NULL;
+	END IF;
+	
+	/* CREATE leagues_ranking_methods COLUMNS
+	============================================= */
+	
+	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'leagues_ranking_methods' AND column_name = 'default_ranking' ) = 0 THEN
+		ALTER TABLE leagues_ranking_methods ADD default_ranking BOOLEAN NOT NULL;
+	END IF;
+	
+	ALTER TABLE leagues_ranking_methods
+		ADD UNIQUE INDEX(league_id, ranking_method_id);
+	
+	ALTER TABLE leagues_ranking_methods ADD
+		FOREIGN KEY (league_id)
+		REFERENCES leagues(league_id)
+		ON DELETE CASCADE
+		ON UPDATE CASCADE;
+	
+	ALTER TABLE leagues_ranking_methods ADD
+		FOREIGN KEY (ranking_method_id)
+		REFERENCES ranking_methods(ranking_method_id)
+		ON DELETE CASCADE
+		ON UPDATE CASCADE;
 	
 	/* CREATE admins COLUMNS
 	============================================= */
