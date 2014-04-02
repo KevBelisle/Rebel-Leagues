@@ -97,7 +97,18 @@ class League {
 	public static function getLeague($league_id = 1) {
 		$league = getDatabase()->one(
 		'SELECT
-			title, subtitle, defaultGameNotes
+			title,
+			subtitle,
+			defaultGameNotes,
+			pointsWinValue,
+			pointsTieValue,
+			pointsLossValue, 
+			eloMasterRank,
+			eloStartKFactor,
+			eloSeasonedKFactor,
+			eloMasterKFactor,
+			eloSeasonedGameCountRequirement,
+			eloStartRank
 		FROM leagues
 		WHERE league_id = :league_id',
 			array( ':league_id' => $league_id )
