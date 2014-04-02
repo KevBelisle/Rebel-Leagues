@@ -10,12 +10,12 @@
 		
 			<div ng-switch on="ranking">
 			
-				<div ng-switch-when="elo_rating">
+				<div ng-switch-when="3">
 					Points Elo : {{ player.elo_rating | number:0 }}
 					<div class="stats_bar" ng-attr-style="width: {{ 10 + 90 * (player.elo_rating - min) / (max - min) | number:0 }} px"></div>
 				</div>
 				
-				<div ng-switch-when="games_played">
+				<div ng-switch-when="1">
 					{{ player.games_played }} parties jouées
 					<div ng-show="player.games_played" class="stats_bar" ng-attr-style="width: {{ 100 * player.games_played / max | number:0 }}%">
 						<div class="darker" ng-attr-style="width: {{ 99.99 * player.games_won / player.games_played | number:2 }}%" tooltip="{{ player.games_won }} parties gagnées"></div>
@@ -24,7 +24,7 @@
 					</div>
 				</div>
 				
-				<div ng-switch-when="points">
+				<div ng-switch-when="2">
 					{{ player.points }} points ({{ player.games_won }} victoires, {{ player.games_tied }} nulles, {{ player.games_lost }} défaites)
 					<div class="stats_bar" ng-attr-style="width: {{ 100 * player.points / max | number:0 }}%"></div>
 				</div>
