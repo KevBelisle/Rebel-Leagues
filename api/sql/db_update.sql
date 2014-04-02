@@ -79,6 +79,13 @@ BEGIN
 		ALTER TABLE ranking_methods ADD ranking_method_name VARCHAR(60) NOT NULL;
 	END IF;
 	
+	INSERT INTO ranking_methods (ranking_method_id, ranking_method_name) VALUES (1, "games_played")
+		ON DUPLICATE KEY UPDATE ranking_method_id=ranking_method_id;
+	INSERT INTO ranking_methods (ranking_method_id, ranking_method_name) VALUES (2, "points")
+		ON DUPLICATE KEY UPDATE ranking_method_id=ranking_method_id;
+	INSERT INTO ranking_methods (ranking_method_id, ranking_method_name) VALUES (3, "elo_rating")
+		ON DUPLICATE KEY UPDATE ranking_method_id=ranking_method_id;
+	
 	/* CREATE leagues_ranking_methods COLUMNS
 	============================================= */
 	
