@@ -100,7 +100,7 @@ class League {
 			subtitle,
 			defaultGameNotes,
 			pointsWinValue,
-			pointsTieValue,
+			pointsDrawValue,
 			pointsLossValue,
 			eloMasterRank,
 			eloStartKFactor,
@@ -310,7 +310,7 @@ class League {
 			'SELECT *,
 			1000 AS elo_rating, :winPoints*games_won + :drawPoints*games_tied + :lossPoints*games_lost AS points
 			FROM players_ranking',
-			array(":winPoints" => 5, ":drawPoints" => 3, ":lossPoints" => 1)
+			array(":winPoints" => $league["pointsWinValue"], ":drawPoints" => $league["pointsDrawValue"], ":lossPoints" => $league["pointsLossValue"])
 		);
 		
 		switch ($ranking_method) {

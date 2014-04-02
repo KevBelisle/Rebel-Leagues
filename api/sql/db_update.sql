@@ -40,8 +40,8 @@ BEGIN
 		ALTER TABLE leagues ADD pointsWinValue INT NOT NULL;
 	END IF;
 	
-	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'leagues' AND column_name = 'pointsTieValue' ) = 0 THEN
-		ALTER TABLE leagues ADD pointsTieValue INT NOT NULL;
+	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'leagues' AND column_name = 'pointsDrawValue' ) = 0 THEN
+		ALTER TABLE leagues ADD pointsDrawValue INT NOT NULL;
 	END IF;
 	
 	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'leagues' AND column_name = 'pointsLossValue' ) = 0 THEN
