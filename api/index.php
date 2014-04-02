@@ -286,8 +286,6 @@ class League {
 	
 		list($league, $possible_ranking_methods) = self::internal_getLeague();
 		
-		print_r( $possible_ranking_methods );
-		
 		$ranking_method = -1;
 		$default_ranking_method = -1;
 		foreach ($possible_ranking_methods as $possible_ranking_method) {
