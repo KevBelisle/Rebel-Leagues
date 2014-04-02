@@ -113,7 +113,19 @@ class League {
 		WHERE league_id = :league_id',
 			array( ':league_id' => $league_id )
 		);
-		echo outputSuccess( array( 'league' => $league) );
+		
+		$ranking_methods = getDatabase()->all(
+		'SELECT
+			lrm.ranking_method_id,
+			rm.ranking_method_name,
+			lrm.default_ranking
+		FROM leagues_ranking_methods lrm
+		LEFT JOIN ranking_methods rm ON lrm.ranking_method_id = rm.ranking_method_id
+		WHERE league_id = :league_id',
+			array( ':league_id' => $league_id )
+		);
+		
+		echo outputSuccess( array( 'league' => $league, 'ranking_methods' => $ranking_methods ) );
 	}
 	
 	
