@@ -360,7 +360,7 @@ class League {
 				(
 					SELECT COUNT(DISTINCT player_id) AS active_players
 					FROM games_split
-					WHERE date > DATE_SUB(NOW(), INTERVAL 14 DAY)
+					WHERE date > DATE_SUB(NOW(), INTERVAL 60 DAY)
 				) ap,
 				(
 					SELECT COUNT(*) AS games_played
