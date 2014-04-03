@@ -631,16 +631,16 @@ class Admin {
 		
 		try {
 			$game_id = getDatabase()->execute('UPDATE games SET
-				player1_id = :player1_id,
-				player1_faction_id = :player1_faction_id,
-				player2_id = :player2_id,
-				player2_faction_id = :player2_faction_id,
-				date = :date,
-				is_draw = :is_draw,
-				is_ranked = :is_ranked,
-				is_time_runout = :is_time_runout,
-				is_online = :is_online,
-				notes = :notes
+					player1_id = :player1_id,
+					player1_faction_id = :player1_faction_id,
+					player2_id = :player2_id,
+					player2_faction_id = :player2_faction_id,
+					date = :date,
+					is_draw = :is_draw,
+					is_ranked = :is_ranked,
+					is_time_runout = :is_time_runout,
+					is_online = :is_online,
+					notes = :notes
 				WHERE game_id = :game_id',
 			array(
 				':player1_id' => $_POST['player1_id'],
@@ -684,43 +684,57 @@ class Admin {
 	public static function editLeague($leagueId = 1) {
 		self::checkTier(1);
 		
-		print_r($_POST);
-		/*
-		self::checkFields( array('player1_id', 'player1_faction_id', 'player2_id', 'player2_faction_id', 'date', 'is_draw', 'is_ranked', 'is_time_runout', 'is_online'), $_POST );
+		self::checkFields( array('title',
+							     'subtitle',
+								 'defaultGameNotes',
+								 'pointsWinValue',
+								 'pointsDrawValue',
+								 'pointsLossValue',
+								 'eloStartRank',
+								 'eloMasterRank',
+								 'eloStartKFactor',
+								 'eloSeasonedKFactor',
+								 'eloMasterKFactor',
+								 'eloSeasonedGameCountRequirement'),
+						   $_POST );
 		
 		try {
-			$game_id = getDatabase()->execute('UPDATE games SET
-				player1_id = :player1_id,
-				player1_faction_id = :player1_faction_id,
-				player2_id = :player2_id,
-				player2_faction_id = :player2_faction_id,
-				date = :date,
-				is_draw = :is_draw,
-				is_ranked = :is_ranked,
-				is_time_runout = :is_time_runout,
-				is_online = :is_online,
-				notes = :notes
-				WHERE game_id = :game_id',
+			getDatabase()->execute('UPDATE leagues SET
+					title = :title,
+					subtitle = :subtitle,
+					defaultGameNotes = :defaultGameNotes,
+					pointsWinValue = :pointsWinValue,
+					pointsDrawValue = :pointsDrawValue,
+					pointsLossValue = :pointsLossValue,
+					eloStartRank = :eloStartRank,
+					eloMasterRank = :eloMasterRank,
+					eloStartKFactor = :eloStartKFactor,
+					eloSeasonedKFactor = :eloSeasonedKFactor,
+					eloMasterKFactor = :eloMasterKFactor,
+					eloSeasonedGameCountRequirement = :eloSeasonedGameCountRequirement
+				WHERE league_id = :league_id',
 			array(
-				':player1_id' => $_POST['player1_id'],
-				':player1_faction_id' => $_POST['player1_faction_id'],
-				':player2_id' => $_POST['player2_id'],
-				':player2_faction_id' => $_POST['player2_faction_id'],
-				':date' => $_POST['date'],
-				':is_draw' => $_POST['is_draw'],
-				':is_ranked' => $_POST['is_ranked'],
-				':is_time_runout' => $_POST['is_time_runout'],
-				':is_online' => $_POST['is_online'],
-				':notes' => $_POST['notes'],
-				':game_id' => $gameId
+				":title" => $_POST["title"],
+				":subtitle" => $_POST["subtitle"],
+				":defaultGameNotes" => $_POST["defaultGameNotes"],
+				":pointsWinValue" => $_POST["pointsWinValue"],
+				":pointsDrawValue" => $_POST["pointsDrawValue"],
+				":pointsLossValue" => $_POST["pointsLossValue"],
+				":eloStartRank" => $_POST["eloStartRank"],
+				":eloMasterRank" => $_POST["eloMasterRank"],
+				":eloStartKFactor" => $_POST["eloStartKFactor"],
+				":eloSeasonedKFactor" => $_POST["eloSeasonedKFactor"],
+				":eloMasterKFactor" => $_POST["eloMasterKFactor"],
+				":eloSeasonedGameCountRequirement" => $_POST["eloSeasonedGameCountRequirement"],
+				':league_id' => $leagueId
 			)
 			);
-			echo outputSuccess( array( 'game_id' => $gameId ) );
+			echo outputSuccess( array( 'league_id' => $leagueId ) );
 			
 		} catch (Exception $e) {
 			echo outputError($e->getMessage());
 		}
-		*/
+		
 	}
 }
 

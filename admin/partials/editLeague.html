@@ -1,0 +1,45 @@
+
+<form id="editLeague" class="clear">
+
+	<div class="left">
+
+		<label>Nom de la league
+		<input type="text" class="fullWidth" ng-model="league.title" /></label>
+		<label>Sous-titre de la league
+		<input type="text" class="fullWidth" ng-model="league.subtitle" /></label>
+		
+		<label>Exemple de commentaire
+		<input type="text" class="fullWidth" ng-model="league.defaultGameNotes" /></label>
+		
+		<label>Points accordés pour une victoire
+		<input type="text" class="fullWidth" ng-model="league.pointsWinValue" /></label>
+		<label>Points accordés pour une nulle
+		<input type="text" class="fullWidth" ng-model="league.pointsDrawValue" /></label>
+		<label>Points accordés pour une défaite
+		<input type="text" class="fullWidth" ng-model="league.pointsLossValue" /></label>
+		
+	</div>
+	
+	<div class="right">
+		<label>Score ELO initial
+		<input type="text" class="fullWidth" ng-model="league.eloStartRank" /></label>
+		
+		<label>Nombre de parties en tant que débutant
+		<input type="text" class="fullWidth" ng-model="league.eloSeasonedGameCountRequirement" /></label>
+		
+		<label>K-Factor en tant que débutant
+		<input type="text" class="fullWidth" ng-model="league.eloStartKFactor" /></label>
+		
+		<label>K-Factor normal
+		<input type="text" class="fullWidth" ng-model="league.eloSeasonedKFactor" /></label>
+		
+		<label>Score ELO d'un maître
+		<input type="text" class="fullWidth" ng-model="league.eloMasterRank" /></label>
+		
+		<label>K-Factor en tant que maître
+		<input type="text" class="fullWidth" ng-model="league.eloMasterKFactor" /></label>
+		
+		<button ng-click="submit(league)" class="fullWidth">Enregistrer les paramètres</button>
+	</div>
+	
+</form>
