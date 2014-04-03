@@ -320,29 +320,41 @@ rebelLeaguesAdminControllers.controller('editGameCtrl', ['$scope', '$http',
 	}
 ]);
 
-
-
-
-rebelLeaguesAdminControllers.controller('tier1Ctrl', ['$scope', '$http',
+rebelLeaguesAdminControllers.controller('editLeagueCtrl', ['$scope', '$http',
 	function ($scope, $http) {
 	
-		$scope.title = "Tier <= 1 ONLY!";
-		$scope.partial = "partials/nothing";
+		$scope.title = "Modifier les paramètres de league";
+		$scope.partial = "partials/editLeague.html";
 	
 		$scope.expanded = false;
 		$scope.toggle = function () { $scope.expanded = !$scope.expanded };
-	}
-]);
+		
+		$scope.league = {};
+		$scope.ranking_methods = [];
+		
+		$http.get('../api/leagues')
+			.then(
+				function success(response) { $scope.league = response.data.data.league;
+											 $scope.ranking_methods = response.data.data.ranking_methods; },
+				function error(reason)     { return false; }
+			);
 
-
-rebelLeaguesAdminControllers.controller('tier2Ctrl', ['$scope', '$http',
-	function ($scope, $http) {
-	
-		$scope.title = "Tier <= 2 ONLY!";
-		$scope.partial = "partials/nothing";
-	
-		$scope.expanded = false;
-		$scope.toggle = function () { $scope.expanded = !$scope.expanded };
+		$scope.submit = function (league, ranking_methods) {
+			
+			//console.log(encodeURIComponent(angular.toJson(game)));
+			
+			$http.put('../api/leagues', league).success( function (data) {
+					console.log(data);
+				if (data.status == "success") {
+					alert("Paramètres modifiées.");
+				} else {
+					alert("Une erreur est survenue.");
+				}
+			}).error( function(data) {
+				alert("Une erreur est survenue.");
+				console.log(data);
+			});
+		};
 	}
 ]);
 

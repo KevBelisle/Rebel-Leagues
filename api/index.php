@@ -50,9 +50,12 @@ getRoute()->get('/admins(?:/?)', array('Admin', 'getAdmins'));
 getRoute()->post('/admins(?:/?)', array('Admin', 'addAdmin'));
 getRoute()->post('/players(?:/?)', array('Admin', 'addPlayer'));
 getRoute()->post('/factions(?:/?)', array('Admin', 'addFaction'));
+
 getRoute()->post('/games(?:/?)', array('Admin', 'addGame'));
 getRoute()->put('/games/(\d+)(?:/?)', array('Admin', 'editGame'));
 getRoute()->delete('/games/(\d+)(?:/?)', array('Admin', 'deleteGame'));
+
+getRoute()->put('/leagues(?:/?)', array('Admin', 'editLeague'));
 
 // Run router
 getRoute()->run();
@@ -360,7 +363,7 @@ class League {
 				(
 					SELECT COUNT(DISTINCT player_id) AS active_players
 					FROM games_split
-					WHERE date > DATE_SUB(NOW(), INTERVAL 14 DAY)
+					WHERE date > DATE_SUB(NOW(), INTERVAL 60 DAY)
 				) ap,
 				(
 					SELECT COUNT(*) AS games_played
@@ -596,8 +599,6 @@ class Admin {
 	public static function addGame() {
 		//self::checkTier(3);
 		
-		print_r($_POST);
-		
 		self::checkFields( array('player1_id', 'player1_faction_id', 'player2_id', 'player2_faction_id', 'date', 'is_draw', 'is_ranked', 'is_time_runout', 'is_online'), $_POST );
 		
 		try {
@@ -626,22 +627,20 @@ class Admin {
 	public static function editGame($gameId) {
 		self::checkTier(2);
 		
-		print_r($_POST);
-		
 		self::checkFields( array('player1_id', 'player1_faction_id', 'player2_id', 'player2_faction_id', 'date', 'is_draw', 'is_ranked', 'is_time_runout', 'is_online'), $_POST );
 		
 		try {
 			$game_id = getDatabase()->execute('UPDATE games SET
-				player1_id = :player1_id,
-				player1_faction_id = :player1_faction_id,
-				player2_id = :player2_id,
-				player2_faction_id = :player2_faction_id,
-				date = :date,
-				is_draw = :is_draw,
-				is_ranked = :is_ranked,
-				is_time_runout = :is_time_runout,
-				is_online = :is_online,
-				notes = :notes
+					player1_id = :player1_id,
+					player1_faction_id = :player1_faction_id,
+					player2_id = :player2_id,
+					player2_faction_id = :player2_faction_id,
+					date = :date,
+					is_draw = :is_draw,
+					is_ranked = :is_ranked,
+					is_time_runout = :is_time_runout,
+					is_online = :is_online,
+					notes = :notes
 				WHERE game_id = :game_id',
 			array(
 				':player1_id' => $_POST['player1_id'],
@@ -679,6 +678,63 @@ class Admin {
 		} catch (Exception $e) {
 			echo outputError($e->getMessage());
 		}
+	}
+	
+	
+	public static function editLeague($leagueId = 1) {
+		self::checkTier(1);
+		
+		self::checkFields( array('title',
+							     'subtitle',
+								 'defaultGameNotes',
+								 'pointsWinValue',
+								 'pointsDrawValue',
+								 'pointsLossValue',
+								 'eloStartRank',
+								 'eloMasterRank',
+								 'eloStartKFactor',
+								 'eloSeasonedKFactor',
+								 'eloMasterKFactor',
+								 'eloSeasonedGameCountRequirement'),
+						   $_POST );
+		
+		try {
+			getDatabase()->execute('UPDATE leagues SET
+					title = :title,
+					subtitle = :subtitle,
+					defaultGameNotes = :defaultGameNotes,
+					pointsWinValue = :pointsWinValue,
+					pointsDrawValue = :pointsDrawValue,
+					pointsLossValue = :pointsLossValue,
+					eloStartRank = :eloStartRank,
+					eloMasterRank = :eloMasterRank,
+					eloStartKFactor = :eloStartKFactor,
+					eloSeasonedKFactor = :eloSeasonedKFactor,
+					eloMasterKFactor = :eloMasterKFactor,
+					eloSeasonedGameCountRequirement = :eloSeasonedGameCountRequirement
+				WHERE league_id = :league_id',
+			array(
+				":title" => $_POST["title"],
+				":subtitle" => $_POST["subtitle"],
+				":defaultGameNotes" => $_POST["defaultGameNotes"],
+				":pointsWinValue" => $_POST["pointsWinValue"],
+				":pointsDrawValue" => $_POST["pointsDrawValue"],
+				":pointsLossValue" => $_POST["pointsLossValue"],
+				":eloStartRank" => $_POST["eloStartRank"],
+				":eloMasterRank" => $_POST["eloMasterRank"],
+				":eloStartKFactor" => $_POST["eloStartKFactor"],
+				":eloSeasonedKFactor" => $_POST["eloSeasonedKFactor"],
+				":eloMasterKFactor" => $_POST["eloMasterKFactor"],
+				":eloSeasonedGameCountRequirement" => $_POST["eloSeasonedGameCountRequirement"],
+				':league_id' => $leagueId
+			)
+			);
+			echo outputSuccess( array( 'league_id' => $leagueId ) );
+			
+		} catch (Exception $e) {
+			echo outputError($e->getMessage());
+		}
+		
 	}
 }
 
