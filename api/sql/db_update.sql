@@ -515,7 +515,16 @@ BEGIN
 	GROUP BY player_id, rival_player_id
 	ORDER BY games_split.player_id, games_split.rival_player_id;
 	
+			/* CREATE crossPlayerVsFactions VIEW -- players against other players (use this to detect rivalries + dominations with a future view)
+	============================================= */
 	
+	CREATE OR REPLACE VIEW crossPlayerVsFactions AS
+	SELECT
+	
+	FROM
+	
+	GROUP BY
+	GROUP BY
 	
 END //
 DELIMITER ;
