@@ -515,10 +515,38 @@ BEGIN
 	GROUP BY player_id, rival_player_id
 	ORDER BY games_split.player_id, games_split.rival_player_id;
 	
-			/* CREATE crossPlayerVsFactions VIEW -- players against other players (use this to detect rivalries + dominations with a future view)
+			/* CREATE playerFaresFactionWith VIEW -- how does a player fare with the different factions?
 	============================================= */
 	
-	CREATE OR REPLACE VIEW crossPlayerVsFactions AS
+	CREATE OR REPLACE VIEW playerFaresFactionWith AS
+	SELECT
+		games_split.player_id,		
+		games_split.faction_id,
+		
+		factions.name AS faction_name,
+		factions.color AS faction_color,
+		
+		parent_factions.faction_id AS parent_faction_id,
+		parent_factions.name AS parent_faction_name,
+		parent_factions.color AS parent_faction_color,
+		
+		COALESCE(SUM(is_win), 0) AS games_won,
+        COALESCE(SUM(is_draw), 0) AS games_tied,
+        COALESCE(SUM(is_loss), 0) AS games_lost,
+        COALESCE(SUM(is_win), 0) + COALESCE(SUM(is_draw), 0) + COALESCE(SUM(is_loss), 0) AS games_played
+	
+	FROM games_split games_split
+		LEFT OUTER JOIN players players ON players.player_id = games_split.player_id
+		LEFT OUTER JOIN factions factions ON factions.faction_id = games_split.faction_id
+		LEFT OUTER JOIN factions parent_factions ON parent_factions.faction_id = games_split.parent_faction_id
+		
+	GROUP BY player_id, faction_id
+	ORDER BY games_split.player_id, games_split.faction_id
+	
+				/* CREATE playerFaresFactionAgainst VIEW -- how does a player fare against the different factions?
+	============================================= */
+	
+	CREATE OR REPLACE VIEW playerFaresFactionAgainst AS
 	SELECT
 	
 	FROM
