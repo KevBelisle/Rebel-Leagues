@@ -523,12 +523,7 @@ BEGIN
 		games_split.player_id,		
 		games_split.faction_id,
 		
-		factions.name AS faction_name,
-		factions.color AS faction_color,
-		
 		parent_factions.faction_id AS parent_faction_id,
-		parent_factions.name AS parent_faction_name,
-		parent_factions.color AS parent_faction_color,
 		
 		COALESCE(SUM(is_win), 0) AS games_won,
         COALESCE(SUM(is_draw), 0) AS games_tied,
