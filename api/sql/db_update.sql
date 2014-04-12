@@ -432,7 +432,8 @@ BEGIN
 		COALESCE(SUM(is_win),0) AS games_won,
 		COALESCE(SUM(is_draw),0) AS games_tied,
 		COALESCE(SUM(is_loss),0) AS games_lost,
-		COALESCE(SUM(is_win), 0) + COALESCE(SUM(is_draw), 0) + COALESCE(SUM(is_loss), 0) AS games_played
+		COALESCE(SUM(is_win), 0) + COALESCE(SUM(is_draw), 0) + COALESCE(SUM(is_loss), 0) AS games_played,
+		games_won / games_played AS ratio
 	FROM factions_games_split
 		LEFT OUTER JOIN factions child_faction ON child_faction.faction_id = factions_games_split.faction_id
 		LEFT OUTER JOIN factions parent_faction ON parent_faction.faction_id = factions_games_split.parent_faction_id
@@ -565,23 +566,23 @@ BEGIN
 	
 	CREATE OR REPLACE VIEW players_against_factions_stats AS
 	SELECT
-		games_split.player_id,		
+		games_split.parent_faction_id,
+		games_split.player_id,
 		games_split.faction_id,
 		
-		parent_factions.faction_id AS parent_faction_id,
+		rival_factions.faction_id AS rival_faction_id,
+		rival_parent_factions.faction_id AS rival_parent_faction_id,
 		
 		COALESCE(SUM(is_win), 0) AS games_won,
         COALESCE(SUM(is_draw), 0) AS games_tied,
         COALESCE(SUM(is_loss), 0) AS games_lost,
         COALESCE(SUM(is_win), 0) + COALESCE(SUM(is_draw), 0) + COALESCE(SUM(is_loss), 0) AS games_played
 	
-	FROM games_split games_split
-		LEFT OUTER JOIN players players ON players.player_id = games_split.player_id
-		LEFT OUTER JOIN factions factions ON factions.faction_id = games_split.faction_id
-		LEFT OUTER JOIN factions parent_factions ON parent_factions.faction_id = games_split.parent_faction_id
-		
-	GROUP BY faction_id, rival_faction_id
-	ORDER BY factions_games_split.faction_id, factions_games_split.rival_parent_faction_id, factions_games_split.rival_faction_id;
+	FROM  games_split games_split
+		LEFT OUTER JOIN factions rival_factions ON rival_factions.faction_id = games_split.rival_faction_id
+		LEFT OUTER JOIN factions rival_parent_factions ON rival_parent_factions.faction_id = games_split.rival_parent_faction_id
+	GROUP BY player_id, rival_faction_id
+	ORDER BY player_id, faction_id
 	
 END //
 DELIMITER ;
