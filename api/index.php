@@ -13,7 +13,7 @@ Epi::init('database');
 Epi::setSetting('exceptions', true);
 
 include_once 'db_access.php';
-include_once 'getELORankings.php';
+include_once 'elo_rating.php';
 
 EpiDatabase::employ('mysql', $db["database"], $db["host"], $db["username"], $db["password"]);
 
@@ -325,7 +325,7 @@ class League {
 				);
 				$players = getDatabase()->all(
 					'SELECT *,
-					1000 AS elo_rating,
+					1000 AS elo_rating
 					FROM players_ranking'
 				);
 				$players = ELO::getELORankings($games, $players);
