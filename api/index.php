@@ -373,6 +373,15 @@ class League {
 				foreach ($players as $key => $player) {
 					$eq_player_id = check_property_equals("player_id", $players[$key]['player_id']);
 					$players[$key]['factions_stats'] = array_filter($players_factions_stats, $eq_player_id);
+				
+					if (count($players[$key]['factions_stats']) > 0) {
+						$sortList = [];
+						foreach ($players[$key]['factions_stats'] as $key2 => $faction_stats) {
+							$sortList['parent_faction_id'][$key2]  = $faction_stats['parent_faction_id'];
+							$sortList['faction_id'][$key2]  = $faction_stats['faction_id'];
+						}
+						array_multisort($sortList['parent_faction_id'], SORT_ASC, $sortList['faction_id'], SORT_ASC, $players[$key]['factions_stats']);
+					}
 				}
 		}
 		
