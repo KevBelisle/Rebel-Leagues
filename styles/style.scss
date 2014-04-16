@@ -259,6 +259,10 @@ div#wrapper {
 							div.darker {
 								background-color: darken( $accent-color, 10%);
 							}
+							div.faction_stats_bar div:hover {
+								box-sizing: border-box;
+								border-bottom: 15px solid rgba(200,200,200,0.5);
+							}
 						}
 					}
 				}
