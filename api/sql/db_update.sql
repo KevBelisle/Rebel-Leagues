@@ -417,27 +417,6 @@ BEGIN
 	FROM  games_split games_split
 		RIGHT JOIN players players on games_split.player_id = players.player_id
 	GROUP BY players.player_id;
-	
-	
-	/* CREATE factions_ranking VIEW
-	============================================= */
-	
-	CREATE OR REPLACE VIEW factions_ranking AS
-	SELECT
-		factions_games_split.parent_faction_id,
-		parent_faction.name AS parent_faction_name,
-		factions_games_split.faction_id,
-		child_faction.name AS faction_name,
-		
-		COALESCE(SUM(is_win),0) AS games_won,
-		COALESCE(SUM(is_draw),0) AS games_tied,
-		COALESCE(SUM(is_loss),0) AS games_lost,
-		COALESCE(SUM(is_win), 0) + COALESCE(SUM(is_draw), 0) + COALESCE(SUM(is_loss), 0) AS games_played
-	FROM factions_games_split
-		LEFT OUTER JOIN factions child_faction ON child_faction.faction_id = factions_games_split.faction_id
-		LEFT OUTER JOIN factions parent_faction ON parent_faction.faction_id = factions_games_split.parent_faction_id
-	GROUP BY faction_id
-	ORDER BY games_won DESC;
 
 	
 	/* CREATE factions_games_split VIEW
@@ -487,6 +466,27 @@ BEGIN
 			0 AS is_loss
 		FROM games_history
 		WHERE is_draw = 1;
+	
+	
+	/* CREATE factions_ranking VIEW
+	============================================= */
+	
+	CREATE OR REPLACE VIEW factions_ranking AS
+	SELECT
+		factions_games_split.parent_faction_id,
+		parent_faction.name AS parent_faction_name,
+		factions_games_split.faction_id,
+		child_faction.name AS faction_name,
+		
+		COALESCE(SUM(is_win),0) AS games_won,
+		COALESCE(SUM(is_draw),0) AS games_tied,
+		COALESCE(SUM(is_loss),0) AS games_lost,
+		COALESCE(SUM(is_win), 0) + COALESCE(SUM(is_draw), 0) + COALESCE(SUM(is_loss), 0) AS games_played
+	FROM factions_games_split
+		LEFT OUTER JOIN factions child_faction ON child_faction.faction_id = factions_games_split.faction_id
+		LEFT OUTER JOIN factions parent_faction ON parent_faction.faction_id = factions_games_split.parent_faction_id
+	GROUP BY faction_id
+	ORDER BY games_won DESC;
 		
 		
 	/* CREATE factions_stats VIEW -- factions against other factions
