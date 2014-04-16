@@ -341,21 +341,17 @@ class League {
 				$players = getDatabase()->all(
 					'SELECT *,
 					:winPoints*games_won + :drawPoints*games_tied + :lossPoints*games_lost AS points
-					FROM players_ranking',
+					FROM players_ranking
+					ORDER BY points DESC, games_won DESC, games_tied DESC',
 					array(":winPoints" => $league["pointsWinValue"], ":drawPoints" => $league["pointsDrawValue"], ":lossPoints" => $league["pointsLossValue"])
 				);
-				$sortList = [];
-				foreach ($players as $key => $player) {
-					$sortList[$key]  = $player['points'];
-				}
-				array_multisort($sortList, SORT_DESC, $players);
 				break;
 			
 			// Games played
 			case 1:
 			default:
 				$players = getDatabase()->all(
-					'SELECT * FROM players_ranking ORDER BY games_played DESC'
+					'SELECT * FROM players_ranking ORDER BY games_played DESC, games_won DESC'
 				);
 				$players_factions_stats = getDatabase()->all(
 					'SELECT
