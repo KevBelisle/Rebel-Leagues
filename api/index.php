@@ -367,7 +367,8 @@ class League {
 						parent_faction_name,
 						parent_faction_color,
 						games_played_with
-					FROM players_factions_stats'
+					FROM players_factions_stats
+					ORDER BY parent_faction_id, faction_id'
 				);
 				foreach ($players as $key => $player) {
 					$eq_player_id = check_property_equals("player_id", $players[$key]['player_id']);
