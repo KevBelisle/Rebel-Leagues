@@ -11,7 +11,7 @@
 			<div ng-switch on="ranking">
 			
 				<div ng-switch-when="3">
-					Points Elo : {{ player.elo_rating | number:0 }}
+					Points Elo : {{ player.elo_rating | number:0 }} <i>({{ player.games_played }} parties jouées)</i>
 					<div class="stats_bar" ng-attr-style="width: {{ 10 + 90 * (player.elo_rating - min) / (max - min) | number:0 }}%">
 						<div style="width: 100%"></div>
 					</div>
