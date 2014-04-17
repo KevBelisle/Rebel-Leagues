@@ -5,72 +5,96 @@ var rebelLeaguesControllers = angular.module('rebelLeaguesControllers', ['ui.boo
 
 rebelLeaguesControllers.controller('gamesHistoryCtrl', ['$scope', '$http', '$modal',
 	function ($scope, $http, $modal) {
-		$http.get('api/games').success(function(data) {
+	
+		$scope.games = [];
+		$scope.lastIndex = 0;
+		$scope.prev_date_string = "";
+		$scope.loadInProgress = false;
+		$scope.noMoreData = false;
+	
+		$scope.loadMore = function (skip) {
 		
-			$scope.showFactionModal = function ($factionId) {
-				console.log("Faction ID : " + $factionId);
-				
-				$modal.open({
-					'templateUrl' : 'partials/factionModal.html',
-					'controller' : 'factionModalCtrl',
-					'windowClass' : 'faction',
-					"resolve": {
-						"faction": [
-							'$http',
-							function($http) {
-								return $http.get('api/factions/' + $factionId)
-									.then(
-										function success(response) { return response.data.data; },
-										function error(reason)     { return false; }
-									);
-							}
-						],
-						"faction_stats": [
-							'$http',
-							function($http) {
-								return $http.get('api/factions/' + $factionId + "/stats")
-									.then(
-										function success(response) { return response.data.data; },
-										function error(reason)     { return false; }
-									);
-							}
-						]
-					}
-					
-				});
-				
-			};
-			
-			$scope.games = [];
-			var prev_date_string = "";
-		
-			for (var i = 0; i < data.data.games.length; i++) {
-			
-				var game = data.data.games[i];
-				
-				game.is_draw = game.is_draw == "1" ? true : false;
-				game.is_online = game.is_online == "1" ? true : false;
-				game.is_time_runout = game.is_time_runout == "1" ? true : false;
-				game.is_group_title = false;
-				
-				var date = new Date( game.date.substring(0,4), parseInt(game.date.substring(5,7))-1, game.date.substring(8,10) );
-				
-				game.date_string = date.getDate() + " " + monthNames[date.getMonth()] + " " + date.getFullYear();
-				
-				if ( game.date_string != prev_date_string) {
-					prev_date_string = game.date_string
-					$scope.games.push( { is_group_title: true, date_string: game.date_string } );
-				}
-				
-				game.showNotes = false;
-				
-				$scope.games.push( game );
-				
+			if ($scope.loadInProgress || $scope.noMoreData) {
+				return;
 			}
 			
-			console.log($scope.games);
+			$scope.loadInProgress = true;
 			
-		});
+			$http.get('api/games/'+skip+'/20/').success(function(data) {
+			
+				for (var i = 0; i < data.data.games.length; i++) {
+				
+					var game = data.data.games[i];
+					
+					game.is_draw = game.is_draw == "1" ? true : false;
+					game.is_online = game.is_online == "1" ? true : false;
+					game.is_time_runout = game.is_time_runout == "1" ? true : false;
+					game.is_group_title = false;
+					
+					var date = new Date( game.date.substring(0,4), parseInt(game.date.substring(5,7))-1, game.date.substring(8,10) );
+					
+					game.date_string = date.getDate() + " " + monthNames[date.getMonth()] + " " + date.getFullYear();
+					
+					if ( game.date_string != $scope.prev_date_string) {
+						$scope.prev_date_string = game.date_string
+						$scope.games.push( { is_group_title: true, date_string: game.date_string } );
+					}
+					
+					game.showNotes = false;
+					
+					$scope.games.push( game );
+					
+				}
+				
+				$scope.lastIndex += data.data.games.length;
+				if (data.data.games.length < 20) {
+					$scope.noMoreData = true;
+				}
+				
+				$scope.loadInProgress = false;
+				
+			}).error(function(data){
+				console.log(data);
+				$scope.loadInProgress = false;
+			});
+		
+		};
+		
+		
+		$scope.showFactionModal = function ($factionId) {
+			console.log("Faction ID : " + $factionId);
+			
+			$modal.open({
+				'templateUrl' : 'partials/factionModal.html',
+				'controller' : 'factionModalCtrl',
+				'windowClass' : 'faction',
+				"resolve": {
+					"faction": [
+						'$http',
+						function($http) {
+							return $http.get('api/factions/' + $factionId)
+								.then(
+									function success(response) { return response.data.data; },
+									function error(reason)     { return false; }
+								);
+						}
+					],
+					"faction_stats": [
+						'$http',
+						function($http) {
+							return $http.get('api/factions/' + $factionId + "/stats")
+								.then(
+									function success(response) { return response.data.data; },
+									function error(reason)     { return false; }
+								);
+						}
+					]
+				}
+			});
+		};
+		
+		$scope.loadMore(0);
+		
 	}
 ]);
 
