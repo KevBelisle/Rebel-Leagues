@@ -244,6 +244,10 @@ div#wrapper {
 						font-size: $small_text;
 						color: $xxdark_color;
 					
+						i {
+							color: $xdark_color;
+						}
+					
 						div.stats_bar {
 							height: 15px;
 							margin-top: 5px;
