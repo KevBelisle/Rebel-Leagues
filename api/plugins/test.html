@@ -6,44 +6,22 @@
   
   <body>
   
-	<div id="container"></div>
-	<div id="printable"></div>
+	<a href="http://geordanr.github.io/xwing/?f=Galactic%20Empire&d=v2!39:23,-1,38,-1:-1:-1:;58:18:-1:2:;58:18:-1:-1:">[Link to Yet Another X-Wing Squad Builder]</a>
   
 	<script src="http://geordanr.github.io/xwing/javascripts/jquery-1.8.3.min.js"></script>
-    <script src='http://geordanr.github.io/xwing/bootstrap/js/bootstrap.min.js'></script>
-	
     <script>
-	
 		exports = {};
-		squad_builder = null;
-	
-		(function() {
-			$(document).ready(function() {
-
-				console.log(exports);
-
-				window.basicCardData = exports.basicCardData;
-				exports.setupTranslationSupport();
-				
-				exports.select2 = function () {};
-				
-				console.log(exports);
-				
-				squad_builder = new exports.SquadBuilder({
-					faction: 'Rebel Alliance',
-					container: '#container',
-					printable_container: '#printable'
-				});
-
-			});
-		}).call(this);
-	  
+		$(document).ready(function() {
+			exports.loadCards('English');
+			exports.parse("body");
+		});
     </script>
+    <script src='http://geordanr.github.io/xwing/javascripts/cards-common.js'></script>
+    <!--<script src='http://geordanr.github.io/xwing/javascripts/cards-en.js'></script>-->
+    <script src='cards-en.js'></script>
+    <script src='http://geordanr.github.io/xwing/javascripts/translate.js'></script>
 	
-    <script src='file://C:\Users\KBelisle\Documents\GitHub\XWingSquadBuilder\javascripts\cards-common.js'></script>
-    <script src='http://geordanr.github.io/xwing/javascripts/cards-en.js'></script>
-    <script src='http://geordanr.github.io/xwing/javascripts/xwing.js'></script>
-    <script src='http://geordanr.github.io/xwing/javascripts/translate.min.js'></script>
+    <script src='yaxwsb_tooltip.js'></script>
 	
   </body>
 </html>
