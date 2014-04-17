@@ -72,6 +72,7 @@ BEGIN
 		ALTER TABLE leagues ADD eloSeasonedGameCountRequirement INT NOT NULL;
 	END IF;
 	
+	
 	/* CREATE ranking_methods COLUMNS
 	============================================= */
 	
@@ -85,6 +86,7 @@ BEGIN
 		ON DUPLICATE KEY UPDATE ranking_method_id=ranking_method_id;
 	INSERT INTO ranking_methods (ranking_method_id, ranking_method_name) VALUES (3, "elo_rating")
 		ON DUPLICATE KEY UPDATE ranking_method_id=ranking_method_id;
+	
 	
 	/* CREATE leagues_ranking_methods COLUMNS
 	============================================= */
@@ -107,6 +109,7 @@ BEGIN
 		REFERENCES ranking_methods(ranking_method_id)
 		ON DELETE CASCADE
 		ON UPDATE CASCADE;
+	
 	
 	/* CREATE admins COLUMNS
 	============================================= */
@@ -245,7 +248,6 @@ BEGIN
 		ON UPDATE CASCADE;
 	
 	
-	
 	/* CREATE games_history VIEW
 	============================================= */
 	
@@ -288,8 +290,6 @@ BEGIN
 	LEFT OUTER JOIN factions AS faction2 ON games.player2_faction_id = faction2.faction_id
 	LEFT OUTER JOIN factions AS parentfaction1 ON parentfaction1.faction_id = faction1.parent_faction_id
 	LEFT OUTER JOIN factions AS parentfaction2 ON parentfaction2.faction_id = faction2.parent_faction_id;
-	
-	
 	
 	
 	/* CREATE games_split VIEW
@@ -401,7 +401,6 @@ BEGIN
 	);
 
 	
-	
 	/* CREATE players_ranking VIEW
 	============================================= */
 	
@@ -418,6 +417,7 @@ BEGIN
 	FROM  games_split games_split
 		RIGHT JOIN players players on games_split.player_id = players.player_id
 	GROUP BY players.player_id;
+
 	
 	/* CREATE factions_games_split VIEW
 	============================================= */
@@ -466,6 +466,28 @@ BEGIN
 			0 AS is_loss
 		FROM games_history
 		WHERE is_draw = 1;
+	
+	
+	/* CREATE factions_ranking VIEW
+	============================================= */
+	
+	CREATE OR REPLACE VIEW factions_ranking AS
+	SELECT
+		factions_games_split.parent_faction_id,
+		parent_faction.name AS parent_faction_name,
+		factions_games_split.faction_id,
+		child_faction.name AS faction_name,
+		
+		COALESCE(SUM(is_win),0) AS games_won,
+		COALESCE(SUM(is_draw),0) AS games_tied,
+		COALESCE(SUM(is_loss),0) AS games_lost,
+		COALESCE(SUM(is_win), 0) + COALESCE(SUM(is_draw), 0) + COALESCE(SUM(is_loss), 0) AS games_played
+	FROM factions_games_split
+		LEFT OUTER JOIN factions child_faction ON child_faction.faction_id = factions_games_split.faction_id
+		LEFT OUTER JOIN factions parent_faction ON parent_faction.faction_id = factions_games_split.parent_faction_id
+	GROUP BY faction_id
+	ORDER BY games_won DESC;
+		
 		
 	/* CREATE factions_stats VIEW -- factions against other factions
 	============================================= */
@@ -493,7 +515,7 @@ BEGIN
 	ORDER BY factions_games_split.faction_id, factions_games_split.rival_parent_faction_id, factions_games_split.rival_faction_id;
 	
 	
-		/* CREATE players_stats VIEW -- players against other players (use this to detect rivalries + dominations with a future view)
+	/* CREATE players_stats VIEW -- players against other players (use this to detect rivalries + dominations with a future view)
 	============================================= */
 	
 	CREATE OR REPLACE VIEW players_stats AS
@@ -516,6 +538,151 @@ BEGIN
 	ORDER BY games_split.player_id, games_split.rival_player_id;
 	
 	
+	/* CREATE players_factions_with_stats VIEW -- how does a player fare with the different factions?
+	============================================= */
+	
+	CREATE OR REPLACE VIEW players_factions_with_stats AS
+		SELECT
+			games_split.player_id as player_id,
+			players.nickname as player_nickname,
+			players.firstname as player_firstname,
+			players.lastname as player_lastname,
+			
+			games_split.faction_id as faction_id,
+			factions.name AS faction_name,
+			factions.color AS faction_color,
+			
+			parent_factions.faction_id AS parent_faction_id,
+			parent_factions.name AS parent_faction_name,
+			parent_factions.color AS parent_faction_color,
+			
+			COALESCE(SUM(is_win), 0) AS games_won_with,
+			COALESCE(SUM(is_draw), 0) AS games_tied_with,
+			COALESCE(SUM(is_loss), 0) AS games_lost_with,
+			COALESCE(SUM(is_win), 0) + COALESCE(SUM(is_draw), 0) + COALESCE(SUM(is_loss), 0) AS games_played_with
+			
+		FROM games_split
+	
+		LEFT OUTER JOIN players players ON players.player_id = games_split.player_id
+		LEFT OUTER JOIN factions factions ON factions.faction_id = games_split.faction_id
+		LEFT OUTER JOIN factions parent_factions ON parent_factions.faction_id = factions.parent_faction_id
+		
+		GROUP BY player_id, faction_id;
+	
+	
+	/* CREATE players_factions_against_stats VIEW -- how does a player fare against the different factions?
+	============================================= */
+	CREATE OR REPLACE VIEW players_factions_against_stats AS
+		SELECT
+			games_split.player_id as player_id,
+			players.nickname as player_nickname,
+			players.firstname as player_firstname,
+			players.lastname as player_lastname,
+			
+			games_split.rival_faction_id as faction_id,
+			factions.name AS faction_name,
+			factions.color AS faction_color,
+			
+			parent_factions.faction_id AS parent_faction_id,
+			parent_factions.name AS parent_faction_name,
+			parent_factions.color AS parent_faction_color,
+			
+			COALESCE(SUM(is_win), 0) AS games_won_against,
+			COALESCE(SUM(is_draw), 0) AS games_tied_against,
+			COALESCE(SUM(is_loss), 0) AS games_lost_against,
+			COALESCE(SUM(is_win), 0) + COALESCE(SUM(is_draw), 0) + COALESCE(SUM(is_loss), 0) AS games_played_against
+			
+		FROM games_split
+	
+		LEFT OUTER JOIN players players ON players.player_id = games_split.player_id
+		LEFT OUTER JOIN factions factions ON factions.faction_id = games_split.rival_faction_id
+		LEFT OUTER JOIN factions parent_factions ON parent_factions.faction_id = factions.parent_faction_id
+		
+		GROUP BY player_id, faction_id;
+	
+	
+	/* CREATE players_factions_split_stats VIEW -- simply a union of 2 previous views, for use in players_factions_stats
+	============================================= */
+	CREATE OR REPLACE VIEW players_factions_split_stats AS
+			SELECT
+				player_id,
+				player_nickname,
+				player_firstname,
+				player_lastname,
+				
+				faction_id,
+				faction_name,
+				faction_color,
+				
+				parent_faction_id,
+				parent_faction_name,
+				parent_faction_color,
+
+				games_won_with,
+				games_tied_with,
+				games_lost_with,
+				games_played_with,
+
+				0 AS games_won_against,
+				0 AS games_tied_against,
+				0 AS games_lost_against,
+				0 AS games_played_against
+			FROM players_factions_with_stats
+		UNION ALL
+			SELECT
+				player_id,
+				player_nickname,
+				player_firstname,
+				player_lastname,
+				
+				faction_id,
+				faction_name,
+				faction_color,
+				
+				parent_faction_id,
+				parent_faction_name,
+				parent_faction_color,
+
+				0 AS games_won_with,
+				0 AS games_tied_with,
+				0 AS games_lost_with,
+				0 AS games_played_with,
+
+				games_won_against,
+				games_tied_against,
+				games_lost_against,
+				games_played_against
+			FROM players_factions_against_stats;
+		
+		
+	/* CREATE players_factions_stats VIEW -- how does a player fare with/against the different factions?
+	============================================= */
+	CREATE OR REPLACE VIEW players_factions_stats AS
+		SELECT
+			player_id,
+			player_nickname,
+			player_firstname,
+			player_lastname,
+			
+			faction_id,
+			faction_name,
+			faction_color,
+			
+			parent_faction_id,
+			parent_faction_name,
+			parent_faction_color,
+
+			SUM(games_won_with) AS games_won_with,
+			SUM(games_tied_with) AS games_tied_with,
+			SUM(games_lost_with) AS games_lost_with,
+			SUM(games_played_with) AS games_played_with,
+
+			SUM(games_won_against) AS games_won_against,
+			SUM(games_tied_against) AS games_tied_against,
+			SUM(games_lost_against) AS games_lost_against,
+			SUM(games_played_against) AS games_played_against
+		FROM players_factions_split_stats
+		GROUP BY player_id, faction_id;
 	
 END //
 DELIMITER ;

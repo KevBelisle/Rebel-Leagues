@@ -13,7 +13,7 @@ Epi::init('database');
 Epi::setSetting('exceptions', true);
 
 include_once 'db_access.php';
-include_once 'getELORankings.php';
+include_once 'elo_rating.php';
 
 EpiDatabase::employ('mysql', $db["database"], $db["host"], $db["username"], $db["password"]);
 
@@ -79,6 +79,15 @@ function sec_session_start() {
 	
 	session_name('rebel_leagues');
 	session_start();
+}
+
+
+function check_property_equals($property = "", $value = 0) {
+	// The "use" here binds $number to the function at declare time.
+	// This means that whenever $number appears inside the anonymous
+	// function, it will have the value it had when the anonymous
+	// function was declared.
+    return function($test) use($property, $value) { return $test[$property] == $value; };
 }
 
 
@@ -306,19 +315,19 @@ class League {
 		if ($ranking_method == -1) // Requested ranking method not allowed -> revert to default
 			$ranking_method = $default_ranking_method;
 	
-		$games = getDatabase()->all(
-			'SELECT * FROM games_history ORDER BY date ASC'
-		);
-		$players = getDatabase()->all(
-			'SELECT *,
-			1000 AS elo_rating, :winPoints*games_won + :drawPoints*games_tied + :lossPoints*games_lost AS points
-			FROM players_ranking',
-			array(":winPoints" => $league["pointsWinValue"], ":drawPoints" => $league["pointsDrawValue"], ":lossPoints" => $league["pointsLossValue"])
-		);
+
 		
 		switch ($ranking_method) {
 			// ELO rating
 			case 3:
+				$games = getDatabase()->all(
+					'SELECT * FROM games_history ORDER BY date ASC'
+				);
+				$players = getDatabase()->all(
+					'SELECT *,
+					1000 AS elo_rating
+					FROM players_ranking'
+				);
 				$players = ELO::getELORankings($games, $players);
 				$sortList = [];
 				foreach ($players as $key => $player) {
@@ -329,22 +338,47 @@ class League {
 			
 			// Points
 			case 2:
-				$sortList = [];
-				foreach ($players as $key => $player) {
-					$sortList[$key]  = $player['points'];
-				}
-				array_multisort($sortList, SORT_DESC, $players);
+				$players = getDatabase()->all(
+					'SELECT *,
+					:winPoints*games_won + :drawPoints*games_tied + :lossPoints*games_lost AS points
+					FROM players_ranking
+					ORDER BY points DESC, games_won DESC, games_tied DESC',
+					array(":winPoints" => $league["pointsWinValue"], ":drawPoints" => $league["pointsDrawValue"], ":lossPoints" => $league["pointsLossValue"])
+				);
 				break;
 			
 			// Games played
 			case 1:
 			default:
-				$sortList = [];
+				$players = getDatabase()->all(
+					'SELECT * FROM players_ranking ORDER BY games_played DESC, games_won DESC'
+				);
+				$players_factions_stats = getDatabase()->all(
+					'SELECT
+						player_id,
+						faction_id,
+						faction_name,
+						faction_color,
+						parent_faction_id,
+						parent_faction_name,
+						parent_faction_color,
+						games_played_with
+					FROM players_factions_stats
+					ORDER BY parent_faction_id, faction_id'
+				);
 				foreach ($players as $key => $player) {
-					$sortList[$key]  = $player['games_played'];
+					$eq_player_id = check_property_equals("player_id", $players[$key]['player_id']);
+					$players[$key]['factions_stats'] = array_filter($players_factions_stats, $eq_player_id);
+				
+					if (count($players[$key]['factions_stats']) > 0) {
+						$sortList = [];
+						foreach ($players[$key]['factions_stats'] as $key2 => $faction_stats) {
+							$sortList['parent_faction_id'][$key2]  = $faction_stats['parent_faction_id'];
+							$sortList['faction_id'][$key2]  = $faction_stats['faction_id'];
+						}
+						array_multisort($sortList['parent_faction_id'], SORT_ASC, $sortList['faction_id'], SORT_ASC, $players[$key]['factions_stats']);
+					}
 				}
-				array_multisort($sortList, SORT_DESC, $players);
-				break;
 		}
 		
 		echo outputSuccess( array( 'ranking' => $ranking_method, 'players' => $players) );

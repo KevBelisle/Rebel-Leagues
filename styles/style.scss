@@ -259,12 +259,27 @@ div#wrapper {
 							div.darker {
 								background-color: darken( $accent-color, 10%);
 							}
+							div.faction_stats_bar div:hover {
+								box-sizing: border-box;
+								border-bottom: 15px solid rgba(200,200,200,0.5);
+							}
 						}
 					}
 				}
 				
 				> div:nth-child(2n) {
 					background: $light_color;
+				}
+				
+				div.loadMore {
+					padding: 10px;
+					text-align: center;
+					cursor: pointer;
+					border-bottom: none;
+				}
+				div.loadMore:hover {
+					background-color: $accent-color;
+					color: $light-color;
 				}
 			}
 		}
