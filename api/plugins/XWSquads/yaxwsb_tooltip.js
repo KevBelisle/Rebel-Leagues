@@ -3,6 +3,8 @@
   var exportObj;
   exportObj = typeof exports !== "undefined" && exports !== null ? exports : this;
   
+  exportObj.ttTemplate = "TEMPLATE";
+  
   exportObj.parse = function (selector) {
   
 	var urlRegex = /http:\/\/geordanr.github.io\/xwing\/\?f=(\S+?)&d=(\S+)/g;
@@ -12,9 +14,12 @@
 		var urlRegex = /http:\/\/geordanr.github.io\/xwing\/\?f=(\S+?)&d=v[0-9]\!(\S+)+/g;
 		var urlComponents = urlRegex.exec( url );
 		
-		var faction = urlComponents[1];
-		var ships = urlComponents[2].split(";");
+		var squadData = {};
 		
+		squadData.faction = urlComponents[1];
+		squadData.members = [];
+		
+		var ships = urlComponents[2].split(";");
 		for (var i = 0; i < ships.length; i++) {
 			ships[i] = ships[i].split(":");
 			for (var j = 0; j < ships[i].length; j++) {
@@ -22,40 +27,34 @@
 			}
 		}
 		
-		
-		console.log(url);
-		console.log(faction);
-		
-		ships.forEach( function (ship) {
-			console.log( exports.pilotsById[ship[0][0]] );
+		ships.forEach( function (urlData) {
+			var ship = exports.pilotsById[urlData[0][0]];
+			var addons = [];
 			
-			ship[1].forEach( function (upgrade) {
+			urlData[1].forEach( function (upgrade) {
 				if (upgrade > -1) {
-					console.log(exports.upgradesById[upgrade]);
+					addons.push(exports.upgradesById[upgrade]);
 				}
 			});
 			
-			ship[2].forEach( function (title) {
+			urlData[2].forEach( function (title) {
 				if (title > -1) {
-					console.log(exports.titlesById[title]);
+					addons.push(exports.titlesById[title]);
 				}
 			});
 			
-			ship[3].forEach( function (modification) {
+			urlData[3].forEach( function (modification) {
 				if (modification > -1) {
-					console.log(exports.modificationsById[modification]);
+					addons.push(exports.modificationsById[modification]);
 				}
 			});
+			
+			squadData.members.push({ship: ship, addons: addons});
 		});
 		
+		console.log(squadData);
+		
 	});
-	
-	
-	
-	
-  
   };
-  
-  exportObj.ttTemplate = "TEMPLATE";
 
 }).call(this);
