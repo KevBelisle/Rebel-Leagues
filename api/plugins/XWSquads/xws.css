@@ -1,0 +1,98 @@
+
+/*  FONTS */
+@import url(http://fonts.googleapis.com/css?family=Signika:400,600,300);
+
+.xws-tooltip {
+	display: none;
+	
+	position: absolute;
+	z-index: 5000;
+	top: 100%;
+	left: 50%;
+	
+	box-sizing: border-box;
+	width: 300px;
+	
+	font-family: "Signika", sans-serif;
+	font-weight: 300;
+	font-size: 0.8em;
+	color: #929395;
+	
+	background-color: #eeeeee;
+	border: 1px solid #e1e1e1;
+	border-top: 1px solid #6652c8;
+	border-radius: 1px;
+	
+	margin-left: -150px;
+	margin-top: 5px;
+}
+
+.xws-tooltip-arrow {
+	display: block;
+	box-sizing: border-box;
+	width: 5px;
+	height: 5px;
+	border-bottom: 5px inset #6652c8;
+	border-left: 5px inset transparent;
+	border-right: 5px inset transparent;
+	
+	position: absolute;
+	top: -5px;
+	left: 50%;
+	margin-left: -5px;
+}
+
+.xws-tooltip .xws-squad-title {
+	display: block;
+	box-sizing: border-box;
+	width: 100%;
+	padding: 10px 15px;
+	
+	color: #6652c8;
+	font-weight: 700;
+	background-color: #e1e1e1;
+	border-bottom: 1px solid #929395;
+}
+
+.xws-tooltip ul,
+.xws-tooltip li {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+.xws-tooltip > ul {
+	box-sizing: border-box;
+	padding: 10px 15px;
+}
+
+.xws-tooltip > ul > li {
+	margin: 5px 0;
+}
+.xws-tooltip > ul > li:first-child { margin-top: 0; }
+.xws-tooltip > ul > li:last-child { margin-bottom: 0; }
+.xws-tooltip > ul > li > ul > li {
+	margin-left: 15px;
+}
+
+.xws-tooltip .xws-pilot-name {
+	color: #141414;
+	font-weight: 400;
+}
+
+.xws-tooltip .xws-squad-points:before { content: "("; }
+.xws-tooltip .xws-squad-points:after { content: " pts)"; }
+
+.xws-tooltip .xws-ship-name:before { content: "("; }
+.xws-tooltip .xws-ship-name:after { content: ", "; }
+.xws-tooltip .xws-ship-cost:after { content: " pts)"; }
+
+.xws-tooltip .xws-addon-cost:before { content: "("; }
+.xws-tooltip .xws-addon-cost:after { content: " pts)"; }
+
+.xws:hover .xws-tooltip {
+	display: block;
+}
+
+.xws {
+	position: relative;
+}

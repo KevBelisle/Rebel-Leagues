@@ -1,26 +1,44 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <title>Test</title>
-  </head>
-  
-  <body>
-  
-	<a href="http://geordanr.github.io/xwing/?f=Galactic%20Empire&d=v2!39:23,-1,38,-1:-1:-1:;58:18:-1:2:;58:18:-1:-1:">[Link to Yet Another X-Wing Squad Builder]</a>
-  
-	<script src="http://geordanr.github.io/xwing/javascripts/jquery-1.8.3.min.js"></script>
-    <script>
-		exports = {};
-		$(document).ready(function() {
-			exports.loadCards('English');
-			exports.parse("body");
-		});
-    </script>
-    <script src='http://geordanr.github.io/xwing/javascripts/cards-common.js'></script>
-    <script src='http://geordanr.github.io/xwing/javascripts/cards-en.js'></script>
-    <script src='http://geordanr.github.io/xwing/javascripts/translate.js'></script>
+	<link rel="stylesheet" type="text/css" href="xws.css">
+	<style>
 	
-    <script src='yaxwsb_tooltip.js'></script>
+		body {
+			display: block;
+			width: 600px;
+			margin: 0 auto;
+			
+			font-family: "Signika", sans-serif;
+			font-weight: 300;
+			font-size: 19px;
+			color: #929395;
+			
+			line-height: 1.4em;
+		}
 	
-  </body>
+	</style>
+</head>
+  
+<body>
+	<p>
+		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ac arcu eget urna porta tincidunt sed ullamcorper neque. Nullam at tortor metus. Nunc vulputate nunc tortor, ac tincidunt arcu suscipit sit amet. Fusce pharetra consequat tortor, in vestibulum justo lobortis in. In et tortor egestas, rhoncus mauris sed, placerat tortor. <a href="http://geordanr.github.io/xwing/?f=Galactic%20Empire&d=v2!39:23,-1,38,-1:-1:-1:;58:18:-1:2:;58:18:-1:-1:">Praesent eget</a> erat eget neque imperdiet semper in vel purus. Nunc vitae risus pharetra tellus cursus congue a vitae sapien. Donec lobortis pulvinar vehicula. Donec ac aliquam dui.
+	</p>
+	<p>
+		Duis ullamcorper lacus et dui accumsan dignissim. Aliquam in nisi porttitor, posuere sem sit amet, pharetra orci. Donec sit amet ligula dolor. Praesent sit amet est lacus. Donec non lacus eu leo varius molestie. Quisque vitae metus dui. In ultrices, sem quis iaculis feugiat, mauris ligula adipiscing nulla, quis semper dolor libero ut nisi. Integer <a href="http://geordanr.github.io/xwing/?f=Rebel%20Alliance&d=v2!7:0,1,-1,6:-1:-1:;47:-1,37,38:3:-1:;8:0,1,-1,-1:-1:-1:">imperdiet</a> orci nec lorem adipiscing scelerisque. Nulla a nulla eu massa lacinia rutrum. Sed ac convallis urna. Vestibulum vel condimentum sem. Nulla aliquam justo sit amet pulvinar rhoncus. Vivamus mollis enim dui, et sagittis lorem semper nec. Suspendisse condimentum mattis ultricies.
+	</p>
+	<p>
+		Donec ultrices est et sapien suscipit condimentum. Duis bibendum aliquet neque, tempus venenatis tellus consectetur auctor. Duis iaculis sapien metus, id imperdiet risus cursus a. <a href="http://geordanr.github.io/xwing/">Nullam et elit</a> sed lacus laoreet porta eget faucibus sem. Sed hendrerit et metus nec interdum. In hac habitasse platea dictumst. Vestibulum pulvinar tortor felis, a scelerisque odio sagittis vitae.
+	</p>
+	<p>
+		Suspendisse id dui eget enim porttitor rutrum. Vivamus viverra arcu nec lectus varius, a porta leo tempus. Suspendisse a nisi et dui pretium dictum malesuada et nisi. Nulla tortor dolor, sodales sed posuere non, iaculis vel ligula. Aliquam euismod scelerisque rhoncus. Cras in libero dolor. Maecenas nisi ante, rhoncus scelerisque nisl eget, scelerisque pellentesque nunc. In posuere orci nec velit eleifend, accumsan feugiat turpis ultricies. Nunc scelerisque consequat consectetur. Sed consectetur tellus ac hendrerit tempor.
+	</p>
+
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js"></script>
+	<script type='text/javascript'>$.noConflict(); delete $;</script>
+    <script src="xws.js.php" type="text/javascript"></script>
+	
+</body>
 </html>

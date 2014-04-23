@@ -10,18 +10,24 @@ window.XWS = {};
 	
 	this.loadCards("English");
 	
-	this.template = Handlebars.compile("<div class='xwst-tooltip'><ul>\
+	this.template = Handlebars.compile("<div class='xws-tooltip {{id}}'><div class='xws-tooltip-arrow'></div>\
+		<span class='xws-squad-title'>\
+			<span class='xws-squad-faction'>{{faction}}</span>\
+			<span class='xws-squad-points'>{{points}}</span>\
+		</span>\
+		<ul>\
 		{{#members}}<li>\
-			<span class='wxst-pilot-name'>{{ship.name}}</span>\
-			<span class='wxst-ship-name'>{{ship.ship}}</span>\
-			<span class='wxst-ship-cost'>{{ship.points}}</span>\
-			<ul class='xwst-addons'>\
+			<span class='xws-pilot-name'>{{ship.name}}</span>\
+			<span class='xws-ship-name'>{{ship.ship}}</span>\
+			<span class='xws-ship-cost'>{{ship.points}}</span>\
+			<ul class='xws-addons'>\
 				{{#addons}}<li>\
-					<span class='wxst-addon-name'>{{name}}</span>\
-					<span class='wxst-addon-cost'>{{points}}</span></li>\
-				{{/addons}}</ul> <br>\
+					<span class='xws-addon-name'>{{name}}</span>\
+					<span class='xws-addon-cost'>{{points}}</span></li>\
+				{{/addons}}</ul>\
 		</li>{{/members}}\
-		</ul></div>");
+		</ul>\
+		</div>");
 	
 	var urlRegex = /http:\/\/geordanr.github.io\/xwing\/\?f=(\S+?)&d=(\S+)/g;
   
@@ -32,14 +38,14 @@ window.XWS = {};
 		var url = jQuery(this).attr('href');
 		var urlRegex = /http:\/\/geordanr.github.io\/xwing\/\?f=(\S+?)&d=v[0-9]\!(\S+)+/g;
 		var urlComponents = urlRegex.exec( url );
-	
-		console.log(urlComponents);
 		
 		if (urlComponents == null) { return; }
 		
 		var squadData = {};
 		
-		squadData.faction = urlComponents[1];
+		squadData.id = "xws-" + Date.now();
+		squadData.faction = decodeURIComponent( urlComponents[1] );
+		squadData.points = 0;
 		squadData.members = [];
 		
 		var ships = urlComponents[2].split(";");
@@ -52,23 +58,27 @@ window.XWS = {};
 		
 		ships.forEach( function (urlData) {
 			var ship = window.XWS.pilotsById[urlData[0][0]];
+			squadData.points += ship.points;
 			var addons = [];
 			
 			urlData[1].forEach( function (upgrade) {
 				if (upgrade > -1) {
 					addons.push(window.XWS.upgradesById[upgrade]);
+					squadData.points += window.XWS.upgradesById[upgrade].points;
 				}
 			});
 			
 			urlData[2].forEach( function (title) {
 				if (title > -1) {
 					addons.push(window.XWS.titlesById[title]);
+					squadData.points += window.XWS.titlesById[title].points;
 				}
 			});
 			
 			urlData[3].forEach( function (modification) {
 				if (modification > -1) {
 					addons.push(window.XWS.modificationsById[modification]);
+					squadData.points += window.XWS.modificationsById[modification].points;
 				}
 			});
 			
@@ -77,10 +87,8 @@ window.XWS = {};
 		jQuery(this).data("XWingSquad", "true");
 	
 		console.log( squadData );
-		jQuery(this).addClass("xwst");
+		jQuery(this).addClass("xws").addClass(squadData.id);
 		jQuery(this).append( window.XWS.template(squadData) );
 	});
-		
-	console.log(this);
 	
 }).call(window.XWS);

@@ -47,8 +47,6 @@
 			
 		</div>
 		
-		<div class="notes" ng-show="game.showNotes">
-			{{ game.notes }}
-		</div>
+		<div class="notes" ng-show="game.showNotes" ng-bind-html="renderHtml(game.notes)"></div>
 		
 	</div>

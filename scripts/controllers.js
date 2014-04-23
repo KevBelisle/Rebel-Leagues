@@ -3,8 +3,8 @@ var monthNames = [ "janvier", "février", "mars", "avril", "mai", "juin",
 
 var rebelLeaguesControllers = angular.module('rebelLeaguesControllers', ['ui.bootstrap']);
 
-rebelLeaguesControllers.controller('gamesHistoryCtrl', ['$scope', '$http', '$modal',
-	function ($scope, $http, $modal) {
+rebelLeaguesControllers.controller('gamesHistoryCtrl', ['$scope', '$http', '$modal', '$sce',
+	function ($scope, $http, $modal, $sce) {
 		$http.get('api/games').success(function(data) {
 		
 			$scope.showFactionModal = function ($factionId) {
@@ -67,6 +67,11 @@ rebelLeaguesControllers.controller('gamesHistoryCtrl', ['$scope', '$http', '$mod
 				$scope.games.push( game );
 				
 			}
+			
+			$scope.renderHtml = function(html_code)
+			{
+				return $sce.trustAsHtml(html_code);
+			};
 			
 			console.log($scope.games);
 			
