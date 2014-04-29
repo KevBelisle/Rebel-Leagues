@@ -232,6 +232,7 @@ div#wrapper {
 				div.notes {
 					font-size: $small_text;
 					white-space: pre-line;
+					border-top: 1px dashed #e1e1e1;
 				}
 				
 				> div.player {

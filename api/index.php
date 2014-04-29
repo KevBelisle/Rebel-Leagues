@@ -5,17 +5,12 @@ if ( count($_POST) == 0 && count($jsonData) > 0 ) {
 	$_POST = $jsonData;
 }
 
-// Include Epiphany library
-include_once 'lib/epiphany/Epi.php';
-Epi::setPath('base', 'lib/epiphany/');
-Epi::init('route');
-Epi::init('database');
-Epi::setSetting('exceptions', true);
+// Load epiphany lib and DB access
+include_once("epiphanySetup.php");
 
-include_once 'db_access.php';
-include_once 'elo_rating.php';
+// Load plugins
+include_once("plugins.php");
 
-EpiDatabase::employ('mysql', $db["database"], $db["host"], $db["username"], $db["password"]);
 
 // Define routes
 getRoute()->get('/', array('League', 'nope'));
@@ -41,6 +36,8 @@ getRoute()->get('/factions/(\d+)/stats(?:/?)', array('League', 'getFactionStats'
 getRoute()->get('/factions/(\d+)/logo(?:/?)', array('League', 'getFactionLogo'));
 
 getRoute()->get('/stats(?:/?)', array('League', 'getStats'));
+
+getRoute()->get('/plugins(?:/?)', array('League', 'getPlugins'));
 
 getRoute()->get('/login(?:/?)', array('Admin', 'checkLogin'));
 getRoute()->post('/login(?:/?)', array('Admin', 'login'));
@@ -278,10 +275,19 @@ class League {
 			$take = $_GET['take'];
 		}
 		
+		global $pluginAddons;
+		
+		$query = 'SELECT * FROM games_history';
+		foreach ($pluginAddons["api_additions"]["games_history"] as $key => $table) {
+			$query = $query . " LEFT JOIN " . $table . " ON games_history.game_id = " . $table . ".game_id";
+		}
+		$query = $query . " ORDER BY date DESC LIMIT :skip, :take";
+		
 		$games = getDatabase()->all(
-			'SELECT * FROM games_history ORDER BY date DESC LIMIT :skip, :take',
+			$query,
 			array(':skip' => $skip, ':take' => $take)
 		);
+		
 		echo outputSuccess( array( 'games' => $games ) );
 	}
 	
@@ -406,6 +412,18 @@ class League {
 		");
 		
 		echo outputSuccess( array( 'stats' => $stats ) );
+		
+	}
+	
+	
+	public static function getPlugins() {
+	
+		$plugins = getDatabase()->one("
+			SELECT *
+			FROM plugins
+		");
+		
+		echo outputSuccess( array( 'plugins' => $plugins ) );
 		
 	}
 }
@@ -633,23 +651,44 @@ class Admin {
 	public static function addGame() {
 		//self::checkTier(3);
 		
+		global $pluginAddons;
+		
 		self::checkFields( array('player1_id', 'player1_faction_id', 'player2_id', 'player2_faction_id', 'date', 'is_draw', 'is_ranked', 'is_time_runout', 'is_online'), $_POST );
+		
+		self::checkFields($pluginAddons["api_additions"]["add_game"]["check_fields"], $_POST);
+		
+		foreach ($pluginAddons["api_additions"]["add_game"]["pre_insert"] as $function) {
+			if ($function != "") {
+				$function(getDatabase());
+			}
+		}
 		
 		try {
 			$game_id = getDatabase()->execute('INSERT INTO games (player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES (:player1_id, :player1_faction_id, :player2_id, :player2_faction_id, :date, :is_draw, :is_ranked, :is_time_runout, :is_online, :notes)',
-			array(
-				':player1_id' => $_POST['player1_id'],
-				':player1_faction_id' => $_POST['player1_faction_id'],
-				':player2_id' => $_POST['player2_id'],
-				':player2_faction_id' => $_POST['player2_faction_id'],
-				':date' => $_POST['date'],
-				':is_draw' => $_POST['is_draw'],
-				':is_ranked' => $_POST['is_ranked'],
-				':is_time_runout' => $_POST['is_time_runout'],
-				':is_online' => $_POST['is_online'],
-				':notes' => $_POST['notes']
-			)
+				array(
+					':player1_id' => $_POST['player1_id'],
+					':player1_faction_id' => $_POST['player1_faction_id'],
+					':player2_id' => $_POST['player2_id'],
+					':player2_faction_id' => $_POST['player2_faction_id'],
+					':date' => $_POST['date'],
+					':is_draw' => $_POST['is_draw'],
+					':is_ranked' => $_POST['is_ranked'],
+					':is_time_runout' => $_POST['is_time_runout'],
+					':is_online' => $_POST['is_online'],
+					':notes' => $_POST['notes']
+				)
 			);
+			
+			print "%%%%%%%%%%%%%%%%%%%%%%%%%%";
+			print_r($pluginAddons["api_additions"]["add_game"]["post_insert"]);
+			print "%%%%%%%%%%%%%%%%%%%%%%%%%%";
+				
+			foreach ($pluginAddons["api_additions"]["add_game"]["post_insert"] as $function) {
+				if ($function != "") {
+					call_user_func_array( $function, [getDatabase(), $game_id] );
+				}
+			}
+			
 			echo outputSuccess( array( 'game_id' => $game_id ) );
 			
 		} catch (Exception $e) {

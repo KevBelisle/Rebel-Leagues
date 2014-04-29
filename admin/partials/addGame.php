@@ -1,4 +1,10 @@
-
+<?php
+	chdir('../../api');
+	// Load epiphany lib and DB access
+	include_once("epiphanySetup.php");
+	// Load plugins
+	include_once("plugins.php");
+?>
 <form id="addGame" class="clear">
 
 	<div class="left">
@@ -11,6 +17,12 @@
 			<option value="">Choisir faction du premier joueur</option>
 		</select>
 		
+		<?php
+			foreach ($pluginAddons["admin_additions"]["add_game"]["player1"] as $fragment) {
+				print $fragment;
+			}
+		?>
+		
 		<select class="fullWidth" ng-model="game.player2_id" ng-options="player.player_id as (player.nickname + ' (' + player.firstname + ' ' + player.lastname + ')') for player in players">
 			<option value="">Choisir deuxième joueur</option>
 		</select>
@@ -18,6 +30,12 @@
 		<select class="fullWidth" ng-model="game.player2_faction_id" ng-options="f.faction_id as f.name group by f.parent_faction_name for f in factions">
 			<option value="">Choisir faction du deuxième joueur</option>
 		</select>
+		
+		<?php
+			foreach ($pluginAddons["admin_additions"]["add_game"]["player2"] as $fragment) {
+				print $fragment;
+			}
+		?>
 		
 		<label class="fullWidth"> <input type="checkbox" ng-model="game.is_draw" /> Finie en nulle</label>
 		<label class="fullWidth"> <input type="checkbox" ng-model="game.is_ranked" /> Comptabilisée au classement</label>

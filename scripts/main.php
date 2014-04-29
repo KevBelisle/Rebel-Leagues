@@ -1,3 +1,10 @@
+<?php
+	chdir('../api');
+	// Load epiphany lib and DB access
+	include_once("epiphanySetup.php");
+	// Load plugins
+	include_once("plugins.php");
+?>
 
 angular.module('link', [])
 	.directive('activeLink', ['$location', function(location) {
@@ -25,7 +32,12 @@ var rebelLeaguesApp = angular.module('rebelLeaguesApp', [
 	'ngAnimate',
 	'rebelLeaguesControllers',
 	'link',
-	'ui.bootstrap'
+	'ui.bootstrap',
+	<?php
+		foreach ($pluginAddons["js_modules"] as $module) {
+			print "'" . $module . "',";
+		}
+	?>
 ]);
 
 
@@ -35,12 +47,12 @@ rebelLeaguesApp.config([
 	
 		$routeProvider
 			.when('/gamesHistory', {
-				templateUrl: 'partials/gamesHistory.html',
+				templateUrl: 'partials/gamesHistory.php',
 				controller: 'gamesHistoryCtrl'
 			})
 			
 			.when('/playersRanking', {
-				templateUrl: 'partials/playersRanking.html',
+				templateUrl: 'partials/playersRanking.php',
 				controller: 'playersRankingCtrl'
 			})
 			

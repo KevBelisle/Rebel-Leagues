@@ -31,3 +31,16 @@ $accent_color: #6652c8;
 
 $background_image: url("images/background.png");
 $background_color: #0c0c0c;
+
+
+/*  GENERIC CLASSES */
+
+.color-xlight { color: $xlight_color }
+.color-light  { color: $light_color }
+.color-dark   { color: $dark_color }
+.color-xdark  { color: $xdark_color }
+.color-xxdark { color: $xxdark_color }
+
+.weight-light  { font-weight: $light_weight }
+.weight-medium { font-weight: $medium_weight }
+.weight-heavy  { font-weight: $heavy_weight }

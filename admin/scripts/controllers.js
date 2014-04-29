@@ -88,7 +88,7 @@ rebelLeaguesAdminControllers.controller('addGameCtrl', ['$scope', '$http',
 	function ($scope, $http) {
 	
 		$scope.title = "Ajouter une partie";
-		$scope.partial = "partials/addGame.html";
+		$scope.partial = "partials/addGame.php";
 		
 		$scope.expanded = false;
 		$scope.toggle = function () { $scope.expanded = !$scope.expanded };
@@ -182,7 +182,7 @@ rebelLeaguesAdminControllers.controller('addPlayerCtrl', ['$scope', '$http',
 	function ($scope, $http) {
 	
 		$scope.title = "Ajouter un joueur";
-		$scope.partial = "partials/addPlayer.html";
+		$scope.partial = "partials/addPlayer.php";
 	
 		$scope.expanded = false;
 		$scope.toggle = function () { $scope.expanded = !$scope.expanded };
@@ -219,7 +219,7 @@ rebelLeaguesAdminControllers.controller('editGameCtrl', ['$scope', '$http',
 	function ($scope, $http) {
 	
 		$scope.title = "Modifier une partie";
-		$scope.partial = "partials/editGame.html";
+		$scope.partial = "partials/editGame.php";
 		
 		$scope.expanded = false;
 		$scope.toggle = function () { $scope.expanded = !$scope.expanded };
@@ -324,7 +324,7 @@ rebelLeaguesAdminControllers.controller('editLeagueCtrl', ['$scope', '$http',
 	function ($scope, $http) {
 	
 		$scope.title = "Modifier les paramètres de league";
-		$scope.partial = "partials/editLeague.html";
+		$scope.partial = "partials/editLeague.php";
 	
 		$scope.expanded = false;
 		$scope.toggle = function () { $scope.expanded = !$scope.expanded };

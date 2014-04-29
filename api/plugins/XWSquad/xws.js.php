@@ -1,4 +1,21 @@
-window.XWS = {};
+
+window.XWSquad = angular.module('xwsquad', [])
+	.directive('xwsquad', function() {
+		return {
+			link: function (scope, element, attrs) {
+			
+				if (attrs.xwsquad.substring(0,32) == 'http://geordanr.github.io/xwing/') {
+					element.html( window.XWSquad.parseURL(attrs.xwsquad) );
+				} else if (attrs.xwsquad.length > 0) {
+					element.html( "<a href='"+attrs.xwsquad+"' target='new'>Voir squad</a>" );
+				} else {
+				}
+				
+			}
+		};
+	});
+
+
 (function () {
 	<?php
 	echo file_get_contents("http://geordanr.github.io/xwing/javascripts/cards-common.js");
@@ -10,14 +27,13 @@ window.XWS = {};
 	
 	this.loadCards("English");
 	
-	this.template = Handlebars.compile("<div class='xws-tooltip {{id}}'><div class='xws-tooltip-arrow'></div>\
-		<span class='xws-squad-title'>\
+	this.template = Handlebars.compile("<span class='xws-squad-title weight-heavy color-xxdark'>\
 			<span class='xws-squad-faction'>{{faction}}</span>\
 			<span class='xws-squad-points'>{{points}}</span>\
 		</span>\
 		<ul>\
 		{{#members}}<li>\
-			<span class='xws-pilot-name'>{{ship.name}}</span>\
+			<span class='xws-pilot-name weight-medium color-xxdark'>{{ship.name}}</span>\
 			<span class='xws-ship-name'>{{ship.ship}}</span>\
 			<span class='xws-ship-cost'>{{ship.points}}</span>\
 			<ul class='xws-addons'>\
@@ -26,17 +42,12 @@ window.XWS = {};
 					<span class='xws-addon-cost'>{{points}}</span></li>\
 				{{/addons}}</ul>\
 		</li>{{/members}}\
-		</ul>\
-		</div>");
+		</ul>");
 	
-	var urlRegex = /http:\/\/geordanr.github.io\/xwing\/\?f=(\S+?)&d=(\S+)/g;
-  
-	jQuery("a[href^='http://geordanr.github.io/xwing/']").each( function (index) {
+	
+	this.parseURL = function(url) {
 		
-		if (jQuery(this).data("XWingSquad")) { return; }
-	
-		var url = jQuery(this).attr('href');
-		var urlRegex = /http:\/\/geordanr.github.io\/xwing\/\?f=(\S+?)&d=v[0-9]\!(\S+)+/g;
+		var urlRegex = /http:\/\/geordanr.github.io\/xwing\/\?f=(\S+?)&d=v[0-9](?:\![\S])?\!(\S+)+/g;
 		var urlComponents = urlRegex.exec( url );
 		
 		if (urlComponents == null) { return; }
@@ -57,38 +68,35 @@ window.XWS = {};
 		}
 		
 		ships.forEach( function (urlData) {
-			var ship = window.XWS.pilotsById[urlData[0][0]];
+			var ship = window.XWSquad.pilotsById[urlData[0][0]];
 			squadData.points += ship.points;
 			var addons = [];
 			
 			urlData[1].forEach( function (upgrade) {
 				if (upgrade > -1) {
-					addons.push(window.XWS.upgradesById[upgrade]);
-					squadData.points += window.XWS.upgradesById[upgrade].points;
+					addons.push(window.XWSquad.upgradesById[upgrade]);
+					squadData.points += window.XWSquad.upgradesById[upgrade].points;
 				}
 			});
 			
 			urlData[2].forEach( function (title) {
 				if (title > -1) {
-					addons.push(window.XWS.titlesById[title]);
-					squadData.points += window.XWS.titlesById[title].points;
+					addons.push(window.XWSquad.titlesById[title]);
+					squadData.points += window.XWSquad.titlesById[title].points;
 				}
 			});
 			
 			urlData[3].forEach( function (modification) {
 				if (modification > -1) {
-					addons.push(window.XWS.modificationsById[modification]);
-					squadData.points += window.XWS.modificationsById[modification].points;
+					addons.push(window.XWSquad.modificationsById[modification]);
+					squadData.points += window.XWSquad.modificationsById[modification].points;
 				}
 			});
 			
 			squadData.members.push({ship: ship, addons: addons});
 		});
-		jQuery(this).data("XWingSquad", "true");
+		
+		return window.XWSquad.template(squadData);
+	}
 	
-		console.log( squadData );
-		jQuery(this).addClass("xws").addClass(squadData.id);
-		jQuery(this).append( window.XWS.template(squadData) );
-	});
-	
-}).call(window.XWS);
+}).call(window.XWSquad);

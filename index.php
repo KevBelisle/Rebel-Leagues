@@ -2,6 +2,14 @@
 <!--[if lt IE 9]><html class="ie" ng-app="rebelLeaguesApp"><![endif]-->
 <!--[if gte IE 9]><!--><html ng-app="rebelLeaguesApp"><!--<![endif]-->
 
+<?php
+chdir('api/');
+// Load epiphany lib and DB access
+include_once("epiphanySetup.php");
+// Load plugins
+include_once("plugins.php");
+?>
+
 <head>
 	<meta charset="utf-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
@@ -13,6 +21,12 @@
 	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 	<link rel="icon" href="favicon.ico" type="image/x-icon">
 	
+	<?php
+		foreach ($pluginAddons["css_includes"] as $cssFile) {
+			print '<link rel="stylesheet" media="all" href="' . $cssFile . '" />';
+		}
+	?>
+	
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 	<script type='text/javascript'>$.noConflict(); delete $;</script>
 	
@@ -21,10 +35,6 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.13/angular-route.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.13/angular-animate.js"></script>
 	<script src="scripts/lib/ui-bootstrap-tpls-0.10.0.js"></script>
-	
-	<script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js"></script>
-	
-    <script src="api/plugins/XWSquads/xws.js.php" type="text/javascript"></script>
 	
 	<!--[if lt IE 9]>
 		<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -94,8 +104,14 @@
 
 </div>
 
-<script src="scripts/controllers.js"></script>
-<script src="scripts/main.js"></script>
+<?php
+	foreach ($pluginAddons["js_includes"] as $jsFile) {
+		print '<script src="' . $jsFile . '" type="text/javascript"></script>';
+	}
+?>
+	
+<script src="scripts/controllers.php"></script>
+<script src="scripts/main.php"></script>
 
 </body>
 </html>

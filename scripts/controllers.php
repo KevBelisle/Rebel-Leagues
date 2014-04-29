@@ -11,7 +11,7 @@ rebelLeaguesControllers.controller('gamesHistoryCtrl', ['$scope', '$http', '$mod
 				console.log("Faction ID : " + $factionId);
 				
 				$modal.open({
-					'templateUrl' : 'partials/factionModal.html',
+					'templateUrl' : 'partials/factionModal.php',
 					'controller' : 'factionModalCtrl',
 					'windowClass' : 'faction',
 					"resolve": {
@@ -62,7 +62,7 @@ rebelLeaguesControllers.controller('gamesHistoryCtrl', ['$scope', '$http', '$mod
 					$scope.games.push( { is_group_title: true, date_string: game.date_string } );
 				}
 				
-				game.showNotes = false;
+				game.showDetails = false;
 				
 				$scope.games.push( game );
 				
@@ -102,7 +102,7 @@ rebelLeaguesControllers.controller('playersRankingCtrl', ['$scope', '$http', '$m
 				console.log("Player ID : " + $playerId);			
 						
 				$modal.open({
-					'templateUrl' : 'partials/playerModal.html',
+					'templateUrl' : 'partials/playerModal.php',
 					'controller' : 'playerModalCtrl',
 					'windowClass' : 'player',
 					"resolve": {

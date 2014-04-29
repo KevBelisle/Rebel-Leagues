@@ -1,0 +1,59 @@
+
+
+div#left section div#main .gameDetails .xwsquads {
+	width: 100%;
+	padding: 10px 40px 10px 10px;
+	font-size: 0.8em;
+	border-top: 1px dashed #e1e1e1;
+}
+
+	@media only screen and (min-width: 900px) {
+		div#left section div#main .gameDetails .xwsquads {
+			padding-left: 20px;
+		}
+	}
+
+	div#left section div#main .gameDetails .xwsquads .squad {
+		display: block;
+		width: 50%;
+		float: left;
+		text-align: left;
+	}
+
+.xwsquads .xws-squad-title {
+	box-sizing: border-box;
+}
+
+.xwsquads ul,
+.xwsquads li {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+.xwsquads .squad div > ul {
+	box-sizing: border-box;
+	padding: 10px 0;
+}
+
+.xwsquads .squad div > ul > li {
+	margin: 5px 0;
+}
+.xwsquads .squad div > ul > li:first-child { margin-top: 0; }
+.xwsquads .squad div > ul > li:last-child { margin-bottom: 0; }
+.xwsquads .squad div > ul > li > ul > li {
+	margin-left: 15px;
+}
+
+.xwsquads .xws-pilot-name {
+}
+
+.xwsquads .xws-squad-points:before { content: "("; }
+.xwsquads .xws-squad-points:after { content: " pts)"; }
+
+.xwsquads .xws-ship-name:before { content: "("; }
+.xwsquads .xws-ship-name:after { content: ", "; }
+.xwsquads .xws-ship-cost:after { content: " pts)"; }
+
+.xwsquads .xws-addon-cost:before { content: "("; }
+.xwsquads .xws-addon-cost:after { content: " pts)"; }
+

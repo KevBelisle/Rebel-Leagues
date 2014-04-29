@@ -1,3 +1,10 @@
+<?php
+	chdir('../api');
+	// Load epiphany lib and DB access
+	include_once("epiphanySetup.php");
+	// Load plugins
+	include_once("plugins.php");
+?>
 
 	<div ng-repeat="game in games">
 	
@@ -42,11 +49,19 @@
 			<div class="moreInfo">
 				<i class="fa fa-clock-o" ng-if="game.is_time_runout" tooltip="Terminée par manque de temps"></i>
 				<i class="fa fa-rss fa-rotate-45" ng-if="game.is_online" tooltip="Partie jouée en ligne"></i>
-				<i class="fa fa-file-text-o notes-icon" ng-show="game.notes" ng-class="{ 'active': game.showNotes }" ng-click="game.showNotes = !game.showNotes" tooltip="Afficher les notes"></i>
+				<i class="fa fa-file-text-o notes-icon" ng-class="{ 'active': game.showDetails }" ng-click="game.showDetails = !game.showDetails" tooltip="Afficher les notes"></i>
 			</div>
 			
 		</div>
 		
-		<div class="notes" ng-show="game.showNotes" ng-bind-html="renderHtml(game.notes)"></div>
+		<div class="gameDetails" ng-show="game.showDetails">
+			<?php
+				foreach ($pluginAddons["view_additions"]["games_history"]["game_details"] as $fragment) {
+					print $fragment;
+				}
+			?>
+			
+			<div class="notes" ng-bind-html="renderHtml(game.notes)"></div>
+		</div>
 		
 	</div>

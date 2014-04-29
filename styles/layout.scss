@@ -100,7 +100,8 @@ div#wrapper { width: $cols4; }
 				}
 				
 				div.notes {
-					padding: 0 10px 10px 10px;
+					width: 100%;
+					padding: 10px 10px 10px 10px;
 				}
 				
 				> div.player {
@@ -355,7 +356,7 @@ div#wrapper { width: $cols4; }
 					}
 					
 					div.notes {
-						padding: 0 20px 20px 20px;
+						padding: 20px 20px 20px 20px;
 					}
 					
 				
