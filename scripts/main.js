@@ -28,7 +28,6 @@ var rebelLeaguesApp = angular.module('rebelLeaguesApp', [
 	'ui.bootstrap'
 ]);
 
-
 rebelLeaguesApp.config([
 	'$routeProvider',
 	function ($routeProvider) {
@@ -66,4 +65,10 @@ rebelLeaguesApp.filter('iif', function () {
    return function(input, trueValue, falseValue) {
         return input ? trueValue : falseValue;
    };
+});
+
+rebelLeaguesApp.filter('decimalDot', function () {
+	return function(text){
+		return text.replace(',', '.');
+	};
 });
