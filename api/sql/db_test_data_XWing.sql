@@ -5,87 +5,420 @@
 INSERT INTO leagues (league_id, title, subtitle, logo, defaultGameNotes, pointsWinValue, pointsDrawValue, pointsLossValue, eloStartRank, eloMasterRank, eloStartKFactor, eloSeasonedKFactor, eloMasterKFactor, eloSeasonedGameCountRequirement) VALUES (1,'Star Wars X-Wing Miniatures Game', 'RebelLeagues Québec', 'uploads/leagues/e034fb6b66aacc1d48f445ddfb08da98.png','Suggestion: ajouter des liens webs vers les squads utilisés dans Yet Another Squad Builder, description des faits saillants, etc.', 5, 3, 1, 1000, 2400, 25, 15, 10, 30);
 
 
+--
+-- Dumping data for table `leagues_ranking_methods`
+--
+
+INSERT INTO `leagues_ranking_methods` (`league_id`, `ranking_method_id`, `default_ranking`) VALUES
+(1, 1, 1),
+(1, 2, 0),
+(1, 3, 0);
+
+
 /* POPULATE factions
 ============================================= */
 
-INSERT INTO factions (faction_id, name, parent_faction_id, color, logo) VALUES (2,'Empire',NULL,'248717','uploads/factions/84935fe3eba50ea4e3d70b7f7964b9c0.png');
-INSERT INTO factions (faction_id, name, parent_faction_id, color, logo) VALUES (1,'Alliance',NULL,'a90c0c','uploads/factions/81edf7d428e9f21aefab65d440a2c1a1.png');
+INSERT INTO `factions` (`faction_id`, `name`, `parent_faction_id`, `color`, `logo`) VALUES
+(1, 'Alliance', NULL, 'a90c0c', 'uploads/factions/81edf7d428e9f21aefab65d440a2c1a1.png'),
+(2, 'Empire', NULL, '248717', 'uploads/factions/84935fe3eba50ea4e3d70b7f7964b9c0.png'),
+(3, 'Scum and Villainy', NULL, 'dda923', 'uploads/factions/f01a32fba3591049fc979f5fc7d0bc08.png');
 
 
 
 /* POPULATE players
 ============================================= */
 
-INSERT INTO players (player_id, nickname, firstname, lastname) VALUES (1, 'Klutz', 'Kevin', 'Bélisle');
-INSERT INTO players (player_id, nickname, firstname, lastname) VALUES (2, 'GomJabbar', 'David', 'Bernier');
-INSERT INTO players (player_id, nickname, firstname, lastname) VALUES (3, 'Slimjim', 'Steve', 'Coulterman');
-INSERT INTO players (player_id, nickname, firstname, lastname) VALUES (4, 'pat', 'Patrick', 'Couturier');
-INSERT INTO players (player_id, nickname, firstname, lastname) VALUES (5, 'Rokiu', 'Martin', 'Lévesque');
-INSERT INTO players (player_id, nickname, firstname, lastname) VALUES (6, 'Mu0n', 'Michaël', 'Juneau');
-INSERT INTO players (player_id, nickname, firstname, lastname) VALUES (7, 'Hugo', 'Hugo', 'Robichaud');
-INSERT INTO players (player_id, nickname, firstname, lastname) VALUES (8, 'Khei', 'François', 'Beaumont');
-INSERT INTO players (player_id, nickname, firstname, lastname) VALUES (9, 'Zomby', 'François', 'Couture');
-INSERT INTO players (player_id, nickname, firstname, lastname) VALUES(10, 'Borgoto', 'Mathieu', 'Borgeat');
-INSERT INTO players (player_id, nickname, firstname, lastname) VALUES(11, 'Sim:)', 'Simon', 'Bélisle');
+INSERT INTO `players` (`player_id`, `nickname`, `firstname`, `lastname`) VALUES
+(1, 'Klutz', 'Kevin', 'Bélisle'),
+(2, 'GomJabbar', 'David', 'Bernier'),
+(3, 'Slimjim', 'Steve', 'Coulterman'),
+(4, 'pat', 'Patrick', 'Couturier'),
+(5, 'Rokiu', 'Martin', 'Lévesque'),
+(6, 'Mu0n', 'Michaël', 'Juneau'),
+(7, 'Hugo', 'Hugo', 'Robichaud'),
+(8, 'Khei', 'François', 'Beaumont'),
+(9, 'Zomby', 'François', 'Couture'),
+(10, 'Borgoto', 'Mathieu', 'Borgeat'),
+(11, 'Sim:)', 'Simon', 'Bélisle'),
+(12, 'Melkichedek', 'Denis', 'Côté'),
+(13, 'JoeBoo', 'Jean', 'Bourgault'),
+(14, 'Tommy', 'Tommy', 'Bureau'),
+(15, 'Kevin', 'Kevin', 'L.'),
+(16, 'Pulpulskap', 'Nicolas', 'Blanc'),
+(17, 'Gab', 'Gabriel', 'Dion'),
+(18, 'Rehoj', 'Rémi', 'Hovington'),
+(19, 'ChrisFortier', 'Christian', 'Fortier'),
+(20, 'Pym', 'Pierre-Antoine', 'Beaubien'),
+(21, 'DenisSamson', 'Denis', 'Samson'),
+(22, 'Wildhorn', 'Jonathan', 'Maisonneuve'),
+(23, 'EricM', 'Éric', 'Marceau'),
+(24, 'Gab D.', 'Gabriel', 'Dubé'),
+(25, 'Julie', 'Julie', 'Hamelin'),
+(26, 'Deathlock77', 'Normand', 'Sévigny'),
+(27, 'Réjean', 'Réjean', '???'),
+(28, 'Jogg', 'François', 'Levasseur'),
+(29, 'Carl G', 'Carl', 'Gionet'),
+(30, 'Montrealer', 'Benoit-Philippe', 'Girouard'),
+(32, 'Big-Marc', 'Marc-André', 'Ferland'),
+(33, 'Didz', 'Didier', 'Soulard'),
+(34, 'Yvon', 'Yvon', 'Deneault'),
+(35, 'Vince H', 'Vincent', 'Hamelin'),
+(36, 'Claude', 'Claude', 'Matte'),
+(37, 'FreeGame', 'Michael', 'Robitaille'),
+(38, 'Jerome Bigl', 'Jérome', 'Lévesque');
 
 
 /* POPULATE games
 ============================================= */
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(1, 1, 1, 3, 2, '2014-01-21 19:30:00', 0, 1, 0, 0, '');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(2, 3, 2, 7, 1, '2014-01-21 21:00:00', 0, 1, 0, 0, NULL);
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(3, 6, 1, 7, 2, '2014-01-21 19:00:00', 0, 1, 0, 0, 'Mic: ma liste était = <a href="http://xwing-builder.co.uk/view/22730/ibtie-and-friends-2">http://xwing-builder.co.uk/view/22730/ibtie-and-friends-2</a> ');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(4, 6, 2, 1, 2, '2014-01-21 21:30:00', 0, 1, 0, 0, NULL);
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(5, 8, 1, 9, 2, '2014-01-21 21:00:00', 0, 1, 0, 0, NULL);
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(6, 5, 2, 6, 1, '2014-01-13 17:00:00', 0, 1, 0, 0, '');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(7, 5, 2, 6, 1, '2014-01-13 18:30:00', 0, 1, 0, 0, '');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(8, 5, 2, 6, 1, '2014-01-13 20:30:00', 0, 1, 0, 0, '');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(9, 6, 1, 3, 2, '2014-01-13 21:30:00', 0, 1, 0, 0, '');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(10, 1, 1, 4, 2, '2014-01-13 20:00:00', 0, 1, 0, 0, '');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(11, 2, 2, 1, 1, '2014-01-27 19:00:00', 0, 1, 0, 0, '');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(12, 6, 2, 7, 1, '2014-01-27 19:15:00', 0, 1, 0, 0, '');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(13, 3, 2, 8, 2, '2014-01-27 19:00:00', 0, 1, 0, 0, '');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(14, 8, 2, 3, 2, '2014-01-27 22:30:00', 0, 1, 0, 0, '');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(15, 6, 1, 1, 2, '2014-01-27 22:30:00', 0, 1, 0, 0, '');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(16, 6, 2, 2, 1, '2014-02-03 18:30:00', 0, 1, 0, 0, 'très très serré');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(17, 6, 1, 8, 1, '2014-02-03 20:30:00', 0, 1, 0, 0, '');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(18, 3, 2, 2, 2, '2014-02-03 21:00:00', 0, 1, 0, 0, '');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(19, 1, 2, 7, 1, '2014-02-03 21:30:00', 0, 1, 0, 0, 'Klutz : <a href="http://xwing-builder.co.uk/view/45430/swarm-leaders">Mon squad</a>');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(20, 6, 1, 1, 1, '2014-02-04 01:00:00', 0, 0, 0, 1, '1st use of online flag...');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(21, 6, 1, 3, 2, '2014-02-09 23:00:00', 0, 1, 0, 0, 'Chewie is the last Wookie standing à 1 hp');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(22, 3, 2, 6, 2, '2014-02-09 23:30:00', 0, 1, 0, 0, 'faits saillants: bounty Hunter à Steve à 1 shield 6 hull sort de la map par mégarde. 2 vaisseaux perdus au même tour par Michaël. Une fin ultra longue entre un Saber amoché vs Soontir + Academy pilot');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(23, 7, 1, 8, 1, '2014-02-10 20:00:00', 0, 1, 0, 0, '');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(24, 1, 1, 3, 2, '2014-02-10 18:00:00', 0, 1, 0, 0, '');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(25, 8, 1, 3, 2, '2014-02-17 18:00:00', 0, 1, 0, 0, '');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(26, 5, 2, 3, 2, '2014-02-17 21:00:00', 0, 1, 0, 0, 'Parked the bus on a rock!');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(34, 1, 2, 2, 1, '2014-02-17 08:30:00', 0, 1, 0, 0, 'Squad à Klutz : http://xwing-builder.co.uk/view/48750/jonus-missile-trio');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(35, 3, 2, 1, 2, '2014-02-24 18:00:00', 0, 1, 0, 0, '');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(36, 1, 1, 6, 2, '2014-02-26 00:30:00', 0, 1, 0, 1, 'sacrifié Carnor Jax comme un idiot (i.e. un radis) vers la fin, Roark a tout bouffé mes 4 vaisseaux tapochés.\n');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(37, 6, 1, 1, 1, '2014-02-28 01:30:00', 0, 1, 0, 1, 'Chewie full health wins!\n(Chewbacca+Expert Handling + Merc Copilot + Luke Skywalker + MF title, 2x Blue\n\nvs \n\nRoark + RecSpec + Blaster\nDutch + R2 + ion cannon turret\n2x rookie + R2)\n');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(38, 2, 2, 1, 1, '2013-12-31 00:00:00', 0, 0, 0, 0, NULL);
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(39, 2, 2, 1, 1, '2013-12-31 00:00:00', 0, 0, 0, 0, NULL);
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(40, 1, 2, 8, 1, '2014-03-10 20:00:00', 0, 1, 0, 0, 'Klutz essaye 2 Bombers avec Seismic Charges... et oublie de les utiliser au moment opportun...');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(41, 1, 1, 6, 1, '2014-03-12 22:30:00', 0, 1, 0, 1, '');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(42, 6, 1, 1, 2, '2014-03-13 01:45:00', 0, 1, 0, 1, '');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(43, 1, 1, 7, 2, '2014-03-17 20:00:00', 0, 1, 0, 0, 'Klutz: Wedge, Biggs + R2-F2, 2 x Rookies');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(44, 8, 1, 3, 2, '2014-03-17 20:15:00', 1, 1, 1, 0, 'Une partie qui s''étire sur 2h30...');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(45, 6, 1, 3, 2, '2014-03-23 22:30:00', 0, 1, 0, 0, '');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(46, 6, 2, 3, 1, '2014-03-24 00:45:00', 0, 1, 1, 0, 'arrêté alors que Darth Vader, 3 hull 1 shield vient d''achever Chewie dans un coin et n''a que dutch (full health) comme adversaire avec ion cannon turret + r2 astromech. ça aurait été vraiment long.....');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(47, 1, 1, 6, 1, '2014-03-25 01:00:00', 0, 1, 0, 1, 'speed game en 60 minutes (avec quelques minutes restantes)...ouf, je vois pas ça arriver sur une table physique.');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(48, 3, 2, 6, 2, '2014-03-25 21:00:00', 0, 1, 0, 0, '');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(49, 1, 2, 8, 1, '2014-03-25 20:15:00', 0, 1, 0, 0, '');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(50, 6, 1, 1, 2, '2014-03-25 23:45:00', 0, 1, 0, 1, '');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(51, 6, 1, 11, 1, '2014-03-30 14:00:00', 0, 1, 1, 0, 'Modified win for Mu0n.');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(52, 6, 1, 8, 1, '2014-03-30 15:30:00', 0, 1, 0, 0, 'Full win pour Mu0n.');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(53, 6, 1, 3, 2, '2014-03-30 16:30:00', 0, 1, 1, 0, 'Modified win pour Mu0n.');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(54, 6, 1, 7, 2, '2014-03-30 17:30:00', 0, 1, 1, 0, 'Modified win pour Mu0n.');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(55, 1, 2, 6, 1, '2014-03-30 18:45:00', 0, 1, 0, 0, 'Full win pour Klutz. À 40s de la fin!');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(57, 3, 2, 8, 1, '2014-03-30 14:00:00', 0, 1, 0, 0, 'Full win for Slimjim.');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(58, 3, 2, 7, 2, '2014-03-30 15:30:00', 0, 1, 0, 0, 'Full win pour Slimjim.');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(59, 3, 2, 1, 2, '2014-03-30 17:30:00', 0, 1, 0, 0, 'Full win pour Slimjim.');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(60, 3, 2, 11, 1, '2014-03-30 18:45:00', 0, 1, 0, 0, 'Full win pour Steve.');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(61, 7, 2, 1, 2, '2014-03-30 14:00:00', 0, 1, 1, 0, 'Modified win pour Hugo.');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(62, 1, 2, 11, 1, '2014-03-30 15:30:00', 0, 1, 0, 0, 'Full win pour Klutz.');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(63, 1, 2, 8, 1, '2014-03-30 16:30:00', 0, 1, 0, 0, 'Full win pour Klutz.');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(64, 11, 1, 7, 2, '2014-03-30 16:30:00', 0, 1, 0, 0, 'Full win pour Simon!');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(65, 8, 1, 11, 1, '2014-03-30 17:30:00', 0, 1, 0, 0, 'Full win pour Khei.\n\nFin incroyable:\n2 Rookie Pilots face à face, Khei avec 3 hull + 1 shield, Simon avec 3 hull.\nKhei shoots first : 4 hits. Simon rolls no evades.\nSimultaneous fire, Simon shoots back. He rolls: 3 hits + 1 crit. Key rolls 1 focus on defense, focuses for an evade. Down to 1 hull - with a crit.\nCrit is nothing. Khei''s Rookie survives - just barely.');
-INSERT INTO games (game_id, player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES(66, 8, 1, 7, 2, '2014-03-30 18:45:28', 0, 1, 0, 0, 'Full win pour Khei.');
+INSERT INTO `games` (`game_id`, `player1_id`, `player1_faction_id`, `player2_id`, `player2_faction_id`, `date`, `is_draw`, `is_ranked`, `is_time_runout`, `is_online`, `notes`) VALUES
+(1, 1, 1, 3, 2, '2014-01-21 19:30:00', 0, 1, 0, 0, ''),
+(2, 3, 2, 7, 1, '2014-01-21 21:00:00', 0, 1, 0, 0, NULL),
+(3, 6, 1, 7, 2, '2014-01-21 19:00:00', 0, 1, 0, 0, 'Mic: ma liste était = <a href="http://xwing-builder.co.uk/view/22730/ibtie-and-friends-2">http://xwing-builder.co.uk/view/22730/ibtie-and-friends-2</a> '),
+(4, 6, 2, 1, 2, '2014-01-21 21:30:00', 0, 1, 0, 0, NULL),
+(5, 8, 1, 9, 2, '2014-01-21 21:00:00', 0, 1, 0, 0, NULL),
+(6, 5, 2, 6, 1, '2014-01-13 17:00:00', 0, 1, 0, 0, ''),
+(7, 5, 2, 6, 1, '2014-01-13 18:30:00', 0, 1, 0, 0, ''),
+(8, 5, 2, 6, 1, '2014-01-13 20:30:00', 0, 1, 0, 0, ''),
+(9, 6, 1, 3, 2, '2014-01-13 21:30:00', 0, 1, 0, 0, ''),
+(10, 1, 1, 4, 2, '2014-01-13 20:00:00', 0, 1, 0, 0, ''),
+(11, 2, 2, 1, 1, '2014-01-27 19:00:00', 0, 1, 0, 0, ''),
+(12, 6, 2, 7, 1, '2014-01-27 19:15:00', 0, 1, 0, 0, ''),
+(13, 3, 2, 8, 2, '2014-01-27 19:00:00', 0, 1, 0, 0, ''),
+(14, 8, 2, 3, 2, '2014-01-27 22:30:00', 0, 1, 0, 0, ''),
+(15, 6, 1, 1, 2, '2014-01-27 22:30:00', 0, 1, 0, 0, ''),
+(16, 6, 2, 2, 1, '2014-02-03 18:30:00', 0, 1, 0, 0, 'très très serré'),
+(17, 6, 1, 8, 1, '2014-02-03 20:30:00', 0, 1, 0, 0, ''),
+(18, 3, 2, 2, 2, '2014-02-03 21:00:00', 0, 1, 0, 0, ''),
+(19, 1, 2, 7, 1, '2014-02-03 21:30:00', 0, 1, 0, 0, 'Klutz : <a href="http://xwing-builder.co.uk/view/45430/swarm-leaders">Mon squad</a>'),
+(20, 6, 1, 1, 1, '2014-02-04 01:00:00', 0, 0, 0, 1, '1st use of online flag...'),
+(21, 6, 1, 3, 2, '2014-02-09 23:00:00', 0, 1, 0, 0, 'Chewie is the last Wookie standing à 1 hp'),
+(22, 3, 2, 6, 2, '2014-02-09 23:30:00', 0, 1, 0, 0, 'faits saillants: bounty Hunter à Steve à 1 shield 6 hull sort de la map par mégarde. 2 vaisseaux perdus au même tour par Michaël. Une fin ultra longue entre un Saber amoché vs Soontir + Academy pilot'),
+(23, 7, 1, 8, 1, '2014-02-10 20:00:00', 0, 1, 0, 0, ''),
+(24, 1, 1, 3, 2, '2014-02-10 18:00:00', 0, 1, 0, 0, ''),
+(25, 8, 1, 3, 2, '2014-02-17 18:00:00', 0, 1, 0, 0, ''),
+(26, 5, 2, 3, 2, '2014-02-17 21:00:00', 0, 1, 0, 0, 'Parked the bus on a rock!'),
+(34, 1, 2, 2, 1, '2014-02-17 08:30:00', 0, 1, 0, 0, 'Squad à Klutz : http://xwing-builder.co.uk/view/48750/jonus-missile-trio'),
+(35, 3, 2, 1, 2, '2014-02-24 18:00:00', 0, 1, 0, 0, ''),
+(36, 1, 1, 6, 2, '2014-02-26 00:30:00', 0, 1, 0, 1, 'sacrifié Carnor Jax comme un idiot (i.e. un radis) vers la fin, Roark a tout bouffé mes 4 vaisseaux tapochés.\n'),
+(37, 6, 1, 1, 1, '2014-02-28 01:30:00', 0, 1, 0, 1, 'Chewie full health wins!\n(Chewbacca+Expert Handling + Merc Copilot + Luke Skywalker + MF title, 2x Blue\n\nvs \n\nRoark + RecSpec + Blaster\nDutch + R2 + ion cannon turret\n2x rookie + R2)\n'),
+(38, 2, 2, 1, 1, '2013-12-31 00:00:00', 0, 0, 0, 0, NULL),
+(39, 2, 2, 1, 1, '2013-12-31 00:00:00', 0, 0, 0, 0, NULL),
+(40, 1, 2, 8, 1, '2014-03-10 20:00:00', 0, 1, 0, 0, 'Klutz essaye 2 Bombers avec Seismic Charges... et oublie de les utiliser au moment opportun...'),
+(41, 1, 1, 6, 1, '2014-03-12 22:30:00', 0, 1, 0, 1, ''),
+(42, 6, 1, 1, 2, '2014-03-13 01:45:00', 0, 1, 0, 1, ''),
+(43, 1, 1, 7, 2, '2014-03-17 20:00:00', 0, 1, 0, 0, 'Klutz: Wedge, Biggs + R2-F2, 2 x Rookies'),
+(44, 8, 1, 3, 2, '2014-03-17 20:15:00', 1, 1, 1, 0, 'Une partie qui s''étire sur 2h30...'),
+(45, 6, 1, 3, 2, '2014-03-23 22:30:00', 0, 1, 0, 0, ''),
+(46, 6, 2, 3, 1, '2014-03-24 00:45:00', 0, 1, 1, 0, 'arrêté alors que Darth Vader, 3 hull 1 shield vient d''achever Chewie dans un coin et n''a que dutch (full health) comme adversaire avec ion cannon turret + r2 astromech. ça aurait été vraiment long.....'),
+(47, 1, 1, 6, 1, '2014-03-25 01:00:00', 0, 1, 0, 1, 'speed game en 60 minutes (avec quelques minutes restantes)...ouf, je vois pas ça arriver sur une table physique.'),
+(48, 3, 2, 6, 2, '2014-03-25 21:00:00', 0, 1, 0, 0, ''),
+(49, 1, 2, 8, 1, '2014-03-25 20:15:00', 0, 1, 0, 0, ''),
+(50, 6, 1, 1, 2, '2014-03-25 23:45:00', 0, 1, 0, 1, ''),
+(51, 6, 1, 11, 1, '2014-03-30 14:00:00', 0, 1, 1, 0, 'Modified win for Mu0n.'),
+(52, 6, 1, 8, 1, '2014-03-30 15:30:00', 0, 1, 0, 0, 'Full win pour Mu0n.'),
+(53, 6, 1, 3, 2, '2014-03-30 16:30:00', 0, 1, 1, 0, 'Modified win pour Mu0n.'),
+(54, 6, 1, 7, 2, '2014-03-30 17:30:00', 0, 1, 1, 0, 'Modified win pour Mu0n.'),
+(55, 1, 2, 6, 1, '2014-03-30 18:45:00', 0, 1, 0, 0, 'Full win pour Klutz. À 40s de la fin!'),
+(57, 3, 2, 8, 1, '2014-03-30 14:00:00', 0, 1, 0, 0, 'Full win for Slimjim.'),
+(58, 3, 2, 7, 2, '2014-03-30 15:30:00', 0, 1, 0, 0, 'Full win pour Slimjim.'),
+(59, 3, 2, 1, 2, '2014-03-30 17:30:00', 0, 1, 0, 0, 'Full win pour Slimjim.'),
+(60, 3, 2, 11, 1, '2014-03-30 18:45:00', 0, 1, 0, 0, 'Full win pour Steve.'),
+(61, 7, 2, 1, 2, '2014-03-30 14:00:00', 0, 1, 1, 0, 'Modified win pour Hugo.'),
+(62, 1, 2, 11, 1, '2014-03-30 15:30:00', 0, 1, 0, 0, 'Full win pour Klutz.'),
+(63, 1, 2, 8, 1, '2014-03-30 16:30:00', 0, 1, 0, 0, 'Full win pour Klutz.'),
+(64, 11, 1, 7, 2, '2014-03-30 16:30:00', 0, 1, 0, 0, 'Full win pour Simon!'),
+(65, 8, 1, 11, 1, '2014-03-30 17:30:00', 0, 1, 0, 0, 'Full win pour Khei.\n\nFin incroyable:\n2 Rookie Pilots face à face, Khei avec 3 hull + 1 shield, Simon avec 3 hull.\nKhei shoots first : 4 hits. Simon rolls no evades.\nSimultaneous fire, Simon shoots back. He rolls: 3 hits + 1 crit. Key rolls 1 focus on defense, focuses for an evade. Down to 1 hull - with a crit.\nCrit is nothing. Khei''s Rookie survives - just barely.'),
+(66, 8, 1, 7, 2, '2014-03-30 18:45:28', 0, 1, 0, 0, 'Full win pour Khei.'),
+(67, 1, 2, 11, 1, '2014-04-07 20:45:00', 0, 1, 0, 0, 'Squad à Sim:) : Biggs+R2-D2, Ten Numb+FCS+Marksmanship+Autoblaster, Tycho Celchu+PTL\n\nSquad à Klutz : Vader+Marksmanship+Cluster Missiles, 2 x Royal Guard Pilot+PTL+Shield+Hull\n\nKlutz gagne avec 1 Interceptor à Hull.\nFini avec Ten Numb (2 hull) vs Interceptor (2 hull) face à face, range 1. Ten Numb shoots with Autoblaster and TL, gets 1 hit and 2 crits. Interceptor rolls 1 evade. Can only cancel 1 of the crits with the dice. Cancel second crit with token. Only take one hit.\nInterceptor fires bac'),
+(68, 6, 2, 3, 2, '2014-04-09 21:30:00', 0, 1, 0, 0, 'Mu0n with 3x TIE bomber swarm (naked howl) + super flank turr: http://geordanr.github.io/xwing/?f=Galactic%20Empire&d=v2!49:-1,-1,-1,-1,-1:-1:-1:;49:-1,-1,-1,-1,-1:-1:-1:;49:-1,-1,-1,-1,-1:-1:-1:;18:-1:-1:-1:;27:18:5:6:M.1\n\nSlimJim with a more standard swarm with backstabber flanker + OGP w/Vader: http://geordanr.github.io/xwing/?f=Galactic%20Empire&d=v2!18:-1:-1:1:;15::-1:-1:;11::-1:-1:;11::-1:-1:;11::-1:-1:;56:-1,-1,45,-1:-1:-1:\n\nRidiculous end. Mu''s last scim @1hull. Howl dies w/ minor explsi'),
+(69, 1, 1, 7, 2, '2014-04-09 21:00:00', 0, 1, 0, 0, 'Klutz : Biggs, Wedge et 2 Gold/Ions. Wedge cleaned up 2 TIE Fighters and a squint on his own. Beast mode.'),
+(70, 1, 2, 3, 2, '2014-04-16 23:45:00', 0, 1, 0, 1, 'Slimjim conceded gracefully after some horrible, horrible evade rolls.\n... Scratch that, he''s still pissed.\n\nKlutz: http://geordanr.github.io/xwing/?f=Galactic%20Empire&d=v2!39:23,-1,38,-1:-1:-1:;58:18:-1:2:;58:18:-1:-1:'),
+(71, 6, 1, 1, 2, '2014-05-20 00:30:00', 0, 1, 0, 1, 'GC squad #1 (mu0n) vs GC squad #1 (Klutz)'),
+(72, 6, 1, 8, 1, '2014-05-31 12:28:54', 0, 1, 0, 0, 'Full win 100 pts destroyed vs 0 destroyed'),
+(73, 6, 1, 11, 1, '2014-05-31 11:00:00', 0, 1, 0, 0, 'Full win 99 pts destroyed vs 46 destroyed'),
+(74, 6, 1, 3, 2, '2014-05-31 14:15:00', 0, 1, 0, 0, 'Full win: 68 destroyed vs 33 destroyed'),
+(75, 1, 2, 6, 1, '2014-05-31 16:00:00', 0, 1, 0, 0, 'Full win 100 pts destroyed vs 60 pts destroyed'),
+(76, 6, 1, 1, 2, '2014-05-31 17:25:25', 0, 1, 0, 0, 'Full win 100 pts destroyed vs 17 pts destroyed. Final game for assault at Imdaar alpha. Mu0n''s squad: http://goo.gl/KUzGM6\nKlutz'' squad: http://goo.gl/KVw7xt'),
+(77, 3, 2, 14, 2, '2014-05-31 11:10:00', 0, 1, 0, 0, 'Full win 59 pts destroyed vs 0 pt destroyed'),
+(78, 3, 2, 1, 2, '2014-05-31 12:30:40', 0, 1, 0, 0, 'Full win 100 pts destroyed vs 0 pt destroyed'),
+(79, 3, 2, 15, 2, '2014-05-31 16:00:20', 0, 1, 0, 0, 'Full win 26 pts destroyed vs 0 pt destroyed'),
+(80, 1, 2, 15, 2, '2014-05-31 11:10:34', 0, 1, 0, 0, 'Full win 100 pts destroyed vs 40 pt destroyed'),
+(81, 15, 2, 14, 2, '2014-05-31 15:00:27', 0, 1, 0, 0, 'Full win 84 pts destroyed vs 25 pt destroyed'),
+(82, 11, 1, 15, 2, '2014-05-31 12:30:36', 0, 1, 0, 0, 'Full win 55 pts destroyed vs 42 pt destroyed'),
+(83, 11, 1, 8, 1, '2014-05-31 15:21:34', 1, 1, 0, 0, 'Draw 39 pts destroyed vs 39 pts destroyed'),
+(84, 11, 1, 12, 1, '2014-05-31 16:09:26', 0, 1, 0, 0, 'Full win 100 pts destroyed vs 19 pt destroyed'),
+(85, 8, 1, 12, 1, '2014-05-31 11:10:04', 0, 1, 0, 0, 'Full win 100 pts destroyed vs 0 pt destroyed'),
+(86, 12, 1, 14, 2, '2014-05-31 12:30:56', 0, 1, 0, 0, 'Full win 100 pts destroyed vs 0 pt destroyed'),
+(87, 1, 2, 12, 1, '2014-05-31 15:15:29', 0, 1, 0, 0, 'Full win 100 pts destroyed vs 16 pt destroyed'),
+(88, 12, 1, 14, 2, '2014-06-27 10:00:00', 0, 1, 0, 0, 'combo han solo et wedge'),
+(89, 12, 1, 14, 2, '2014-06-27 18:00:00', 0, 1, 0, 0, ''),
+(90, 6, 1, 17, 1, '2014-07-20 13:15:00', 0, 1, 0, 0, 'Game Epic. La corvette ne perd aucun chip de peinture.'),
+(91, 18, 2, 12, 1, '2014-07-20 14:15:00', 0, 1, 0, 0, 'Han solo est mort'),
+(92, 12, 1, 6, 2, '2014-07-20 15:00:00', 0, 1, 0, 0, 'Denis run sa liste de tournoi (Wedge et Han Solo hyper loadés défensifs) contre Echo + ARush + ADCD + RecSpec + FCS, Howl + 3x obsidian. Super bien joué par Denis, décime le phantom au 2e tour de combat et bloque bien le mini-swarm, forçant cette dernière à pas pouvoir focuser sur Wedge.'),
+(93, 18, 2, 17, 1, '2014-07-20 15:45:00', 0, 1, 0, 0, ''),
+(94, 6, 2, 12, 1, '2014-07-20 15:40:50', 0, 1, 0, 0, 'Rematch, pas mal 1 sided'),
+(95, 6, 1, 19, 1, '2014-08-23 10:00:00', 0, 1, 0, 0, 'Tournoi donjon 23 août\nRound 1\nfull win\npts détruits: 99 vs 25'),
+(96, 6, 1, 7, 1, '2014-08-23 11:00:39', 0, 1, 0, 0, 'Tournoi donjon 23 août\nRound 2\nfull win\npts détruits: 100 vs 25'),
+(97, 3, 2, 6, 1, '2014-08-23 12:00:21', 0, 1, 0, 0, 'Tournoi donjon 23 août\nRound 3\nfull win\npts détruits: 100 vs 24'),
+(98, 6, 1, 7, 1, '2014-08-23 13:04:07', 0, 1, 0, 0, 'Tournoi donjon 23 août\nSemi-finale\nfull win\npts détruits: 100 vs 50'),
+(99, 6, 1, 3, 2, '2014-08-23 15:04:41', 0, 1, 0, 0, 'Tournoi donjon 23 août\nFinale\nfull win\npts détruits: 98 vs 50'),
+(100, 7, 1, 18, 2, '2014-08-23 10:00:00', 0, 1, 1, 0, 'Tournoi donjon 23 août\nRound 1\nfull win\npts détruits: 100 vs 44'),
+(101, 7, 1, 12, 1, '2014-08-23 12:00:09', 0, 1, 0, 0, 'Tournoi donjon 23 août\nRound 3\nfull win\npts détruits: 100 vs 12'),
+(102, 7, 1, 18, 2, '2014-08-23 15:00:07', 0, 1, 0, 0, 'Tournoi donjon 23 août\nRound 5 (lutte pour 3e, 4e places)\nfull win\npts détruits: 100 vs 0'),
+(103, 3, 2, 8, 1, '2014-08-23 10:00:53', 0, 1, 1, 0, 'Tournoi donjon 23 août\nRound 1\nfull win\npts détruits: 44 vs 24'),
+(104, 3, 2, 12, 1, '2014-08-23 11:00:45', 0, 1, 0, 0, 'Tournoi donjon 23 août\nRound 2\nfull win\npts détruits: 100 vs 35'),
+(105, 18, 2, 8, 1, '2014-08-23 12:00:44', 0, 1, 1, 0, 'Tournoi donjon 23 août\nRound 3\nfull win\npts détruits: 83 vs 54'),
+(106, 8, 1, 19, 1, '2014-08-23 11:00:54', 0, 1, 0, 0, 'Tournoi donjon 23 août\nRound 2\nfull win\npts détruits: 99 vs 17'),
+(107, 12, 1, 19, 1, '2014-08-23 15:00:34', 0, 1, 0, 0, 'Tournoi donjon 23 août\nRound 5 (pour la 5e ou 6e place)\nfull win\npts détruits: 99 vs 0'),
+(108, 8, 1, 19, 1, '2014-08-23 13:00:00', 0, 1, 0, 0, 'Tournoi donjon 23 août\nRound 4\nfull win\npts détruits: 99 vs 44'),
+(109, 3, 2, 18, 2, '2014-08-23 13:00:19', 0, 1, 0, 0, 'Tournoi donjon 23 août\nSemi-finale\nfull win\npts détruits: 100 vs ?'),
+(110, 6, 2, 20, 1, '2014-09-11 18:30:00', 0, 1, 0, 0, ''),
+(111, 18, 2, 14, 1, '2014-09-11 19:15:00', 0, 1, 0, 0, ''),
+(112, 6, 1, 20, 1, '2014-09-11 19:57:58', 0, 1, 0, 0, ''),
+(113, 18, 2, 20, 1, '2014-09-13 09:00:00', 0, 1, 1, 0, 'Round 1 tournoi 125 pts\n125 - 13'),
+(114, 3, 2, 21, 1, '2014-09-13 09:00:00', 0, 1, 0, 0, 'Round 1 tournoi 125 pts\n125 - 20'),
+(115, 8, 1, 7, 1, '2014-09-13 09:00:03', 0, 1, 1, 0, 'Round 1 tournoi 125 pts\n50 - 43'),
+(116, 22, 2, 1, 2, '2014-09-13 09:00:00', 0, 1, 1, 0, 'Round 1 tournoi 125 pts\n92 - 87'),
+(117, 11, 1, 12, 1, '2014-09-13 09:00:14', 0, 1, 1, 0, 'Round 1 tournoi 125 pts\n63 - 0'),
+(118, 8, 1, 18, 2, '2014-09-13 10:00:59', 0, 1, 1, 0, 'Round 2 tournoi 125 pts\n44 - 22'),
+(119, 1, 2, 21, 1, '2014-09-13 10:00:23', 0, 1, 0, 0, 'Round 2 tournoi 125 pts\n125 - 0'),
+(120, 3, 2, 11, 1, '2014-09-13 10:00:19', 0, 1, 1, 0, 'Round 2 tournoi 125 pts\n72 - 20'),
+(121, 20, 1, 12, 1, '2014-09-13 10:00:06', 0, 1, 0, 0, 'Round 2 tournoi 125 pts\n125 - 25'),
+(122, 7, 1, 22, 2, '2014-09-13 10:00:40', 0, 1, 0, 0, 'Round 2 tournoi 125 pts\n125 - 28'),
+(123, 22, 2, 18, 2, '2014-09-13 11:00:25', 0, 1, 0, 0, 'Round 3 tournoi 125 pts\n125 - 76'),
+(124, 12, 1, 21, 1, '2014-09-13 11:00:14', 0, 1, 1, 0, 'Round 3 tournoi 125 pts\n99 - 25'),
+(125, 7, 1, 1, 2, '2014-09-13 11:00:32', 0, 1, 0, 0, 'Round 3 tournoi 125 pts\n125 - 25'),
+(126, 11, 1, 20, 1, '2014-09-13 11:00:02', 0, 1, 1, 0, 'Round 3 tournoi 125 pts\n95 - 46'),
+(127, 8, 1, 3, 2, '2014-09-13 11:00:45', 0, 1, 1, 0, 'Round 3 tournoi 125 pts\n55 - 42'),
+(128, 18, 2, 1, 2, '2014-09-13 13:00:19', 0, 1, 1, 0, 'Round 4 tournoi 125 pts\n75 - 44'),
+(129, 7, 1, 3, 2, '2014-09-13 13:00:00', 0, 1, 0, 0, 'Round 4 tournoi 125 pts\n125 - 34'),
+(130, 22, 2, 20, 1, '2014-09-13 13:00:04', 0, 1, 1, 0, 'Round 4 tournoi 125 pts\n74 - 49'),
+(131, 8, 1, 11, 1, '2014-09-13 13:00:58', 0, 1, 1, 0, 'Round 4 tournoi 125 pts\n74 - 42'),
+(132, 8, 1, 3, 2, '2014-09-13 15:00:59', 0, 1, 0, 0, 'Semi-Finale tournoi 125 pts\n#1 vs #4\n? - ?'),
+(133, 7, 1, 22, 2, '2014-09-13 15:00:51', 0, 1, 0, 0, 'Semi-Finale tournoi 125 pts\n#2 vs #3\n? - ?'),
+(134, 20, 1, 22, 2, '2014-09-14 19:30:00', 0, 1, 0, 0, ''),
+(135, 7, 1, 8, 1, '2014-09-18 18:30:00', 0, 1, 0, 0, 'Tournoi 125 point FINALE\n\n125 - 37'),
+(136, 6, 2, 20, 1, '2014-09-25 18:00:00', 0, 1, 0, 0, ''),
+(137, 14, 2, 22, 2, '2014-09-25 19:15:00', 0, 1, 0, 0, ''),
+(138, 18, 2, 19, 2, '2014-09-25 18:45:00', 0, 1, 0, 0, ''),
+(139, 6, 1, 20, 2, '2014-09-25 19:44:04', 0, 1, 1, 0, ''),
+(140, 22, 2, 19, 1, '2014-09-25 21:30:00', 0, 1, 0, 0, ''),
+(141, 18, 2, 19, 2, '2014-09-25 19:45:00', 0, 1, 0, 0, ''),
+(142, 6, 1, 23, 1, '2014-10-09 17:30:00', 0, 1, 0, 0, ''),
+(143, 14, 2, 6, 2, '2014-10-09 19:31:12', 0, 1, 0, 0, ''),
+(144, 6, 1, 7, 2, '2014-10-09 20:45:00', 0, 1, 0, 0, ''),
+(145, 1, 1, 19, 1, '2014-10-16 18:30:00', 0, 1, 0, 0, 'Squad à seulement deux vaisseaux pour Klutz:\nhttp://geordanr.github.io/xwing/?f=Rebel%20Alliance&d=v3!s!34:18,-1,75,21:2:3:;89:18,36,-1,1,1:-1:3:'),
+(146, 1, 2, 23, 1, '2014-10-16 20:05:01', 0, 1, 0, 0, 'Mini-swarm pour Klutz, seulement Mauler Mithel meurt.\nhttp://geordanr.github.io/xwing/?f=Galactic%20Empire&d=v3!s!68:23,-1:-1:-1:;18:9:-1:-1:;17:9:-1:-1:;10::-1:-1:;10::-1:-1:'),
+(147, 19, 1, 23, 2, '2014-10-16 17:45:00', 0, 1, 0, 0, ''),
+(148, 3, 2, 20, 2, '2014-10-25 11:30:00', 0, 1, 1, 0, 'Tournoi summer kit donjon\nRound 1\n\nFull win 53-24'),
+(149, 1, 1, 22, 2, '2014-10-25 11:30:00', 0, 1, 1, 0, 'Tournoi summer kit donjon \nRound 1  \nFull win 69-43'),
+(150, 19, 2, 6, 1, '2014-10-25 11:30:58', 0, 1, 1, 0, 'Tournoi summer kit donjon \nRound 1  \nFull win 24-12'),
+(151, 24, 1, 11, 1, '2014-10-25 11:30:00', 0, 1, 1, 0, 'Tournoi summer kit donjon \nRound 1  \nModified win 46-36'),
+(152, 3, 2, 1, 1, '2014-10-25 12:30:29', 0, 1, 1, 0, 'Tournoi summer kit donjon \nRound 2  \nFull win 57-36'),
+(153, 24, 1, 19, 2, '2014-10-25 12:30:26', 0, 1, 0, 0, 'Tournoi summer kit donjon \nRound 2  \nFull win 100-65'),
+(154, 6, 1, 11, 1, '2014-10-25 12:30:21', 0, 1, 1, 0, 'Tournoi summer kit donjon \nRound 2  \nFull win 15-0'),
+(155, 20, 2, 22, 2, '2014-10-25 12:30:00', 0, 1, 1, 0, 'Tournoi summer kit donjon \nRound 2  \nFull win 56-0'),
+(156, 3, 2, 24, 1, '2014-10-25 14:00:52', 0, 1, 1, 0, 'Tournoi summer kit donjon \nRound 3  \nFull win 73-60'),
+(157, 1, 1, 20, 1, '2014-10-25 14:01:36', 0, 1, 0, 0, 'Tournoi summer kit donjon \nRound 3  \nFull win 100-43'),
+(158, 22, 2, 6, 1, '2014-10-25 14:00:18', 0, 1, 0, 0, 'Tournoi summer kit donjon \nRound 3  \nFull win 100-0'),
+(159, 19, 2, 11, 1, '2014-10-25 14:03:41', 0, 1, 1, 0, 'Tournoi summer kit donjon \nRound 3  \nModified win 73-67'),
+(160, 3, 2, 19, 2, '2014-10-25 16:00:00', 0, 1, 1, 0, 'Tournoi summer kit donjon \nRound 4  \nModified win 42-36'),
+(161, 1, 1, 24, 1, '2014-10-25 16:00:00', 1, 1, 0, 0, 'Tournoi summer kit donjon \nRound 4  \nDraw 100-100'),
+(162, 11, 1, 22, 2, '2014-10-25 16:09:38', 0, 1, 0, 0, 'Tournoi summer kit donjon \nRound 4  \nFull win 100-31'),
+(163, 6, 1, 20, 2, '2014-10-25 16:10:40', 0, 1, 0, 0, 'Tournoi summer kit donjon \nRound 4  \nFull win 100-77'),
+(164, 3, 2, 1, 1, '2014-10-25 17:00:00', 0, 1, 0, 0, 'Tournoi Summer Kit Donjon\nFinale\nFull win 100-12\n"J''ai buté 1 TIE. 1 f****** acad." -Klutz'),
+(165, 6, 1, 1, 1, '2014-11-13 20:00:00', 0, 1, 0, 0, ''),
+(166, 6, 2, 1, 2, '2014-11-13 21:15:00', 0, 1, 0, 0, ''),
+(167, 6, 1, 1, 1, '2014-11-17 23:15:00', 0, 1, 0, 1, ''),
+(168, 20, 2, 25, 1, '2014-11-22 10:00:00', 0, 1, 0, 0, ''),
+(169, 27, 1, 26, 2, '2014-11-22 10:00:43', 0, 1, 0, 0, ''),
+(170, 18, 2, 12, 2, '2014-11-22 10:00:10', 0, 1, 0, 0, ''),
+(171, 24, 1, 11, 1, '2014-11-22 10:00:00', 0, 1, 0, 0, ''),
+(172, 1, 1, 19, 2, '2014-11-22 10:00:36', 0, 1, 0, 0, ''),
+(173, 27, 1, 20, 2, '2014-11-22 11:30:56', 0, 1, 0, 0, ''),
+(174, 25, 1, 26, 2, '2014-11-22 11:30:28', 0, 1, 0, 0, ''),
+(175, 18, 2, 24, 1, '2014-11-22 11:30:47', 0, 1, 0, 0, ''),
+(176, 1, 1, 12, 2, '2014-11-22 11:30:00', 0, 1, 0, 0, ''),
+(177, 19, 2, 11, 1, '2014-11-22 11:30:53', 0, 1, 0, 0, ''),
+(178, 1, 1, 20, 2, '2014-11-22 13:00:16', 0, 1, 0, 0, ''),
+(179, 11, 1, 26, 2, '2014-11-22 13:00:56', 0, 1, 0, 0, ''),
+(180, 27, 1, 18, 2, '2014-11-22 13:00:16', 0, 1, 0, 0, ''),
+(181, 12, 2, 25, 1, '2014-11-22 13:00:37', 0, 1, 0, 0, ''),
+(182, 19, 2, 24, 1, '2014-11-22 13:00:01', 0, 1, 0, 0, ''),
+(183, 24, 1, 20, 2, '2014-11-22 14:30:27', 0, 1, 0, 0, ''),
+(185, 18, 2, 19, 2, '2014-11-22 14:30:16', 0, 1, 0, 0, ''),
+(186, 12, 2, 26, 2, '2014-11-22 14:30:39', 0, 1, 0, 0, ''),
+(187, 1, 1, 27, 1, '2014-11-22 14:30:55', 0, 1, 0, 0, ''),
+(188, 11, 1, 25, 1, '2014-11-22 14:30:21', 0, 1, 0, 0, ''),
+(189, 1, 1, 27, 1, '2014-11-22 16:00:00', 0, 1, 0, 0, ''),
+(190, 3, 2, 20, 2, '2014-11-27 16:30:00', 0, 1, 0, 0, ''),
+(191, 3, 2, 14, 2, '2014-11-27 17:29:46', 0, 1, 0, 0, ''),
+(192, 6, 1, 23, 2, '2014-11-27 18:30:30', 0, 1, 0, 0, ''),
+(193, 12, 1, 26, 1, '2014-11-27 18:31:18', 0, 1, 0, 0, ''),
+(194, 6, 1, 3, 2, '2014-11-27 22:15:00', 0, 1, 1, 0, ''),
+(195, 14, 2, 3, 2, '2014-12-04 13:15:00', 0, 1, 0, 0, ''),
+(196, 3, 2, 18, 1, '2014-12-11 17:15:00', 0, 1, 0, 0, ''),
+(197, 3, 2, 28, 1, '2014-12-11 18:45:00', 0, 1, 0, 0, ''),
+(198, 3, 2, 6, 1, '2014-12-12 15:00:00', 0, 1, 0, 0, 'Campagne "Escape from Hoth" du Rebel Transport expansion pack, missions H1 (victoire empire au tour 3), H2 (victoire empire au tour 4), H3 (victoire empire au tour 3)\n\nSlimjim gagne donc la campagne!\nLes interceptor Royal Guard Pilots sont très bons pour cette campagne.'),
+(199, 6, 1, 3, 2, '2014-12-13 15:01:54', 0, 1, 0, 0, 'Epic 300 pts 1v1\n\n2 kills par le transport! (Black Squadron et Whisper)\n\nListe alliance: http://goo.gl/XONZeQ\nListe empire: http://goo.gl/jA0ADX'),
+(200, 1, 2, 11, 1, '2014-12-13 13:00:00', 0, 1, 0, 0, 'Epic 300 pts 1v1'),
+(201, 22, 2, 3, 2, '2014-12-18 15:30:00', 0, 1, 0, 0, ''),
+(202, 3, 2, 22, 2, '2014-12-18 15:33:11', 0, 1, 0, 0, ''),
+(203, 22, 2, 20, 1, '2014-12-20 14:45:00', 0, 1, 0, 0, ''),
+(204, 22, 1, 20, 1, '2014-12-20 17:15:30', 0, 1, 0, 0, ''),
+(205, 18, 2, 3, 2, '2014-12-22 14:15:00', 0, 1, 0, 0, ''),
+(206, 19, 1, 21, 2, '2014-12-22 14:19:18', 0, 1, 0, 0, ''),
+(207, 1, 1, 6, 1, '2014-12-28 11:00:00', 0, 1, 0, 0, 'Round 1:\n\nKevin Bélisle: (100) PS2 hate  http://goo.gl/JWyfi2\n100 points détruits\n\nfull win contre\n\nMichael Juneau: (100) Crit shower http://goo.gl/sSDFmz \n51 points détruits'),
+(208, 22, 2, 8, 1, '2014-12-28 11:00:00', 0, 1, 0, 0, 'Round 1:\n\nJonathan: (100) Tanks http://goo.gl/bxVb0B\n76 points détruits\n\nfull win contre\n\nFrancois: (100) Rebel Aces Swarm http://goo.gl/iV8PB6\n24 points détruits'),
+(209, 19, 1, 21, 2, '2014-12-28 11:00:16', 0, 1, 0, 0, 'Round 1:\n\nChristian: (100) Alt Fat Falcon http://goo.gl/WyzpTS\n100 points détruits\n\nfull win contre\n\nDenis: (99) Phantom Brave http://goo.gl/qlE5ZH\n0 points détruits'),
+(210, 25, 2, 18, 2, '2014-12-28 11:00:20', 0, 1, 0, 0, 'Round 1:\n\nJulie: (99) Classic Swarm http://goo.gl/742Skj\n51 points détruits\n\nmodified win contre\n\nRemi: (99) Wave 2 Swarm http://goo.gl/nwY8ss\n44 points détruits'),
+(211, 1, 1, 22, 2, '2014-12-28 12:00:35', 0, 1, 0, 0, 'Round 2:\n\nKevin Bélisle: (100) PS2 hate http://goo.gl/JWyfi2\n100 points détruits\n\nfull win contre\n\nJonathan: (100) Tanks http://goo.gl/bxVb0B\n51 points détruits'),
+(212, 6, 1, 18, 2, '2014-12-28 12:00:00', 0, 1, 0, 0, 'Round 2:\n\nMichael Juneau: (100) Crit shower http://goo.gl/sSDFmz\n99 points détruits\n\nfull win contre\n\nRemi: (99) Wave 2 Swarm http://goo.gl/nwY8ss\n16 points détruits'),
+(213, 19, 2, 24, 1, '2014-12-28 12:00:17', 0, 1, 0, 0, 'Round 2:\n\nChristian: (100) Alt Fat Falcon http://goo.gl/WyzpTS\n100 points détruits\n\nfull win contre\n\nGabriel: (100) While Han is frozen in carbonite http://goo.gl/U5e1U5\n0 points détruits'),
+(214, 25, 2, 8, 1, '2014-12-28 12:00:00', 0, 1, 0, 0, 'Round 2:\n\nJulie: (99) Classic Swarm http://goo.gl/742Skj\n78 points détruits\n\nfull win contre\n\nFrancois: (100) Rebel Aces Swarm http://goo.gl/iV8PB6\n45 points détruits'),
+(216, 8, 1, 21, 2, '2014-12-28 13:00:00', 0, 1, 0, 0, 'Round 3:\n\nFrancois: (100) Rebel Aces Swarm http://goo.gl/iV8PB6\n100 points détruits\n\nfull win contre\n\nDenis: (99) Phantom Brave http://goo.gl/qlE5ZH\n0 points détruits'),
+(217, 1, 1, 19, 2, '2014-12-28 13:00:37', 0, 1, 0, 0, 'Round 3:\n\nKevin Bélisle: (100) PS2 hate http://goo.gl/JWyfi2\n100 points détruits\n\nfull win contre\n\nChristian: (100) Alt Fat Falcon http://goo.gl/WyzpTS\n51 points détruits'),
+(218, 6, 1, 25, 2, '2014-12-28 13:00:35', 0, 1, 0, 0, 'Round 3:\n\nMichael Juneau: (100) Crit shower http://goo.gl/sSDFmz\n87 points détruits\n\nfull win contre\n\nJulie: (99) Classic Swarm http://goo.gl/742Skj\n44 points détruits'),
+(219, 24, 1, 22, 2, '2014-12-28 13:00:23', 0, 1, 0, 0, 'Round 3:\n\nGabriel: (100) While Han is frozen in carbonite http://goo.gl/U5e1U5\n100 points détruits\n\nfull win contre\n\nJonathan: (100) Tanks http://goo.gl/bxVb0B\n30 points détruits'),
+(220, 1, 1, 24, 1, '2014-12-28 14:00:19', 0, 1, 0, 0, 'Round 4:\n\nKevin Bélisle: (100) PS2 hate http://goo.gl/JWyfi2\n100 points détruits\n\nfull win contre\n\nGabriel: (100) While Han is frozen in carbonite http://goo.gl/U5e1U5\n0 points détruits'),
+(221, 8, 1, 18, 2, '2014-12-28 14:00:27', 0, 1, 0, 0, 'Round 4:\n\nFrancois: (100) Rebel Aces Swarm http://goo.gl/iV8PB6\n73 points détruits\n\nfull win contre\n\nRemi: (99) Wave 2 Swarm http://goo.gl/nwY8ss\n30 points détruits'),
+(222, 19, 1, 6, 1, '2014-12-28 14:00:00', 0, 1, 0, 0, 'Round 4:\n\nChris: (100) Chewbo\nhttp://goo.gl/WyzpTS\n100 points détruits\n\nfull win contre\n\nMichael Juneau: (100) Crit shower http://goo.gl/sSDFmz\n0 points détruits'),
+(223, 25, 2, 21, 2, '2014-12-28 14:00:57', 0, 1, 0, 0, 'Round 4:\n\nJulie: (99) Classic Swarm http://goo.gl/742Skj\n100 points détruits\n\nfull win contre\n\nDenis: (99) Phantom Brave http://goo.gl/qlE5ZH\n12 points détruits'),
+(224, 6, 1, 19, 1, '2015-01-11 12:00:00', 0, 1, 0, 1, ''),
+(225, 3, 2, 19, 1, '2015-01-15 15:00:00', 0, 1, 0, 0, ''),
+(226, 3, 2, 19, 1, '2015-01-15 14:55:47', 0, 1, 0, 0, ''),
+(227, 6, 2, 3, 2, '2015-01-15 16:45:00', 0, 1, 0, 0, ''),
+(228, 6, 2, 26, 1, '2015-01-15 18:45:00', 0, 1, 0, 0, ''),
+(229, 3, 2, 22, 2, '2015-01-22 19:45:00', 0, 1, 0, 0, ''),
+(230, 3, 2, 22, 2, '2015-01-22 19:53:00', 0, 1, 0, 0, ''),
+(231, 3, 2, 26, 1, '2015-01-22 19:53:25', 0, 1, 0, 0, ''),
+(232, 6, 1, 22, 1, '2015-01-22 20:00:00', 0, 1, 0, 0, ''),
+(233, 6, 1, 22, 2, '2015-01-22 20:04:41', 0, 1, 0, 0, ''),
+(234, 3, 2, 18, 2, '2015-01-22 19:53:51', 0, 1, 0, 0, ''),
+(235, 18, 2, 26, 1, '2015-01-22 18:30:00', 0, 1, 0, 0, ''),
+(236, 25, 1, 26, 2, '2015-01-29 18:45:00', 0, 1, 0, 0, ''),
+(237, 3, 2, 19, 1, '2015-01-29 18:44:22', 0, 1, 0, 0, ''),
+(238, 3, 2, 22, 2, '2015-01-29 18:45:00', 0, 1, 0, 0, ''),
+(239, 3, 2, 22, 2, '2015-01-29 20:30:00', 0, 1, 0, 0, ''),
+(240, 11, 1, 24, 1, '2015-02-01 11:00:00', 0, 1, 0, 0, '99-50'),
+(241, 26, 1, 21, 2, '2015-02-01 14:00:00', 0, 1, 1, 0, '40-13'),
+(242, 1, 1, 19, 2, '2015-02-01 12:00:45', 0, 1, 0, 0, '100-24'),
+(243, 1, 1, 6, 1, '2015-02-01 13:00:31', 0, 1, 0, 0, '100-36'),
+(244, 1, 1, 24, 1, '2015-02-01 14:00:50', 0, 1, 0, 0, '100-36'),
+(245, 8, 1, 3, 2, '2015-02-01 11:00:29', 0, 1, 1, 0, '49-44 modified win'),
+(246, 8, 1, 11, 1, '2015-02-01 12:00:29', 0, 1, 1, 0, '50-22'),
+(247, 24, 1, 26, 1, '2015-02-01 12:00:18', 0, 1, 0, 0, '100-0'),
+(248, 24, 1, 22, 2, '2015-02-01 13:00:34', 0, 1, 0, 0, '100-49'),
+(249, 22, 2, 29, 2, '2015-02-01 11:00:00', 0, 1, 0, 0, '100-0'),
+(250, 22, 2, 3, 2, '2015-02-01 14:00:05', 0, 1, 1, 0, '51-0'),
+(251, 3, 2, 26, 1, '2015-02-01 13:00:33', 0, 1, 1, 0, '67-26'),
+(252, 29, 2, 21, 2, '2015-02-01 12:00:12', 0, 1, 1, 0, '84-0'),
+(253, 6, 1, 19, 2, '2015-02-01 11:00:04', 0, 1, 0, 0, '100-24'),
+(254, 6, 1, 11, 1, '2015-02-01 14:00:47', 0, 1, 0, 0, '100-53'),
+(255, 8, 1, 29, 1, '2015-02-01 13:00:00', 0, 1, 0, 0, '100-0'),
+(256, 22, 2, 6, 1, '2015-02-01 18:00:00', 0, 1, 1, 0, 'game hors tournoi pour le fun!\n\necho @2 hull vs rookie @3 hull avant de devoir quitter.'),
+(257, 25, 1, 1, 1, '2015-02-01 11:00:40', 0, 1, 0, 0, '100-24'),
+(258, 25, 1, 6, 1, '2015-02-01 12:00:55', 0, 1, 0, 0, '100-50'),
+(259, 25, 1, 30, 1, '2015-02-01 13:00:23', 0, 1, 0, 0, '100-74'),
+(260, 25, 1, 18, 2, '2015-02-01 14:00:24', 0, 1, 1, 0, '87-50'),
+(261, 19, 2, 21, 2, '2015-02-01 13:00:45', 0, 1, 0, 0, '100-22'),
+(262, 19, 2, 29, 1, '2015-02-01 14:00:00', 0, 1, 0, 0, '100-22'),
+(263, 18, 2, 26, 1, '2015-02-01 11:00:14', 0, 1, 1, 0, '39-13'),
+(264, 18, 2, 3, 2, '2015-02-01 12:00:17', 0, 1, 1, 0, '88-39'),
+(265, 18, 2, 11, 1, '2015-02-01 13:00:52', 0, 1, 1, 0, '77-29'),
+(266, 30, 1, 21, 2, '2015-02-01 11:00:19', 0, 1, 1, 0, '84-0'),
+(267, 30, 1, 22, 2, '2015-02-01 12:00:02', 0, 1, 0, 0, '100-27'),
+(268, 30, 1, 8, 1, '2015-02-01 14:00:00', 0, 1, 1, 0, '66-39'),
+(270, 30, 1, 1, 1, '2015-02-01 15:00:04', 0, 1, 0, 0, 'TOP4\n\n100-39'),
+(271, 18, 2, 25, 1, '2015-02-01 15:00:39', 0, 1, 0, 0, 'TOP4\n\n100-39'),
+(274, 30, 1, 18, 2, '2015-02-01 17:30:05', 0, 1, 0, 0, 'Finale, Store Championship\n\nMontreal vs Quebec \n\nMTL WINS\n\n100-39'),
+(275, 3, 2, 26, 2, '2015-02-06 12:45:00', 0, 1, 0, 0, ''),
+(276, 3, 2, 19, 1, '2015-02-12 20:15:00', 0, 1, 0, 0, ''),
+(277, 3, 2, 1, 1, '2015-02-12 20:15:00', 0, 1, 0, 0, ''),
+(278, 1, 2, 3, 2, '2015-02-12 20:15:00', 0, 1, 0, 0, ''),
+(279, 19, 1, 29, 2, '2015-02-12 20:22:20', 0, 1, 0, 0, ''),
+(282, 1, 1, 6, 3, '2015-02-17 00:15:00', 0, 1, 0, 1, ''),
+(283, 6, 3, 1, 1, '2015-02-18 22:45:00', 0, 1, 0, 1, ''),
+(284, 6, 1, 24, 1, '2015-03-01 11:00:00', 0, 1, 0, 0, 'Round 1\n100-0'),
+(285, 6, 1, 26, 3, '2015-03-01 12:13:45', 0, 1, 0, 0, 'Round 2\n100-0'),
+(286, 6, 1, 20, 3, '2015-03-01 13:14:28', 0, 1, 0, 0, 'Round 3\n100-40'),
+(287, 6, 1, 26, 3, '2015-03-01 15:00:03', 0, 1, 0, 0, 'Finale top 2\n100-0'),
+(288, 26, 3, 29, 2, '2015-03-01 11:00:00', 0, 1, 1, 0, 'Round 1\n88-14'),
+(289, 26, 3, 24, 1, '2015-03-01 13:00:01', 0, 1, 1, 0, 'Round 3\n66-64\nModified win'),
+(290, 20, 3, 29, 2, '2015-03-01 12:00:08', 0, 1, 0, 0, 'Round 2\n100-32'),
+(291, 6, 2, 1, 2, '2015-03-05 00:45:00', 0, 1, 1, 1, '1 acad tué sur 7'),
+(292, 33, 2, 22, 3, '2015-03-05 19:15:00', 0, 1, 0, 0, ''),
+(293, 3, 2, 22, 3, '2015-03-05 18:17:20', 0, 1, 0, 0, ''),
+(294, 3, 2, 22, 3, '2015-03-05 21:15:00', 0, 1, 0, 0, ''),
+(295, 35, 2, 36, 1, '2015-03-07 10:00:00', 0, 1, 0, 0, 'Store Championship Free Game 7 mars 2015\nRound 1\nFull Win 100-54'),
+(296, 19, 2, 22, 1, '2015-03-07 10:00:53', 0, 1, 1, 0, 'Store Championship Free Game 7 mars 2015\nRound 1\nModified Win 66-65'),
+(297, 8, 1, 26, 3, '2015-03-07 10:00:48', 0, 1, 0, 0, 'Store Championship Free Game 7 mars 2015\nRound 1\nFull Win 100-0'),
+(298, 29, 2, 32, 1, '2015-03-07 10:00:27', 0, 1, 0, 0, 'Store Championship Free Game 7 mars 2015\nRound 1\nFull Win 100-48'),
+(299, 3, 2, 25, 1, '2015-03-07 10:00:28', 0, 1, 0, 0, 'Store Championship Free Game 7 mars 2015\nRound 1\nFull Win 100-0'),
+(300, 6, 2, 34, 3, '2015-03-07 10:00:57', 0, 1, 0, 0, 'Store Championship Free Game 7 mars 2015\nRound 1\nFull Win 100-0'),
+(301, 24, 3, 1, 2, '2015-03-07 10:00:18', 0, 1, 1, 0, 'Store Championship Free Game 7 mars 2015\nRound 1\nModified Win 61-50'),
+(302, 3, 2, 8, 1, '2015-03-07 11:00:00', 0, 1, 0, 0, 'Store Championship Free Game 7 mars 2015\nRound 2\nFull Win 100-0'),
+(303, 6, 2, 29, 2, '2015-03-07 11:00:57', 0, 1, 0, 0, 'Store Championship Free Game 7 mars 2015\nRound 2\nFull Win 100-0'),
+(304, 19, 2, 35, 2, '2015-03-07 11:00:16', 0, 1, 0, 0, 'Store Championship Free Game 7 mars 2015\nRound 2\nFull Win 100-0'),
+(305, 22, 1, 24, 3, '2015-03-07 11:00:37', 0, 1, 0, 0, 'Store Championship Free Game 7 mars 2015\nRound 2\nFull Win 100-22'),
+(306, 1, 2, 36, 1, '2015-03-07 11:00:02', 0, 1, 0, 0, 'Store Championship Free Game 7 mars 2015\nRound 2\nFull Win 100-0'),
+(307, 34, 3, 32, 1, '2015-03-07 11:00:36', 0, 1, 0, 0, 'Store Championship Free Game 7 mars 2015\nRound 2\nFull Win 100-0'),
+(308, 26, 3, 25, 1, '2015-03-07 11:00:55', 0, 1, 0, 0, 'Store Championship Free Game 7 mars 2015\nRound 2\nFull Win 100-0'),
+(309, 3, 2, 6, 2, '2015-03-07 12:00:20', 0, 1, 1, 0, 'Store Championship Free Game 7 mars 2015\nRound 3\nFull Win 60-40'),
+(310, 1, 2, 19, 2, '2015-03-07 12:00:58', 0, 1, 1, 0, 'Store Championship Free Game 7 mars 2015\nRound 3\nFull Win 65-0'),
+(311, 8, 1, 22, 1, '2015-03-07 12:00:21', 0, 1, 0, 0, 'Store Championship Free Game 7 mars 2015\nRound 3\nFull Win 100-44'),
+(312, 34, 3, 26, 3, '2015-03-07 12:00:48', 0, 1, 0, 0, 'Store Championship Free Game 7 mars 2015\nRound 3\nFull Win 100-0'),
+(313, 29, 2, 35, 2, '2015-03-07 12:00:11', 0, 1, 0, 0, 'Store Championship Free Game 7 mars 2015\nRound 3\nFull Win 100-24'),
+(314, 24, 3, 36, 1, '2015-03-07 12:00:40', 0, 1, 0, 0, 'Store Championship Free Game 7 mars 2015\nRound 3\nFull Win 100-0'),
+(315, 32, 1, 25, 1, '2015-03-07 12:00:10', 0, 1, 0, 0, 'Store Championship Free Game 7 mars 2015\nRound 3\nFull Win 100-25'),
+(316, 1, 2, 3, 2, '2015-03-07 13:00:30', 0, 1, 0, 0, 'Store Championship Free Game 7 mars 2015\nRound 4\nFull Win 100-0'),
+(317, 6, 2, 8, 1, '2015-03-07 13:00:20', 0, 1, 0, 0, 'Store Championship Free Game 7 mars 2015\nRound 4\nFull Win 100-0'),
+(318, 29, 2, 34, 3, '2015-03-07 13:00:41', 0, 1, 1, 0, 'Store Championship Free Game 7 mars 2015\nRound 4\nFull Win 50-27'),
+(319, 19, 2, 24, 3, '2015-03-07 13:00:14', 0, 1, 1, 0, 'Store Championship Free Game 7 mars 2015\nRound 4\nFull Win 50-31'),
+(320, 22, 1, 32, 1, '2015-03-07 13:00:59', 0, 1, 0, 0, 'Store Championship Free Game 7 mars 2015\nRound 4\nFull Win 100-0'),
+(321, 35, 2, 26, 3, '2015-03-07 13:00:18', 0, 1, 0, 0, 'Store Championship Free Game 7 mars 2015\nRound 4\nFull Win 100-0'),
+(322, 25, 1, 36, 1, '2015-03-07 13:00:48', 0, 1, 0, 0, 'Store Championship Free Game 7 mars 2015\nRound 4\nFull Win 100-65'),
+(323, 1, 2, 3, 2, '2015-03-07 14:00:12', 0, 1, 0, 0, 'Store Championship Free Game 7 mars 2015\nTop 4 (#2 vs #3)\nFull Win 100-0'),
+(324, 6, 2, 29, 2, '2015-03-07 14:00:33', 0, 1, 0, 0, 'Store Championship Free Game 7 mars 2015\nTop 4 (#1 vs #4)\nFull Win 100-60'),
+(325, 6, 2, 1, 2, '2015-03-07 15:00:16', 0, 1, 0, 0, 'Store Championship Free Game 7 mars 2015\nFinale\nFull Win 100-0'),
+(326, 22, 1, 26, 3, '2015-03-07 16:00:00', 0, 1, 0, 0, ''),
+(327, 3, 2, 32, 1, '2015-02-16 18:45:00', 0, 1, 0, 0, ''),
+(328, 32, 2, 19, 1, '2015-02-16 18:42:39', 0, 1, 0, 0, ''),
+(329, 3, 2, 20, 3, '2015-03-12 08:45:00', 1, 1, 0, 0, ''),
+(330, 3, 2, 22, 3, '2015-03-12 08:56:58', 0, 1, 0, 0, ''),
+(331, 22, 3, 37, 1, '2015-03-13 19:00:00', 0, 1, 0, 0, ''),
+(332, 6, 3, 1, 1, '2015-03-17 23:45:00', 0, 1, 0, 1, ''),
+(333, 6, 3, 3, 2, '2015-03-19 14:15:00', 0, 1, 0, 0, ''),
+(334, 3, 2, 6, 3, '2015-03-19 14:17:41', 0, 1, 0, 0, ''),
+(335, 3, 2, 6, 3, '2015-03-19 16:15:00', 0, 1, 0, 0, ''),
+(336, 22, 3, 6, 2, '2015-03-19 17:00:00', 0, 1, 0, 0, ''),
+(337, 22, 3, 33, 2, '2015-03-19 18:30:00', 0, 1, 0, 0, ''),
+(338, 33, 2, 6, 3, '2015-03-19 19:38:15', 0, 1, 0, 0, ''),
+(339, 6, 3, 22, 3, '2015-03-19 20:38:48', 0, 1, 1, 0, ''),
+(340, 6, 1, 8, 1, '2015-03-21 11:00:00', 0, 1, 1, 0, 'Store Championship Pub La Revanche\nRound 1\nFull win 34-0'),
+(341, 6, 1, 3, 2, '2015-03-21 12:00:55', 0, 1, 0, 0, 'Store Championship Pub La Revanche\nRound 2\nFull win 100-0'),
+(342, 6, 1, 22, 3, '2015-03-21 13:00:00', 0, 1, 1, 0, 'Store Championship Pub La Revanche\nRound 3\nModified win 71-62'),
+(343, 6, 1, 11, 1, '2015-03-21 14:00:08', 0, 1, 0, 0, 'Store Championship Pub La Revanche\nRound 4\nFull win 100-0'),
+(344, 1, 1, 6, 1, '2015-03-21 16:00:36', 0, 1, 0, 0, 'Store Championship Pub La Revanche\nSemi-Finals\nFull win 100-24'),
+(345, 1, 1, 8, 1, '2015-03-21 22:00:00', 0, 1, 0, 0, 'Store Championship Pub La Revanche\nFinals\nFull win 100-83'),
+(346, 26, 1, 29, 2, '2015-03-21 14:00:00', 0, 1, 1, 0, 'Store Championship Pub La Revanche\nRound 4\nFull win 73-25'),
+(347, 8, 1, 3, 2, '2015-03-21 14:00:46', 0, 1, 0, 0, 'Store Championship Pub La Revanche\nRound 4\nFull win 100-78'),
+(348, 1, 1, 24, 3, '2015-03-21 14:00:22', 0, 1, 0, 0, 'Store Championship Pub La Revanche\nRound 4\nFull win 100-0'),
+(349, 28, 2, 22, 3, '2015-03-21 14:00:02', 0, 1, 1, 0, 'Store Championship Pub La Revanche\nRound 4\nFull win 57-13'),
+(350, 3, 2, 28, 2, '2015-03-21 13:00:37', 0, 1, 1, 0, 'Store Championship Pub La Revanche\nRound 3\nFull win 50-0'),
+(351, 26, 1, 1, 1, '2015-03-21 13:00:48', 0, 1, 1, 0, 'Store Championship Pub La Revanche\nRound 3\nModified win 58-49'),
+(352, 24, 3, 29, 2, '2015-03-21 13:00:38', 0, 1, 0, 0, 'Store Championship Pub La Revanche\nRound 3\nFull win 100-0'),
+(353, 8, 1, 11, 1, '2015-03-21 13:00:25', 0, 1, 0, 0, 'Store Championship Pub La Revanche\nRound 3\nFull win 100-0'),
+(354, 28, 2, 26, 1, '2015-03-21 12:00:00', 0, 1, 1, 0, 'Store Championship Pub La Revanche\nRound 2\nFull win 36-13'),
+(355, 11, 1, 29, 2, '2015-03-21 12:00:07', 0, 1, 0, 0, 'Store Championship Pub La Revanche\nRound 2\nFull win 100-0'),
+(356, 8, 1, 24, 3, '2015-03-21 12:00:28', 0, 1, 0, 0, 'Store Championship Pub La Revanche\nRound 2\nFull win 100-0'),
+(357, 22, 3, 1, 1, '2015-03-21 12:00:32', 0, 1, 1, 0, 'Store Championship Pub La Revanche\nRound 2\nFull win 76-43'),
+(358, 22, 3, 26, 1, '2015-03-21 11:00:22', 0, 1, 1, 0, 'Store Championship Pub La Revanche\nRound 1\nModified win 24-14'),
+(359, 3, 2, 24, 2, '2015-03-21 11:00:15', 0, 1, 0, 0, 'Store Championship Pub La Revanche\nRound 1\nFull win 100-0'),
+(360, 1, 1, 29, 2, '2015-03-21 11:00:46', 0, 1, 1, 0, 'Store Championship Pub La Revanche\nRound 1\nFull win 52-24'),
+(361, 11, 1, 28, 2, '2015-03-21 11:00:33', 1, 1, 1, 0, ''),
+(362, 32, 1, 38, 2, '2015-03-18 18:30:00', 0, 0, 0, 0, ''),
+(363, 32, 2, 38, 1, '2015-03-18 20:30:18', 0, 0, 0, 0, ''),
+(364, 8, 1, 28, 2, '2015-03-21 16:00:00', 0, 1, 0, 0, 'Store Championship Pub La Revanche Semi-finals \nFull win 100-12'),
+(365, 6, 1, 3, 2, '2015-03-31 14:00:00', 0, 1, 0, 0, 'Epic match 300 pts\nSquads utilisés\nAlliance: http://goo.gl/9K3DR9\nEmpire: http://goo.gl/587Ino\n\nBlount avec son Assault missile: 1 crit sur cible principale (celle qui donne un stress) + 7 splash damage sur l''empire (dont 2 qui tuent des TIE Fighters) + 1 splash damage sur un B-Wing.'),
+(366, 6, 3, 3, 2, '2015-03-31 15:30:19', 0, 1, 0, 0, '');

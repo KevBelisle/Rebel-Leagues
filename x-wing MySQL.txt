@@ -1,0 +1,264 @@
+wishlist
+top 3 players (selon ELO)
+top played games
+faction wins
+rivalit‚s close (+ que 10 games, … +/- 10%)
+
+
+
+
+ranking des victoires RANKED
+
+SELECT winnerJoueur, COUNT(winnerJoueur) AS 'wins', j.prenom, j.nom
+from gamelogs, joueurs AS j
+WHERE j.idJoueur = winnerJoueur AND isRanked = 1
+GROUP BY winnerJoueur
+ORDER BY COUNT(winnerJoueur) DESC;
+
+ranking des victoires RANKED ET UNRANKED
+
+SELECT winnerJoueur, COUNT(winnerJoueur) AS 'wins', j.prenom, j.nom
+from gamelogs, joueurs AS j
+WHERE j.idJoueur = winnerJoueur
+GROUP BY winnerJoueur
+ORDER BY COUNT(winnerJoueur) DESC;
+
+ranking des d‚faites RANKED
+
+SELECT loserJoueur, COUNT(loserJoueur) AS 'losses', j.prenom, j.nom
+from gamelogs, joueurs AS j
+WHERE j.idJoueur = loserJoueur
+GROUP BY loserJoueur
+ORDER BY COUNT(loserJoueur) DESC;
+
+chronological RANKED games
+
+SELECT * from gamelogs
+ORDER BY date ASC;
+
+
+chronological DESC RANKED + UNRANKED games with verbose info
+
+CREATE VIEW `chrono_all_played` 
+AS select `g`.`idgamelog` AS `idgamelog`,`g`.`date` AS `date`,
+`f1`.`nom` AS `gagnant`,`j1`.`idjoueur` AS `idJoueur1`,
+`j1`.`alias` AS `alias1`,`j1`.`prenom` AS `prenom1`,`j1`.`nom` AS `nom1`,
+`f2`.`nom` AS `perdant`,`j2`.`idjoueur` AS `idJoueur2`,
+`j2`.`alias` AS `alias2`,`j2`.`prenom` AS `prenom2`,
+`j2`.`nom` AS `nom2`,`g`.`isTimeRunout` AS `isTimeRunout`,
+`g`.`isDraw` AS `isDraw`,`g`.`isOnline` AS `isOnline`,`g`.`notes` AS `notes` 
+from ((((`gamelogs` `g` join `joueurs` `j1`) 
+join `joueurs` `j2`) join `factions` `f1`) 
+join `factions` `f2`) 
+where ((`g`.`winnerJoueur` = `j1`.`idjoueur`) 
+and (`g`.`loserJoueur` = `j2`.`idjoueur`) and (`g`.`winnerFaction` = `f1`.`idfaction`) 
+and (`g`.`loserFaction` = `f2`.`idfaction`)) 
+order by `g`.`date` DESC;
+
+
+chrono RANKED games
+CREATE VIEW `chrono_ranked_played` 
+AS select `g`.`idgamelog` AS `idgamelog`,`g`.`date` AS `date`,
+`f1`.`nom` AS `gagnant`,`j1`.`idjoueur` AS `idJoueur1`,
+`j1`.`alias` AS `alias1`,`j1`.`prenom` AS `prenom1`,`j1`.`nom` AS `nom1`,
+`f2`.`nom` AS `perdant`,`j2`.`idjoueur` AS `idJoueur2`,
+`j2`.`alias` AS `alias2`,`j2`.`prenom` AS `prenom2`,
+`j2`.`nom` AS `nom2`,`g`.`isTimeRunout` AS `isTimeRunout`,
+`g`.`isDraw` AS `isDraw`,`g`.`isOnline` AS `isOnline`,`g`.`notes` AS `notes` 
+from ((((`gamelogs` `g` join `joueurs` `j1`) 
+join `joueurs` `j2`) join `factions` `f1`) 
+join `factions` `f2`) 
+where ((`g`.`winnerJoueur` = `j1`.`idjoueur`) 
+and (`g`.`loserJoueur` = `j2`.`idjoueur`) and (`g`.`winnerFaction` = `f1`.`idfaction`) 
+and (`g`.`loserFaction` = `f2`.`idfaction`) and `g`.`isRanked` = 1) 
+order by `g`.`date` DESC;
+
+
+
+top played games
+
+SELECT j1.alias, j1.prenom, j1.nom, COUNT(j1.nom) AS 'nombre_parties_jouees'
+FROM joueurs AS j1, gamelogs AS g
+WHERE g.winnerJoueur = j1.idJoueur OR g.loserJoueur = j1.idJoueur
+GROUP BY j1.idJoueur
+ORDER BY COUNT(j1.nom) DESC;
+
+top played games ordered by faction
+CREATE VIEW top_played_by_faction AS
+SELECT j1.alias, j1.prenom, j1.nom, 
+
+
+top alliance played games
+
+CREATE VIEW top_alliance_played_games AS
+SELECT j1.idJoueur, j1.alias, j1.prenom, j1.nom, '0' AS parties_empire, COUNT(j1.idJoueur) AS 'parties_alliance'
+FROM joueurs AS j1, gamelogs AS g
+WHERE g.winnerJoueur = j1.idJoueur AND g.winnerFaction = 1 OR g.loserJoueur = j1.idJoueur AND g.loserFaction = 1
+GROUP BY j1.idJoueur
+ORDER BY COUNT(j1.nom) DESC;
+
+top empire played games
+
+CREATE VIEW top_empire_played_games AS
+
+SELECT j1.idJoueur, j1.alias, j1.prenom, j1.nom, COUNT(j1.idJoueur) AS 'parties_empire', '0' AS 'parties_alliance'
+FROM joueurs AS j1, gamelogs AS g
+WHERE g.winnerJoueur = j1.idJoueur AND g.winnerFaction = 0 OR g.loserJoueur = j1.idJoueur AND g.loserFaction = 0
+GROUP BY j1.idJoueur
+ORDER BY COUNT(j1.nom) DESC;
+
+top $varFaction played games
+
+
+SELECT j1.idJoueur, j1.alias, j1.prenom, j1.nom, COUNT(j1.idJoueur) AS 'parties_$varFaction'
+FROM joueurs AS j1, gamelogs AS g
+WHERE g.winnerJoueur = j1.idJoueur AND g.winnerFaction = $varFaction OR g.loserJoueur = j1.idJoueur AND g.loserFaction = $varFaction 
+GROUP BY j1.idJoueur
+ORDER BY COUNT(j1.nom) DESC;
+
+bilan alliance, empire, total:
+
+SELECT u.alias, u.prenom, u.nom, SUM(u.parties_empire) AS 'parties_empire', SUM(u.parties_alliance) AS 'parties_alliance',
+SUM(u.parties_empire) + SUM(u.parties_alliance) AS 'total'
+FROM
+(
+SELECT * FROM top_empire_played_games as e
+UNION
+SELECT * FROM top_alliance_played_games as a
+) as u
+GROUP BY u.nom
+ORDER BY total DESC;
+
+
+
+
+wins for everyone
+
+SELECT j1.idJoueur, j1.alias, j1.prenom, j1.nom, COUNT(j1.idJoueur) AS 'wins'
+FROM joueurs AS j1, gamelogs AS g
+WHERE g.winnerJoueur = j1.idJoueur
+GROUP BY idJoueur
+ORDER BY COUNT(j1.idJoueur) DESC;
+
+
+
+losses for everyone
+
+SELECT j1.idJoueur, j1.alias, j1.prenom, j1.nom, COUNT(j1.idJoueur) AS 'losses'
+FROM joueurs AS j1, gamelogs AS g
+WHERE g.loserJoueur = j1.idJoueur
+GROUP BY idJoueur
+ORDER BY COUNT(j1.idJoueur) DESC;
+
+
+SELECT b.alias, b.prenom, b.nom, COUNT(b.idjoueur) 
+AS 'Nombre de parties' 
+FROM
+	
+(SELECT g.idgamelog, a.idjoueur, a.alias, a.prenom, a.nom
+	
+FROM gamelogs AS g, joueurs AS a
+	
+WHERE g.winnerJoueur = p1() AND a.idjoueur = g.loserJoueur
+	
+
+UNION
+	
+SELECT g.idgamelog, a.idjoueur, a.alias, a.prenom, a.nom
+	
+FROM gamelogs AS g, joueurs AS a
+	
+WHERE g.loserJoueur = p1() AND a.idjoueur = g.winnerJoueur) b
+
+GROUP BY (b.idjoueur)
+ORDER BY COUNT(b.idjoueur) DESC;
+
+ 
+
+
+CREATE FUNCTION `p1`() RETURNS int
+    NO SQL
+    DETERMINISTIC
+return @p1;
+
+
+
+
+CREATE VIEW wonagainst AS
+SELECT g.idgamelog, a.idjoueur, a.alias, a.prenom, a.nom
+	
+FROM gamelogs AS g, joueurs AS a
+	
+WHERE g.winnerJoueur = p1() AND a.idjoueur = g.loserJoueur
+;
+
+CREATE VIEw lostagainst AS
+SELECT g.idgamelog, a.idjoueur, a.alias, a.prenom, a.nom
+	
+FROM gamelogs AS g, joueurs AS a
+	
+WHERE g.loserJoueur = p1() AND a.idjoueur = g.winnerJoueur;
+
+CREATE VIEW playedagainst AS
+SELECT * from wonagainst
+UNION
+SELECT * from lostagainst;
+
+
+Voir bilan empire + alliance quand le nombre de faction est connu à l'avance, 2 ici:
+
+SELECT u.alias, u.prenom, u.nom, SUM(u.parties_empire) AS 'parties_empire', SUM(u.parties_alliance) AS 'parties_alliance',
+	SUM(u.parties_empire) + SUM(u.parties_alliance) AS 'total'
+FROM 
+(
+SELECT e.alias, e.prenom, e.nom, 
+	e.nombre_parties_jouees AS parties_empire, 0 AS parties_alliance 
+from top_empire_played_games as e
+UNION
+SELECT a.alias, a.prenom, a.nom, 
+	0 AS parties_empire, a.nombre_parties_jouees AS parties_alliance 
+from top_alliance_played_games as a
+) as u
+GROUP BY u.nom
+ORDER BY total DESC
+;
+
+
+
+
+PHP request pour sortir le nombre de parties jouées par chaque
+select s.alias, s.prenom, s.nom, COUNT(s.idJoueur) AS 'Nombre de parties' 
+from (select @p1:= $idjoueurvoulu p) parm , playedagainst s
+GROUP BY s.idjoueur
+ORDER BY COUNT(s.idJoueur) DESC;
+
+PHP request pour sortir le nombre de parties jouées par chaque et par faction
+
+SELECT s.alias, s.prenom, s.nom, COUNT($nom_faction) As $nom_faction, etc., 
+
+
+
+
+***début boucle sur $chosenPlayer***
+SELECT idJoueur, alias, prenom, nom,
+	(
+		SELECT COUNT(*)
+		FROM gamelogs
+		WHERE winnerJoueur = $chosenPlayer OR loserJoueur = $chosenPlayer
+	) AS gamesPlayed,
+
+***début boucle sur $chosenFaction***
+	(
+		SELECT COUNT(*)
+		FROM gamelogs
+		WHERE winnerJoueur = $chosenPlayer  AND winnerFaction = $chosenFaction OR loserJoueur = $chosenPlayer  AND loserFaction = $chosenFaction
+	) AS gamesPlayedAs_$chosenFaction,
+***fin boucle sur $chosenFaction***
+
+FROM joueurs
+WHERE idJoueur = $chosenPlayer 
+
+UNION (sauf si dernier $chosenPlayer)***
+***fin boucle sur $chosenPlayer***
+
+
