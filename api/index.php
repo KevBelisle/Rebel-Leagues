@@ -423,7 +423,6 @@ class League {
 			FROM games_history 
 			WHERE player1_id = :player_id OR player2_id = :player_id
 		");
-		
 		echo outputSuccess( array( 'LastDate' => $lastdate ) );
 		
 	}
