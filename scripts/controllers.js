@@ -61,6 +61,7 @@ rebelLeaguesControllers.controller('gamesHistoryCtrl', ['$scope', '$http', '$mod
 		};
 		
 		
+
 		$scope.showFactionModal = function ($factionId) {
 			console.log("Faction ID : " + $factionId);
 			
@@ -95,6 +96,17 @@ rebelLeaguesControllers.controller('gamesHistoryCtrl', ['$scope', '$http', '$mod
 		
 		$scope.loadMore(0);
 		
+	}
+]);
+
+rebelLeaguesControllers.controller('playerReviewCtrl', ['$scope', '$http',
+	function ($scope, $http) {
+		$http.get('api/players').success(function(data) {
+			console.log(data);
+			$scope.title = data.data.league.title;
+			$scope.subtitle = data.data.league.subtitle;
+		});
+				
 	}
 ]);
 
@@ -203,6 +215,8 @@ rebelLeaguesControllers.controller('leagueInfoCtrl', ['$scope', '$http',
 				
 	}
 ]);
+
+
 
 
 
