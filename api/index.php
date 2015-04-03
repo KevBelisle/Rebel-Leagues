@@ -408,6 +408,25 @@ class League {
 		echo outputSuccess( array( 'stats' => $stats ) );
 		
 	}
+	
+	
+		public static function getAllLastDatePlayed() {
+		//
+		//IS IT NEEDED
+		//	
+	}
+	
+		public static function getPlayerLastDatePlayed($player_id) {
+	
+		$lastdate = getDatabase()->one("
+			SELECT MAX(date) 
+			FROM games_history 
+			WHERE player1_id = :player_id OR player2_id = :player_id
+		");
+		
+		echo outputSuccess( array( 'LastDate' => $lastdate ) );
+		
+	}
 }
 
 
