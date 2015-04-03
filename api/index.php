@@ -34,6 +34,8 @@ getRoute()->get('/games(?:/?)/all', array('League', 'getGamesHistoryAll'));
 getRoute()->get('/ranking(?:/?)', array('League', 'getRanking'));
 getRoute()->get('/ranking/(\d+)(?:/?)', array('League', 'getRanking'));
 
+getRoute()->get('/games(?:/?)', array('League', 'getPlayerLastDatePlayed')); 
+
 getRoute()->get('/factions(?:/?)', array('League', 'getFactions'));
 getRoute()->get('/factions/leafs(?:/?)', array('League', 'getLeafFactions'));
 getRoute()->get('/factions/(\d+)(?:/?)', array('League', 'getFaction'));
