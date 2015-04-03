@@ -99,12 +99,10 @@ rebelLeaguesControllers.controller('gamesHistoryCtrl', ['$scope', '$http', '$mod
 	}
 ]);
 
-rebelLeaguesControllers.controller('playerReviewCtrl', ['$scope', '$http',
+rebelLeaguesControllers.controller('playersReviewCtrl', ['$scope', '$http',
 	function ($scope, $http) {
 		$http.get('api/players').success(function(data) {
 			console.log(data);
-			$scope.title = data.data.league.title;
-			$scope.subtitle = data.data.league.subtitle;
 		});
 				
 	}
