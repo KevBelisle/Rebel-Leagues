@@ -101,9 +101,10 @@ rebelLeaguesControllers.controller('gamesHistoryCtrl', ['$scope', '$http', '$mod
 
 rebelLeaguesControllers.controller('playersReviewCtrl', ['$scope', '$http',
 	function ($scope, $http) {
-		$http.get('api/players').success(function(data) {
-			console.log(data);
+		$http.get('api/games').success(function(data) {
+			$scope.players = data.data.players;
 		});
+					
 				
 	}
 ]);
