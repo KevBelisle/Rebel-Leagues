@@ -35,12 +35,15 @@ getRoute()->get('/ranking(?:/?)', array('League', 'getRanking'));
 getRoute()->get('/ranking/(\d+)(?:/?)', array('League', 'getRanking'));
 
 getRoute()->get('/games(?:/?)', array('League', 'getPlayerLastDatePlayed')); 
+getRoute()->get('/games(?:/?)', array('League', 'getAllLastDatePlayed')); 
 
 getRoute()->get('/factions(?:/?)', array('League', 'getFactions'));
 getRoute()->get('/factions/leafs(?:/?)', array('League', 'getLeafFactions'));
 getRoute()->get('/factions/(\d+)(?:/?)', array('League', 'getFaction'));
 getRoute()->get('/factions/(\d+)/stats(?:/?)', array('League', 'getFactionStats'));
 getRoute()->get('/factions/(\d+)/logo(?:/?)', array('League', 'getFactionLogo'));
+
+getRoute()->get('/players_factions_with_stats/(\d+)', array('League', 'getPlayersFactionsWithStats'));
 
 getRoute()->get('/stats(?:/?)', array('League', 'getStats'));
 
@@ -413,9 +416,12 @@ class League {
 	
 	
 		public static function getAllLastDatePlayed() {
-		//
-		//IS IT NEEDED
-		//	
+		$lastdates = getDatabase()->all("
+			SELECT player_id, MAX(date) 
+			FROM games_split
+			GROUP BY player_id
+		");
+		echo outputSuccess( array( 'lastdates' => $lastdates ) );
 	}
 	
 		public static function getPlayerLastDatePlayed($player_id) {
@@ -425,9 +431,22 @@ class League {
 			FROM games_history 
 			WHERE player1_id = :player_id OR player2_id = :player_id
 		");
-		echo outputSuccess( array( 'LastDate' => $lastdate ) );
+		echo outputSuccess( array( 'lastdates' => $lastdates ) );
 		
 	}
+	
+	public static function getPlayersFactionsWithStats($player_id) {
+	
+		$lastdate = getDatabase()->one("
+			SELECT MAX(date) 
+			FROM games_history 
+			WHERE player1_id = :player_id OR player2_id = :player_id
+		");
+		echo outputSuccess( array( 'lastdate' => $lastdate ) );
+		
+	}
+	
+	
 }
 
 

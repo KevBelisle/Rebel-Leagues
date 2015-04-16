@@ -1,14 +1,13 @@
 
 	<div class="player clear" ng-repeat="player in players">
 	
-		<div class="playerid" ng-click="showPlayerModal(player.player_id)">
+		<div class="playerid">
 			<span class="nickname">{{ player.nickname }}</span>
 			<span class="fullname">({{ player.firstname }} {{ player.lastname }})</span>
 		</div>
 		
 		<div class="player_stats">
-		
-				Hello World
+			Date de la dernière partie:{{ games.lastdates[player.player_id] }}
 		</div>
 		
 	</div>
