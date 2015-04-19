@@ -22,7 +22,10 @@ $main_font: "Signika", sans-serif;
     clear: both;
 }
 
-
+.scrollbar-dynamic {
+    max-height: 600px;
+    overflow: auto;
+}
 
 
 /*  GENERAL STYLING */

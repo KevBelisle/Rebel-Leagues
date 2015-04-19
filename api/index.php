@@ -34,8 +34,8 @@ getRoute()->get('/games(?:/?)/all', array('League', 'getGamesHistoryAll'));
 getRoute()->get('/ranking(?:/?)', array('League', 'getRanking'));
 getRoute()->get('/ranking/(\d+)(?:/?)', array('League', 'getRanking'));
 
-getRoute()->get('/games(?:/?)', array('League', 'getPlayerLastDatePlayed')); 
-getRoute()->get('/games(?:/?)', array('League', 'getAllLastDatePlayed')); 
+getRoute()->get('/games/lastdates(?:/?)', array('League', 'getAllLastDatePlayed')); 
+getRoute()->get('/games/bestratio(?:/?)', array('League', 'getBestRatio')); 
 
 getRoute()->get('/factions(?:/?)', array('League', 'getFactions'));
 getRoute()->get('/factions/leafs(?:/?)', array('League', 'getLeafFactions'));
@@ -416,34 +416,34 @@ class League {
 	
 	
 		public static function getAllLastDatePlayed() {
+		$player_count = getDatabase()->one("
+		SELECT COUNT(player_id) FROM players
+		");
+		
 		$lastdates = getDatabase()->all("
-			SELECT player_id, MAX(date) 
+			SELECT players.player_id, MAX(games_split.date) as lastdate
 			FROM games_split
-			GROUP BY player_id
+			RIGHT OUTER JOIN players
+			ON games_split.player_id = players.player_id
+			GROUP BY players.player_id
 		");
 		echo outputSuccess( array( 'lastdates' => $lastdates ) );
 	}
 	
 		public static function getPlayerLastDatePlayed($player_id) {
+	}
 	
-		$lastdate = getDatabase()->one("
-			SELECT MAX(date) 
-			FROM games_history 
-			WHERE player1_id = :player_id OR player2_id = :player_id
+	public static function getBestRatio() {
+		$bestratio = getDatabase()->all("
+			SELECT player_id, faction_name, MAX(games_won_with/games_played_with) AS best
+			FROM players_factions_with_stats
+			GROUP BY player_id
 		");
-		echo outputSuccess( array( 'lastdates' => $lastdates ) );
-		
+	echo outputSuccess( array( 'bestratio' => $bestratio ) );
 	}
 	
 	public static function getPlayersFactionsWithStats($player_id) {
 	
-		$lastdate = getDatabase()->one("
-			SELECT MAX(date) 
-			FROM games_history 
-			WHERE player1_id = :player_id OR player2_id = :player_id
-		");
-		echo outputSuccess( array( 'lastdate' => $lastdate ) );
-		
 	}
 	
 	

@@ -101,10 +101,26 @@ rebelLeaguesControllers.controller('gamesHistoryCtrl', ['$scope', '$http', '$mod
 
 rebelLeaguesControllers.controller('playersReviewCtrl', ['$scope', '$http',
 	function ($scope, $http) {
-		$http.get('api/games').success(function(data) {
+		$http.get('api/players').success(function(data) {
 			$scope.players = data.data.players;
 		});
-					
+		$http.get('api/games/lastdates').success(function(data) {
+			$scope.lastdates = data.data.lastdates;
+			console.log($scope.lastdates);
+		});
+		$http.get('api/games/bestratio').success(function(data) {
+			$scope.bestratio = data.data.bestratio;
+			console.log($scope.bestratio);
+		});
+		
+		$scope.jqueryScrollbarOptions = {
+        "type": "simple",
+        "onScroll":function(y, x){
+            if(y.scroll == y.maxScroll){
+                alert('Scrolled to bottom');
+            }
+        }
+    };
 				
 	}
 ]);
