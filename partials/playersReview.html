@@ -1,15 +1,16 @@
-
-		<div class="player clear" ng-repeat="player in players">
-	
-			<div class="playerid">
-				<span class="nickname">{{ player.nickname }}</span>
-				<span class="fullname">({{ player.firstname }} {{ player.lastname }})</span>
+<header>
+	<div class="name">
+		<h1>{{ players.nickname }}</h1>
+		<h2>{{ players.firstname }} {{ players.lastname }}</h2>
+	</div>
+</header>
+<section>
+		<div ng-repeat="ratio in efficiencyRatios">
+			<div class="logo">
+				<img src="api/factions/{{ ratio.faction_id }}/logo">
 			</div>
-		
-			<div class="player_stats">
-				<div ng-init="offsetCorrection=player.player_id-1"></div>
-				<span class="lastdate">Date de la dernière partie: {{ lastdates[offsetCorrection].lastdate }}</span>
-				<span class="bestratio">Meilleure faction: {{ bestratio[offsetCorrection].faction_name }} Efficacité: {{ bestratio[offsetCorrection].best*100 }} %</span>
+			<div class="faction_played_with">
+			{{ ratio.efficiencyRatio }} % avec {{ ratio.games_played_with }} parties jouées.
 			</div>
-		
 		</div>
+</section>

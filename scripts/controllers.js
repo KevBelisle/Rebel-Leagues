@@ -99,32 +99,22 @@ rebelLeaguesControllers.controller('gamesHistoryCtrl', ['$scope', '$http', '$mod
 	}
 ]);
 
-rebelLeaguesControllers.controller('playersReviewCtrl', ['$scope', '$http',
-	function ($scope, $http) {
-		$http.get('api/players').success(function(data) {
-			$scope.players = data.data.players;
-		});
-		$http.get('api/games/lastdates').success(function(data) {
-			$scope.lastdates = data.data.lastdates;
-			console.log($scope.lastdates);
-		});
-		$http.get('api/games/bestratio').success(function(data) {
-			$scope.bestratio = data.data.bestratio;
-			console.log($scope.bestratio);
-		});
+rebelLeaguesControllers.controller('playersReviewCtrl', ['$scope', '$http',function($scope, $http) {
 		
-		$scope.jqueryScrollbarOptions = {
-        "type": "simple",
-        "onScroll":function(y, x){
-            if(y.scroll == y.maxScroll){
-                alert('Scrolled to bottom');
-            }
-        }
-    };
-				
+		$http.get('api/players/6/efficiencyRatios')
+			.then(
+				function success(response) { $scope.efficiencyRatios = response.data.data; },
+				function error(reason) {return false; }
+				)
+		$http.get('api/players/6')
+			.then(
+				function success(response) { $scope.players = response.data.data; },
+				function error(reason) {return false; }
+				);
+		console.log($scope);
+    //just a test for mic centric view	
 	}
 ]);
-
 
 rebelLeaguesControllers.controller('playersRankingCtrl', ['$scope', '$http', '$modal',
 	function ($scope, $http, $modal) {

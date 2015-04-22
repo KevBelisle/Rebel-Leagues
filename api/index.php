@@ -26,6 +26,7 @@ getRoute()->get('/leagues/logo(?:/?)', array('League', 'getLeagueLogo'));
 getRoute()->get('/players(?:/?)', array('League', 'getPlayers'));
 getRoute()->get('/players/(\d+)(?:/?)', array('League', 'getPlayer'));
 getRoute()->get('/players/(\d+)/stats(?:/?)', array('League', 'getPlayerStats'));
+getRoute()->get('/players/(\d+)/efficiencyRatios', array('League', 'getEfficiencyRatios')); 
 
 getRoute()->get('/games(?:/?)', array('League', 'getGamesHistory'));
 getRoute()->get('/games/(\d+)(?:/?)', array('League', 'getGamesHistory'));
@@ -35,15 +36,12 @@ getRoute()->get('/ranking(?:/?)', array('League', 'getRanking'));
 getRoute()->get('/ranking/(\d+)(?:/?)', array('League', 'getRanking'));
 
 getRoute()->get('/games/lastdates(?:/?)', array('League', 'getAllLastDatePlayed')); 
-getRoute()->get('/games/bestratio(?:/?)', array('League', 'getBestRatio')); 
 
 getRoute()->get('/factions(?:/?)', array('League', 'getFactions'));
 getRoute()->get('/factions/leafs(?:/?)', array('League', 'getLeafFactions'));
 getRoute()->get('/factions/(\d+)(?:/?)', array('League', 'getFaction'));
 getRoute()->get('/factions/(\d+)/stats(?:/?)', array('League', 'getFactionStats'));
 getRoute()->get('/factions/(\d+)/logo(?:/?)', array('League', 'getFactionLogo'));
-
-getRoute()->get('/players_factions_with_stats/(\d+)', array('League', 'getPlayersFactionsWithStats'));
 
 getRoute()->get('/stats(?:/?)', array('League', 'getStats'));
 
@@ -433,19 +431,16 @@ class League {
 		public static function getPlayerLastDatePlayed($player_id) {
 	}
 	
-	public static function getBestRatio() {
-		$bestratio = getDatabase()->all("
-			SELECT player_id, faction_name, MAX(games_won_with/games_played_with) AS best
+	public static function getEfficiencyRatios($player_id) {
+		$efficiencyRatios = getDatabase()->all("
+			SELECT player_id, player_nickname, player_firstname, player_lastname, faction_id, games_won_with/games_played_with*100 AS efficiencyRatio, games_played_with
 			FROM players_factions_with_stats
-			GROUP BY player_id
-		");
-	echo outputSuccess( array( 'bestratio' => $bestratio ) );
+            WHERE games_played_with > 4 AND player_id = :player_id
+			ORDER BY efficiencyRatio DESC",
+			array( ':player_id' => $player_id )
+		);
+	echo outputSuccess( $efficiencyRatios );
 	}
-	
-	public static function getPlayersFactionsWithStats($player_id) {
-	
-	}
-	
 	
 }
 
