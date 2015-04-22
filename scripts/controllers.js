@@ -111,6 +111,16 @@ rebelLeaguesControllers.controller('playersReviewCtrl', ['$scope', '$http',funct
 				function success(response) { $scope.players = response.data.data; },
 				function error(reason) {return false; }
 				);
+		$http.get('api/players/6/lastdate')
+			.then(
+				function success(response) { 
+				    var treatThis = response.data.data.lastdate;
+				    var date = new Date(treatThis.substring(0,4), parseInt(treatThis.substring(5,7))-1, treatThis.substring(8,10) );
+					
+					$scope.lastdate = date.getDate() + " " + monthNames[date.getMonth()] + " " + date.getFullYear();
+					},
+				function error(reason) {return false; }
+				);
 		console.log($scope);
     //just a test for mic centric view	
 	}

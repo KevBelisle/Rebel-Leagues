@@ -35,7 +35,8 @@ getRoute()->get('/games(?:/?)/all', array('League', 'getGamesHistoryAll'));
 getRoute()->get('/ranking(?:/?)', array('League', 'getRanking'));
 getRoute()->get('/ranking/(\d+)(?:/?)', array('League', 'getRanking'));
 
-getRoute()->get('/games/lastdates(?:/?)', array('League', 'getAllLastDatePlayed')); 
+
+getRoute()->get('/players/(\d+)/lastdate', array('League', 'getPlayerLastDatePlayed'));
 
 getRoute()->get('/factions(?:/?)', array('League', 'getFactions'));
 getRoute()->get('/factions/leafs(?:/?)', array('League', 'getLeafFactions'));
@@ -412,23 +413,15 @@ class League {
 		
 	}
 	
-	
-		public static function getAllLastDatePlayed() {
-		$player_count = getDatabase()->one("
-		SELECT COUNT(player_id) FROM players
-		");
-		
-		$lastdates = getDatabase()->all("
-			SELECT players.player_id, MAX(games_split.date) as lastdate
-			FROM games_split
-			RIGHT OUTER JOIN players
-			ON games_split.player_id = players.player_id
-			GROUP BY players.player_id
-		");
-		echo outputSuccess( array( 'lastdates' => $lastdates ) );
-	}
-	
 		public static function getPlayerLastDatePlayed($player_id) {
+			
+			$lastdate = getDatabase()->one("
+			SELECT MAX(games_split.date) as lastdate
+			FROM games_split
+			WHERE player_id = :player_id",
+			array( ':player_id' => $player_id )
+		);
+		echo outputSuccess( $lastdate );
 	}
 	
 	public static function getEfficiencyRatios($player_id) {
