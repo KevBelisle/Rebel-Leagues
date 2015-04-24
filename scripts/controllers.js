@@ -99,8 +99,8 @@ rebelLeaguesControllers.controller('gamesHistoryCtrl', ['$scope', '$http', '$mod
 	}
 ]);
 
-rebelLeaguesControllers.controller('playersReviewCtrl', ['$scope', '$http',
-	function($scope, $http) {
+rebelLeaguesControllers.controller('playersReviewCtrl', ['$scope', '$http', '$modal',
+	function($scope, $http, $modal) {
 		
 		$scope.playerid;
 		$scope.players = [];
@@ -149,6 +149,18 @@ rebelLeaguesControllers.controller('playersReviewCtrl', ['$scope', '$http',
 				);
 		
 		}
+		
+		$scope.showEfficiencyWithInfo = function () {
+			
+			$modal.open({
+				'templateUrl' : 'partials/showEfficiencyWithInfo.html',
+				'controller' : 'playersReviewCtrl',
+				'windowClass' : 'something',
+				"resolve": {
+				}
+			});
+		};
+		
 		
 	}
 ]);

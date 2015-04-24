@@ -14,7 +14,7 @@
 <section>
 		
 		<div class="something">
-			<span>Efficacité <span tooltip="Nombre de parties gagnées avec cette faction / Nombre de parties jouées avec cette faction. Nécessite au moins 5 parties pour être calculé.">(?)</span> en jouant <strong>avec</strong> {{ ratio.faction_name }}.</span>
+			<span>Efficacité <img src=".\images\infomodal.png" width="23"ng-click="showEfficiencyWithInfo()"/> en jouant <strong>avec</strong> {{ ratio.faction_name }}.</span>
 		</div>
 		
 		
@@ -28,7 +28,7 @@
 		</div>
 		
 		<div class="something">
-			<span>Efficacité <span tooltip="Nombre de parties gagnées contre cette faction / Nombre de parties jouées contre cette faction. Nécessite au moins 5 parties pour être calculé.">(?)</span> en jouant <strong>contre</strong> {{ ratio.faction_name }}.</span>
+			<span>Efficacité <img src=".\images\infomodal.png" width="23"/> en jouant <strong>contre</strong> {{ ratio.faction_name }}.</span>
 		</div>
 		
 		<div ng-repeat="ratio in efficiencyRatiosAgainst">
