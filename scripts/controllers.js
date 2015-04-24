@@ -102,8 +102,9 @@ rebelLeaguesControllers.controller('gamesHistoryCtrl', ['$scope', '$http', '$mod
 rebelLeaguesControllers.controller('playersReviewCtrl', ['$scope', '$http', '$modal',
 	function($scope, $http, $modal) {
 		
-		$scope.playerid;
 		$scope.players = [];
+		$scope.playerid;
+        $scope.playerSelected = false;
 		
 		$http.get('api/players/')
 			.then(
@@ -147,6 +148,8 @@ rebelLeaguesControllers.controller('playersReviewCtrl', ['$scope', '$http', '$mo
 						},
 					function error(reason) {return false; }
 				);
+                
+            $scope.playerSelected = true;
 		
 		}
 		
