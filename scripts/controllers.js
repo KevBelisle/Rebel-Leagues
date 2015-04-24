@@ -99,7 +99,7 @@ rebelLeaguesControllers.controller('gamesHistoryCtrl', ['$scope', '$http', '$mod
 	}
 ]);
 
-rebelLeaguesControllers.controller('playerReviewCtrl', ['$scope', '$http',
+rebelLeaguesControllers.controller('playersReviewCtrl', ['$scope', '$http',
 	function($scope, $http) {
 		
 		$scope.playerid;
