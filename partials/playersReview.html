@@ -6,12 +6,28 @@
 	<span>Dernière partie jouée: {{ lastdate }}</span>
 </header>
 <section>
-		<div ng-repeat="ratio in efficiencyRatios">
+		<div class="something">
+			<span>Efficacité <span tooltip="Nombre de parties gagnées avec cette faction / Nombre de parties jouées avec cette faction. Nécessite au moins 5 parties pour être calculé.">(?)</span> en jouant <strong>avec</strong> {{ ratio.faction_name }}.</span>
+		</div>
+		<div ng-repeat="ratio in efficiencyRatiosWith">
 			<div class="logo">
-				<img src="api/factions/{{ ratio.faction_id }}/logo">
+				<img class="badge" src="api/factions/{{ ratio.faction_id }}/logo" tooltip="{{ ratio.faction_name }}">
 			</div>
 			<div class="faction_played_with">
-			{{ ratio.efficiencyRatio }} % avec {{ ratio.games_played_with }} parties jouées.
+			{{ ratio.efficiencyRatio }} % avec {{ ratio.games_played_with }} parties jouées avec cette faction.
 			</div>
 		</div>
+		<div class="something">
+			<span>Efficacité <span tooltip="Nombre de parties gagnées contre cette faction / Nombre de parties jouées contre cette faction. Nécessite au moins 5 parties pour être calculé.">(?)</span> en jouant <strong>contre</strong> {{ ratio.faction_name }}.</span>
+		</div>
+		
+		<div ng-repeat="ratio in efficiencyRatiosAgainst">
+			<div class="logo">
+				<img class="badge" src="api/factions/{{ ratio.faction_id }}/logo" tooltip="{{ ratio.faction_name }}">
+			</div>
+			<div class="faction_played_against">
+			{{ ratio.efficiencyRatio }} % avec {{ ratio.games_played_against }} parties jouées contre cette faction.
+			</div>
+		</div>
+		
 </section>

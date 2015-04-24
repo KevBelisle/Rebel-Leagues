@@ -101,9 +101,14 @@ rebelLeaguesControllers.controller('gamesHistoryCtrl', ['$scope', '$http', '$mod
 
 rebelLeaguesControllers.controller('playersReviewCtrl', ['$scope', '$http',function($scope, $http) {
 		
-		$http.get('api/players/6/efficiencyRatios')
+		$http.get('api/players/6/efficiencyRatiosWith')
 			.then(
-				function success(response) { $scope.efficiencyRatios = response.data.data; },
+				function success(response) { $scope.efficiencyRatiosWith = response.data.data; },
+				function error(reason) {return false; }
+				)
+		$http.get('api/players/6/efficiencyRatiosAgainst')
+			.then(
+				function success(response) { $scope.efficiencyRatiosAgainst = response.data.data; },
 				function error(reason) {return false; }
 				)
 		$http.get('api/players/6')

@@ -26,7 +26,8 @@ getRoute()->get('/leagues/logo(?:/?)', array('League', 'getLeagueLogo'));
 getRoute()->get('/players(?:/?)', array('League', 'getPlayers'));
 getRoute()->get('/players/(\d+)(?:/?)', array('League', 'getPlayer'));
 getRoute()->get('/players/(\d+)/stats(?:/?)', array('League', 'getPlayerStats'));
-getRoute()->get('/players/(\d+)/efficiencyRatios', array('League', 'getEfficiencyRatios')); 
+getRoute()->get('/players/(\d+)/efficiencyRatiosWith', array('League', 'getEfficiencyRatiosWith')); 
+getRoute()->get('/players/(\d+)/efficiencyRatiosAgainst', array('League', 'getEfficiencyRatiosAgainst')); 
 
 getRoute()->get('/games(?:/?)', array('League', 'getGamesHistory'));
 getRoute()->get('/games/(\d+)(?:/?)', array('League', 'getGamesHistory'));
@@ -424,17 +425,27 @@ class League {
 		echo outputSuccess( $lastdate );
 	}
 	
-	public static function getEfficiencyRatios($player_id) {
-		$efficiencyRatios = getDatabase()->all("
-			SELECT player_id, player_nickname, player_firstname, player_lastname, faction_id, games_won_with/games_played_with*100 AS efficiencyRatio, games_played_with
+	public static function getEfficiencyRatiosWith($player_id) {
+		$efficiencyRatiosWith = getDatabase()->all("
+			SELECT player_id, player_nickname, player_firstname, player_lastname, faction_id, faction_name, games_won_with/games_played_with*100 AS efficiencyRatio, games_played_with
 			FROM players_factions_with_stats
             WHERE games_played_with > 4 AND player_id = :player_id
 			ORDER BY efficiencyRatio DESC",
 			array( ':player_id' => $player_id )
 		);
-	echo outputSuccess( $efficiencyRatios );
+	echo outputSuccess( $efficiencyRatiosWith );
 	}
 	
+	public static function getEfficiencyRatiosAgainst($player_id) {
+		$efficiencyRatiosAgainst = getDatabase()->all("	
+			SELECT player_id, player_nickname, player_firstname, player_lastname, faction_id, faction_name, games_won_against/games_played_against*100 AS efficiencyRatio, games_played_against
+			FROM players_factions_against_stats
+            WHERE games_played_against > 4 AND player_id = :player_id
+			ORDER BY efficiencyRatio DESC",
+			array( ':player_id' => $player_id )
+		);
+	echo outputSuccess( $efficiencyRatiosAgainst );
+	}
 }
 
 
