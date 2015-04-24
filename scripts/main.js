@@ -43,9 +43,9 @@ rebelLeaguesApp.config([
 				controller: 'playersRankingCtrl'
 			})
 			
-			.when('/playersReview', {
-				templateUrl: 'partials/playersReview.html',
-				controller: 'playersReviewCtrl'
+			.when('/playerReview', {
+				templateUrl: 'partials/playerReview.html',
+				controller: 'playerReviewCtrl'
 			})
 			
 			.otherwise({
