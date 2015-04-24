@@ -1,0 +1,17 @@
+
+
+
+
+		<select class="fullWidth"
+			ng-model="playerid"
+			ng-options="player.player_id as (player.nickname + ' (' + player.firstname + ' ' + player.lastname + ')') for player in players"
+			ng-change="getPlayerStats()">
+			<option value="">Choisir un joueur</option>
+		</select>
+		
+		
+		<div ng-include="'partials/playerReview.html'"></div>
+
+
+
+
