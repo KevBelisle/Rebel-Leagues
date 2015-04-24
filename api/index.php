@@ -28,6 +28,7 @@ getRoute()->get('/players/(\d+)(?:/?)', array('League', 'getPlayer'));
 getRoute()->get('/players/(\d+)/stats(?:/?)', array('League', 'getPlayerStats'));
 getRoute()->get('/players/(\d+)/efficiencyRatiosWith', array('League', 'getEfficiencyRatiosWith')); 
 getRoute()->get('/players/(\d+)/efficiencyRatiosAgainst', array('League', 'getEfficiencyRatiosAgainst')); 
+getRoute()->get('/players/(\d+)/lastgame', array('League', 'getPlayerLastGame'));
 
 getRoute()->get('/games(?:/?)', array('League', 'getGamesHistory'));
 getRoute()->get('/games/(\d+)(?:/?)', array('League', 'getGamesHistory'));
@@ -35,9 +36,6 @@ getRoute()->get('/games/(\d+)/(\d+)(?:/?)', array('League', 'getGamesHistory'));
 getRoute()->get('/games(?:/?)/all', array('League', 'getGamesHistoryAll'));
 getRoute()->get('/ranking(?:/?)', array('League', 'getRanking'));
 getRoute()->get('/ranking/(\d+)(?:/?)', array('League', 'getRanking'));
-
-
-getRoute()->get('/players/(\d+)/lastdate', array('League', 'getPlayerLastDatePlayed'));
 
 getRoute()->get('/factions(?:/?)', array('League', 'getFactions'));
 getRoute()->get('/factions/leafs(?:/?)', array('League', 'getLeafFactions'));
@@ -99,10 +97,11 @@ function check_property_equals($property = "", $value = 0) {
 function outputSuccess($data) {
 	return json_encode( array('status' => 'success', 'data' => $data), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
 }
+
+
 function outputError($data) {
 	return json_encode( array('status' => 'error', 'data' => $data), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
 }
-
 
 
 class League {
@@ -110,6 +109,7 @@ class League {
 		echo "Nope.";
 	}
 	
+    
 	public static function internal_getLeague($league_id = 1) {
 		$league = getDatabase()->one(
 		'SELECT
@@ -145,6 +145,7 @@ class League {
 		return array($league, $ranking_methods);
 	}
 	
+    
 	public static function getLeague($league_id = 1) {
 		list($league, $ranking_methods) = self::internal_getLeague($league_id);
 		echo outputSuccess( array( 'league' => $league, 'ranking_methods' => $ranking_methods ) );
@@ -201,6 +202,7 @@ class League {
 		echo outputSuccess( array( 'factions' => $factions ) );
 	}
 	
+    
 	public static function getLeafFactions() {
 		$factions = getDatabase()->all(
 		'SELECT
@@ -414,17 +416,21 @@ class League {
 		
 	}
 	
-		public static function getPlayerLastDatePlayed($player_id) {
-			
-			$lastdate = getDatabase()->one("
-			SELECT MAX(games_split.date) as lastdate
-			FROM games_split
-			WHERE player_id = :player_id",
+    
+    public static function getPlayerLastGame($player_id) {
+		
+        $lastgame = getDatabase()->one("
+			SELECT players.firstname, players.lastname, players.nickname, MAX(games_split.date) as lastdate
+            FROM games_split
+            JOIN players
+            ON games_split.rival_player_id = players.player_id
+            WHERE games_split.player_id = :player_id",
 			array( ':player_id' => $player_id )
 		);
-		echo outputSuccess( $lastdate );
+		echo outputSuccess( $lastgame );
 	}
 	
+    
 	public static function getEfficiencyRatiosWith($player_id) {
 		$efficiencyRatiosWith = getDatabase()->all("
 			SELECT player_id, player_nickname, player_firstname, player_lastname, faction_id, faction_name, games_won_with/games_played_with*100 AS efficiencyRatio, games_played_with
@@ -436,6 +442,7 @@ class League {
 	echo outputSuccess( $efficiencyRatiosWith );
 	}
 	
+    
 	public static function getEfficiencyRatiosAgainst($player_id) {
 		$efficiencyRatiosAgainst = getDatabase()->all("	
 			SELECT player_id, player_nickname, player_firstname, player_lastname, faction_id, faction_name, games_won_against/games_played_against*100 AS efficiencyRatio, games_played_against

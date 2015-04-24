@@ -59,7 +59,6 @@ div#topBar {
 }
 
 div#wrapper {
-}
 
 	div#right {
 		
@@ -310,6 +309,57 @@ div#wrapper {
 			}
 		}
 	}
+}
+
+
+
+div.playersReview {
+    > header {
+        background-color: $dark_color;
+        
+        select {
+            font-size: $small_text;
+        }
+    }
+    
+    > section {
+        border-top: 3px solid $accent_color;
+        background-color: $xlight_color;
+        
+        > header {
+            background-color: $xlight_color;
+            
+            div.playerid {
+                text-align: left;
+            
+                span.nickname {
+                    color: $xxdark_color;
+                    font-weight: $medium_weight;
+                    font-size: $large_text;
+                }
+                span.fullname {
+                    color: $xdark_color;
+                }
+                span.lastgame {
+                    display: block;
+                    font-size: $small_text;
+                }
+            }
+            
+        }
+        
+        > section {
+            border-top: 1px dashed $accent_color;
+            background-color: $dark_color;
+        }
+        
+        > section:nth-child(2n+1) {
+            background-color: $light_color;
+        }
+    }
+}
+
+
 
 div.tooltip {
 	position: absolute;

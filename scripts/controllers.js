@@ -138,15 +138,23 @@ rebelLeaguesControllers.controller('playersReviewCtrl', ['$scope', '$http', '$mo
 					function error(reason) {return false; }
 				);
 				
-			$http.get('api/players/' + $scope.playerid + '/lastdate')
+			$http.get('api/players/' + $scope.playerid + '/lastgame')
 				.then(
 					function success(response) { 
 					    var treatThis = response.data.data.lastdate;
 					    var date = new Date(treatThis.substring(0,4), parseInt(treatThis.substring(5,7))-1, treatThis.substring(8,10) );
 						
-						$scope.lastdate = date.getDate() + " " + monthNames[date.getMonth()] + " " + date.getFullYear();
-						},
-					function error(reason) {return false; }
+                        $scope.lastgame = {};
+                        
+						$scope.lastgame.date = date.getDate() + " " + monthNames[date.getMonth()] + " " + date.getFullYear();
+						$scope.lastgame.opponent = {};
+                        $scope.lastgame.opponent.firstname = response.data.data.firstname;
+                        $scope.lastgame.opponent.lastname = response.data.data.lastname;
+                        $scope.lastgame.opponent.nickname = response.data.data.nickname;
+                        
+                        console.log($scope);
+                    },
+					function error(reason) { return false; }
 				);
                 
             $scope.playerSelected = true;
