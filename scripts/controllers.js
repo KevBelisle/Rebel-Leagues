@@ -99,7 +99,61 @@ rebelLeaguesControllers.controller('gamesHistoryCtrl', ['$scope', '$http', '$mod
 	}
 ]);
 
-rebelLeaguesControllers.controller('playersReviewCtrl', ['$scope', '$http',function($scope, $http) {
+rebelLeaguesControllers.controller('playersReviewCtrl', ['$scope', '$http',
+	function($scope, $http) {
+		
+		$scope.playerid;
+		$scope.players = [];
+		
+		$http.get('api/players/')
+			.then(
+				function success(response) { $scope.players = response.data.data.players; },
+				function error(reason)     { return false; }
+			);
+		
+		$scope.getPlayerStats = function () {
+			
+			$http.get('api/players/' + $scope.playerid)
+				.then(
+					function success(response) {
+						$scope.info = response.data.data;
+					},
+					function error(reason) {return false; }
+				);
+				
+			$http.get('api/players/' + $scope.playerid + '/efficiencyRatiosWith')
+				.then(
+					function success(response) {
+						$scope.efficiencyRatiosWith = response.data.data;
+					},
+					function error(reason) {return false; }
+				);
+				
+			$http.get('api/players/' + $scope.playerid + '/efficiencyRatiosAgainst')
+				.then(
+					function success(response) {
+						$scope.efficiencyRatiosAgainst = response.data.data;
+					},
+					function error(reason) {return false; }
+				);
+				
+			$http.get('api/players/' + $scope.playerid + '/lastdate')
+				.then(
+					function success(response) { 
+					    var treatThis = response.data.data.lastdate;
+					    var date = new Date(treatThis.substring(0,4), parseInt(treatThis.substring(5,7))-1, treatThis.substring(8,10) );
+						
+						$scope.lastdate = date.getDate() + " " + monthNames[date.getMonth()] + " " + date.getFullYear();
+						},
+					function error(reason) {return false; }
+				);
+		
+		}
+		
+	}
+]);
+
+rebelLeaguesControllers.controller('playerReviewCtrl', ['$scope', '$http',function($scope, $http) {
 		
 		$http.get('api/players/6/efficiencyRatiosWith')
 			.then(

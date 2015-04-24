@@ -1,22 +1,43 @@
 
-	<div class="player clear" ng-repeat="player in players">
 	
-		<div class="playerid" ng-click="showPlayerModal(player.player_id)">
-			<span class="nickname">{{ player.nickname }}</span>
-			<span class="fullname">({{ player.firstname }} {{ player.lastname }})</span>
+<header>
+	
+	<div class="name">
+		<h1>{{ info.nickname }}</h1>
+		<h2>{{ info.firstname }} {{ info.lastname }}</h2>
+	</div>
+	
+	<span>Dernière partie jouée: {{ lastdate }}</span>
+	
+</header>
+
+<section>
+		
+		<div class="something">
+			<span>Efficacité <span tooltip="Nombre de parties gagnées avec cette faction / Nombre de parties jouées avec cette faction. Nécessite au moins 5 parties pour être calculé.">(?)</span> en jouant <strong>avec</strong> {{ ratio.faction_name }}.</span>
 		</div>
 		
-		<div class="player_stats">
 		
-			<div ng-switch on="ranking">
-
-				Points Elo : {{ player.elo_rating | number:0 | decimalDot }} <i>({{ player.games_played }} parties jouées)</i>
-				<div class="stats_bar" ng-attr-style="width: {{ 10 + 90 * (player.elo_rating - min) / (max - min) | number:2 | decimalDot }}%">
-					<div style="width: 100%"></div>
-				</div>
-
-				
+		<div ng-repeat="ratio in efficiencyRatiosWith">
+			<div class="logo">
+				<img class="badge" src="api/factions/{{ ratio.faction_id }}/logo" tooltip="{{ ratio.faction_name }}">
+			</div>
+			<div class="faction_played_with">
+			{{ ratio.efficiencyRatio }} % avec {{ ratio.games_played_with }} parties jouées avec cette faction.
 			</div>
 		</div>
 		
-	</div>
+		<div class="something">
+			<span>Efficacité <span tooltip="Nombre de parties gagnées contre cette faction / Nombre de parties jouées contre cette faction. Nécessite au moins 5 parties pour être calculé.">(?)</span> en jouant <strong>contre</strong> {{ ratio.faction_name }}.</span>
+		</div>
+		
+		<div ng-repeat="ratio in efficiencyRatiosAgainst">
+			<div class="logo">
+				<img class="badge" src="api/factions/{{ ratio.faction_id }}/logo" tooltip="{{ ratio.faction_name }}">
+			</div>
+			<div class="faction_played_against">
+			{{ ratio.efficiencyRatio }} % avec {{ ratio.games_played_against }} parties jouées contre cette faction.
+			</div>
+		</div>
+		
+</section>
