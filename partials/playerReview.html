@@ -3,7 +3,7 @@
 <header>
 	
     <div class="playerid">
-        <img class="badge" src="api/factions/1/logo" tooltip="Alliance">
+        <img class="badge" src="api/factions/{{ mostPlayedFaction.faction_id }}/logo" tooltip="{{ mostPlayedFaction.faction_name }}">
     
         <span class="nickname">{{ info.nickname }}</span>
         <span class="fullname">({{ info.firstname }} {{ info.lastname }})</span>

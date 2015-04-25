@@ -29,6 +29,7 @@ getRoute()->get('/players/(\d+)/stats(?:/?)', array('League', 'getPlayerStats'))
 getRoute()->get('/players/(\d+)/efficiencyRatiosWith', array('League', 'getEfficiencyRatiosWith')); 
 getRoute()->get('/players/(\d+)/efficiencyRatiosAgainst', array('League', 'getEfficiencyRatiosAgainst')); 
 getRoute()->get('/players/(\d+)/lastgame', array('League', 'getPlayerLastGame'));
+getRoute()->get('/players/(\d+)/mostPlayedFaction', array('League', 'getMostPlayedFaction'));
 
 getRoute()->get('/games(?:/?)', array('League', 'getGamesHistory'));
 getRoute()->get('/games/(\d+)(?:/?)', array('League', 'getGamesHistory'));
@@ -453,6 +454,20 @@ class League {
 		);
 	echo outputSuccess( $efficiencyRatiosAgainst );
 	}
+	
+	public static function getMostPlayedFaction($player_id) {
+		$mostPlayedFaction = getDatabase()->one("	
+			SELECT *
+			FROM players_factions_with_stats
+			WHERE player_id = :player_id
+			ORDER BY games_played_with
+			DESC",
+			array( ':player_id' => $player_id )
+		);
+	echo outputSuccess( $mostPlayedFaction );
+	}
+	
+	
 }
 
 
