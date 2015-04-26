@@ -265,12 +265,12 @@ class League {
 		
 		
         $lastgame = getDatabase()->one("
-			SELECT players.firstname, players.lastname, players.nickname, games_split.date as lastdate
+			SELECT players.firstname, players.lastname, players.nickname, games_split.date as date
             FROM games_split
             JOIN players
             ON games_split.rival_player_id = players.player_id
             WHERE games_split.player_id = :player_id
-			ORDER BY lastdate
+			ORDER BY date
 			DESC",
 			array( ':player_id' => $player_id )
 		);
@@ -477,12 +477,12 @@ class League {
     public static function getPlayerLastGame($player_id) {
 		
         $lastgame = getDatabase()->one("
-			SELECT players.firstname, players.lastname, players.nickname, games_split.date as lastdate
+			SELECT players.firstname, players.lastname, players.nickname, games_split.date as date
             FROM games_split
             JOIN players
             ON games_split.rival_player_id = players.player_id
             WHERE games_split.player_id = :player_id
-			ORDER BY lastdate
+			ORDER BY date
 			DESC",
 			array( ':player_id' => $player_id )
 		);
