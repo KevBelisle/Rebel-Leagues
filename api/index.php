@@ -254,11 +254,65 @@ class League {
 	
 
 	public static function getPlayerStats($player_id) {
-		$players = getDatabase()->all(
+		
+		error_reporting(E_ALL);
+		ini_set('display_errors', 1);
+		
+		$opponents = getDatabase()->all(
 			"SELECT * FROM players_stats WHERE player_id = :player_id ORDER BY games_played DESC",
 			array( ':player_id' => $player_id )
 		);
-		echo outputSuccess( array( 'players' => $players ) );
+		
+		
+        $lastgame = getDatabase()->one("
+			SELECT players.firstname, players.lastname, players.nickname, MAX(games_split.date) as lastdate
+            FROM games_split
+            JOIN players
+            ON games_split.rival_player_id = players.player_id
+            WHERE games_split.player_id = :player_id",
+			array( ':player_id' => $player_id )
+		);
+    
+		$factionEfficiencyRatios = getDatabase()->all("	
+			SELECT
+				PFWS.faction_id AS faction_id,
+				PFWS.faction_name AS faction_name,
+				PFWS.games_won_with/PFWS.games_played_with*100 AS efficiencyRatioWith,
+				PFWS.games_played_with AS games_played_with,
+				PFAS.games_won_against/PFAS.games_played_against*100 AS efficiencyRatioAgainst,
+				PFAS.games_played_against AS games_played_against
+			FROM
+			(
+				SELECT *
+				FROM players_factions_against_stats
+            	WHERE games_played_against > 0 AND player_id = :player_id1
+           	) PFAS
+           	JOIN
+           	(
+				SELECT *
+				FROM players_factions_with_stats
+            	WHERE games_played_with > 0 AND player_id = :player_id2
+           	) PFWS
+           	ON PFAS.faction_id = PFWS.faction_id
+			ORDER BY efficiencyRatioWith DESC",
+			array( ':player_id1' => $player_id, ':player_id2' => $player_id )
+		);
+		
+		$mostPlayedFaction = getDatabase()->one("	
+			SELECT faction_id, faction_name, faction_color
+			FROM players_factions_with_stats
+			WHERE player_id = :player_id
+			ORDER BY games_played_with
+			DESC",
+			array( ':player_id' => $player_id )
+		);	
+		
+		echo outputSuccess( array(
+			'opponents' => $opponents,
+			'lastgame' => $lastgame,
+			'mostPlayedFaction' => $mostPlayedFaction,
+			'factionEfficiencyRatios' => $factionEfficiencyRatios
+		) );
 	}
 	
 	
@@ -440,7 +494,7 @@ class League {
 			ORDER BY efficiencyRatio DESC",
 			array( ':player_id' => $player_id )
 		);
-	echo outputSuccess( $efficiencyRatiosWith );
+		echo outputSuccess( $efficiencyRatiosWith );
 	}
 	
     
@@ -452,7 +506,7 @@ class League {
 			ORDER BY efficiencyRatio DESC",
 			array( ':player_id' => $player_id )
 		);
-	echo outputSuccess( $efficiencyRatiosAgainst );
+		echo outputSuccess( $efficiencyRatiosAgainst );
 	}
 	
 	public static function getMostPlayedFaction($player_id) {
@@ -464,7 +518,7 @@ class League {
 			DESC",
 			array( ':player_id' => $player_id )
 		);
-	echo outputSuccess( $mostPlayedFaction );
+		echo outputSuccess( $mostPlayedFaction );
 	}
 	
 	
