@@ -3,23 +3,37 @@
 <header>
 	
     <div class="playerid">
-        <img class="badge" src="api/factions/{{ mostPlayedFaction.faction_id }}/logo" tooltip="{{ mostPlayedFaction.faction_name }}">
+        <img class="badge" src="api/factions/{{ playerStats.mostPlayedFaction.faction_id }}/logo" tooltip="{{ playerStats.mostPlayedFaction.faction_name }}">
     
-        <span class="nickname">{{ info.nickname }}</span>
-        <span class="fullname">({{ info.firstname }} {{ info.lastname }})</span>
-        <span class="lastgame">Dernière partie le {{ lastgame.date }} contre {{ lastgame.opponent.nickname }}</span>
+        <span class="nickname">{{ playerInfo.nickname }}</span>
+        <span class="fullname">({{ playerInfo.firstname }} {{ playerInfo.lastname }})</span>
+        <span class="lastgame">Dernière partie le {{ playerStats.lastgame.date }} contre {{ playerStats.lastgame.nickname }}</span>
     </div>
 	
 </header>
 
-<section>
+<section id="factionEfficiencyStats">
 		
-		<div class="something">
+		<header>
 			<span>Efficacité <img src=".\images\infomodal.png" width="23" ng-click="showEfficiencyWithInfo()"/> en jouant <strong>avec</strong> {{ ratio.faction_name }}</span>
+		</header>
+		
+		
+		<div class="faction" ng-repeat="faction in playerStats.factionEfficiencyRatios">
+		
+			<img class="badge" src="api/factions/{{ faction.faction_id }}/logo" tooltip="{{ faction.faction_name }}">
+			
+			<div class="with">
+				{{ faction.efficiencyRatioWith }} % avec {{ faction.games_played_with }} parties jouées avec cette faction.
+			</div>
+			
+			<div class="against">
+				{{ faction.efficiencyRatioAgainst }} % avec {{ faction.games_played_against }} parties jouées contre cette faction.
+			</div>
+			
 		</div>
 		
-		
-		<div ng-repeat="ratio in efficiencyRatiosWith">
+		<!--
 			<div class="logo">
 				<img class="badge" src="api/factions/{{ ratio.faction_id }}/logo" tooltip="{{ ratio.faction_name }}">
 			</div>
@@ -27,6 +41,7 @@
 			{{ ratio.efficiencyRatio }} % avec {{ ratio.games_played_with }} parties jouées avec cette faction.
 			</div>
 		</div>
+		
 		
 		<div class="something">
 			<span>Efficacité <img src=".\images\infomodal.png" width="23" ng-click="showEfficiencyAgainstInfo()"/> en jouant <strong>contre</strong> {{ ratio.faction_name }}</span>
@@ -40,5 +55,6 @@
 			{{ ratio.efficiencyRatio }} % avec {{ ratio.games_played_against }} parties jouées contre cette faction.
 			</div>
 		</div>
+		-->
 		
 </section>

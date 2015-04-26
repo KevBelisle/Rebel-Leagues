@@ -99,12 +99,12 @@ rebelLeaguesControllers.controller('gamesHistoryCtrl', ['$scope', '$http', '$mod
 	}
 ]);
 
-rebelLeaguesControllers.controller('playersReviewCtrl', ['$scope', '$http', '$modal', 
-	function($scope, $http, $modal) {
+rebelLeaguesControllers.controller('playersReviewCtrl', ['$scope', '$http',
+	function($scope, $http) {
 		
-		$scope.players = [];
+		$scope.playerSelected = false;
 		$scope.playerid;
-        $scope.playerSelected = false;
+		$scope.players = [];
 		
 		$http.get('api/players/')
 			.then(
@@ -113,84 +113,36 @@ rebelLeaguesControllers.controller('playersReviewCtrl', ['$scope', '$http', '$mo
 			);
 		
 		$scope.getPlayerStats = function () {
-			
 			$http.get('api/players/' + $scope.playerid)
 				.then(
 					function success(response) {
-						$scope.info = response.data.data;
-					},
-					function error(reason) {return false; }
-				);
-			
-			$http.get('api/players/' + $scope.playerid + '/mostPlayedFaction')
-				.then(
-					function success(response) {
-						$scope.mostPlayedFaction = response.data.data;
+						$scope.playerInfo = response.data.data;
 					},
 					function error(reason) {return false; }
 				);
 				
-			$http.get('api/players/' + $scope.playerid + '/efficiencyRatiosWith')
+			$http.get('api/players/' + $scope.playerid + '/stats')
 				.then(
 					function success(response) {
-						$scope.efficiencyRatiosWith = response.data.data;
-					},
-					function error(reason) {return false; }
-				);
-				
-			$http.get('api/players/' + $scope.playerid + '/efficiencyRatiosAgainst')
-				.then(
-					function success(response) {
-						$scope.efficiencyRatiosAgainst = response.data.data;
-					},
-					function error(reason) {return false; }
-				);
-				
-			$http.get('api/players/' + $scope.playerid + '/lastgame')
-				.then(
-					function success(response) { 
-					    var treatThis = response.data.data.lastdate;
-					    var date = new Date(treatThis.substring(0,4), parseInt(treatThis.substring(5,7))-1, treatThis.substring(8,10) );
+						$scope.playerStats = response.data.data;
 						
-                        $scope.lastgame = {};
-                        
-						$scope.lastgame.date = date.getDate() + " " + monthNames[date.getMonth()] + " " + date.getFullYear();
-						$scope.lastgame.opponent = {};
-                        $scope.lastgame.opponent.firstname = response.data.data.firstname;
-                        $scope.lastgame.opponent.lastname = response.data.data.lastname;
-                        $scope.lastgame.opponent.nickname = response.data.data.nickname;
-                        
-                        console.log($scope);
-                    },
-					function error(reason) { return false; }
+						var lastGameDate = new Date(
+							$scope.playerStats.lastgame.date.substring(0,4),
+							parseInt($scope.playerStats.lastgame.date.substring(5,7))-1,
+							$scope.playerStats.lastgame.date.substring(8,10)
+						);
+						
+						$scope.playerStats.lastgame.date = lastGameDate.getDate() + " " +
+															monthNames[lastGameDate.getMonth()] + " " +
+															lastGameDate.getFullYear();
+
+						
+						console.log($scope);
+					},
+					function error(reason) {return false; }
 				);
-                
-            $scope.playerSelected = true;
-		
-		}
-		
-		$scope.showEfficiencyWithInfo = function () {
-			
-			$modal.open({
-				'templateUrl' : 'partials/showEfficiencyWithInfo.html',
-				'controller' : 'playersReviewCtrl',
-				'windowClass' : 'something',
-				"resolve": {
-				}
-			});
-		};
-		
-		$scope.showEfficiencyAgainstInfo = function () {
-			
-			$modal.open({
-				'templateUrl' : 'partials/showEfficiencyAgainstInfo.html',
-				'controller' : 'playersReviewCtrl',
-				'windowClass' : 'something',
-				"resolve": {
-				}
-			});
-		};
-		
+				
+			$scope.playerSelected = true;		}
 		
 	}
 ]);
