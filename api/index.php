@@ -265,7 +265,7 @@ class League {
 		
 		
         $lastgame = getDatabase()->one("
-			SELECT players.firstname, players.lastname, players.nickname, MAX(games_split.date) as lastdate
+			SELECT players.firstname, players.lastname, players.nickname, MAX(games_split.date) as date
             FROM games_split
             JOIN players
             ON games_split.rival_player_id = players.player_id
