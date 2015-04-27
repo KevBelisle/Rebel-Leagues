@@ -166,11 +166,26 @@ class League {
 		header('Content-Type: image/png');
 		readfile($logo);
 	}
-	
-
+	/*
+        SELECT COUNT(DISTINCT player_id) AS active_players
+        FROM games_split
+        WHERE date > DATE_SUB(NOW(), INTERVAL 60 DAY)
+    */
 	public static function getPlayers() {
 		$players = getDatabase()->all(
-		'SELECT * FROM players ORDER BY nickname'
+		'SELECT
+            p.player_id,
+            p.nickname,
+            p.firstname,
+            p.lastname,
+            IFNULL(MAX(g.date) > DATE_SUB(NOW(), INTERVAL 60 DAY), 0) AS active
+        FROM
+            players p
+        LEFT JOIN
+            games_split g
+        ON p.player_id = g.player_id
+        GROUP BY p.player_id
+        ORDER BY nickname'
 		);
 		echo outputSuccess( array( 'players' => $players ) );
 	}
@@ -283,38 +298,6 @@ class League {
 			DESC",
 			array( ':player_id' => $player_id )
 		);
-    /*
-		$factionEfficiencyRatios = getDatabase()->all("	
-			SELECT
-				PFWS.faction_id AS faction_id,
-				PFWS.faction_name AS faction_name,
-				PFWS.games_won_with,
-				PFWS.games_lost_with,
-				PFWS.games_tied_with,
-				PFWS.games_won_with/PFWS.games_played_with*100 AS efficiencyRatioWith,
-				PFWS.games_played_with AS games_played_with,
-				PFAS.games_won_against,
-				PFAS.games_lost_against,
-				PFAS.games_tied_against,
-				PFAS.games_won_against/PFAS.games_played_against*100 AS efficiencyRatioAgainst,
-				PFAS.games_played_against AS games_played_against
-			FROM
-			(
-				SELECT *
-				FROM players_factions_against_stats
-            	WHERE games_played_against > 0 AND player_id = :player_id1
-           	) PFAS
-           	JOIN
-           	(
-				SELECT *
-				FROM players_factions_with_stats
-            	WHERE games_played_with > 0 AND player_id = :player_id2
-           	) PFWS
-           	ON PFAS.faction_id = PFWS.faction_id
-			ORDER BY efficiencyRatioWith DESC",
-			array( ':player_id1' => $player_id, ':player_id2' => $player_id )
-		);
-		*/
 		
 		$factionEfficiencyRatiosWith = getDatabase()->all("	
 			SELECT

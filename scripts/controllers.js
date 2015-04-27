@@ -108,7 +108,11 @@ rebelLeaguesControllers.controller('playersReviewCtrl', ['$scope', '$http', '$mo
 		
 		$http.get('api/players/')
 			.then(
-				function success(response) { $scope.players = response.data.data.players; },
+				function success(response) {
+                    //$scope.activePlayers = $.grep(response.data.data.players, function(a){return a.active > 0;});
+                    //$scope.inactivePlayers = $.grep(response.data.data.players, function(a){return a.active > 0;}, true);
+                    $scope.players = response.data.data.players;
+                },
 				function error(reason)     { return false; }
 			);
 		
