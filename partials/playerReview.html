@@ -8,7 +8,6 @@
         <span class="nickname">{{ playerInfo.nickname }}</span>
         <span class="fullname">({{ playerInfo.firstname }} {{ playerInfo.lastname }})</span>
         <span class="lastgame">Dernière partie le {{ playerStats.lastgame.date }} contre {{ playerStats.lastgame.nickname }} ({{ playerStats.lastgame.firstname }} {{ playerStats.lastgame.lastname }})</span>
-		<span class="something">Adversaires fréquents:
 		<p>{{ playerStats.opponents[0].rival_firstname }} {{ playerStats.opponents[0].rival_lastname }} ({{ playerStats.opponents[0].rival_nickname }}) {{ playerStats.opponents[0].games_played }} parties. {{ playerStats.opponents[0].games_won}}-{{ playerStats.opponents[0].games_lost}}-{{ playerStats.opponents[0].games_tied}}</p>
 		<p>{{ playerStats.opponents[1].rival_firstname }} {{ playerStats.opponents[1].rival_lastname }} ({{ playerStats.opponents[1].rival_nickname }}) {{ playerStats.opponents[1].games_played }} parties. {{ playerStats.opponents[1].games_won}}-{{ playerStats.opponents[1].games_lost}}-{{ playerStats.opponents[1].games_tied}}</p>
 		<p>{{ playerStats.opponents[2].rival_firstname }} {{ playerStats.opponents[2].rival_lastname }} ({{ playerStats.opponents[2].rival_nickname }}) {{ playerStats.opponents[2].games_played }} parties. {{ playerStats.opponents[2].games_won}}-{{ playerStats.opponents[2].games_lost}}-{{ playerStats.opponents[2].games_tied}}</p>
@@ -19,7 +18,7 @@
 <section id="factionEfficiencyStats">
 		
 		<header>
-			<span>Efficacité <img src=".\images\infomodal.png" width="23" ng-click="showEfficiencyWithInfo()"/> en jouant <strong>avec</strong> {{ ratio.faction_name }}</span>
+			<!-- <span>Efficacité <img src=".\images\infomodal.png" width="23" ng-click="showEfficiencyWithInfo()"/> en jouant <strong>avec</strong> {{ ratio.faction_name }}</span> -->
 		</header>
 		
 		
@@ -28,11 +27,11 @@
 			<img class="badge" src="api/factions/{{ faction.faction_id }}/logo" tooltip="{{ faction.faction_name }}">
 			
 			<div class="with">
-				{{ faction.efficiencyRatioWith }} % avec {{ faction.games_played_with }} parties jouées avec cette faction.
+				{{ faction.efficiencyRatioWith }} % avec {{ faction.games_played_with }} parties ({{ faction.games_won_with }}-{{ faction.games_lost_with }}-{{ faction.games_tied_with }}) jouées avec cette faction. 
 			</div>
 			
 			<div class="against">
-				{{ faction.efficiencyRatioAgainst }} % avec {{ faction.games_played_against }} parties jouées contre cette faction.
+				{{ faction.efficiencyRatioAgainst }} % avec {{ faction.games_played_against }} parties ({{ faction.games_won_against }}-{{ faction.games_lost_against }}-{{ faction.games_tied_against }}) jouées contre cette faction.
 			</div>
 			
 		</div>
