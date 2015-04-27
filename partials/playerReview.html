@@ -8,6 +8,10 @@
         <span class="nickname">{{ playerInfo.nickname }}</span>
         <span class="fullname">({{ playerInfo.firstname }} {{ playerInfo.lastname }})</span>
         <span class="lastgame">Dernière partie le {{ playerStats.lastgame.date }} contre {{ playerStats.lastgame.nickname }} ({{ playerStats.lastgame.firstname }} {{ playerStats.lastgame.lastname }})</span>
+		<span class="something">Adversaires fréquents:
+		<p>{{ playerStats.opponents[0].rival_firstname }} {{ playerStats.opponents[0].rival_lastname }} ({{ playerStats.opponents[0].rival_nickname }}) {{ playerStats.opponents[0].games_played }} parties. {{ playerStats.opponents[0].games_won}}-{{ playerStats.opponents[0].games_lost}}-{{ playerStats.opponents[0].games_tied}}</p>
+		<p>{{ playerStats.opponents[1].rival_firstname }} {{ playerStats.opponents[1].rival_lastname }} ({{ playerStats.opponents[1].rival_nickname }}) {{ playerStats.opponents[1].games_played }} parties. {{ playerStats.opponents[1].games_won}}-{{ playerStats.opponents[1].games_lost}}-{{ playerStats.opponents[1].games_tied}}</p>
+		<p>{{ playerStats.opponents[2].rival_firstname }} {{ playerStats.opponents[2].rival_lastname }} ({{ playerStats.opponents[2].rival_nickname }}) {{ playerStats.opponents[2].games_played }} parties. {{ playerStats.opponents[2].games_won}}-{{ playerStats.opponents[2].games_lost}}-{{ playerStats.opponents[2].games_tied}}</p>
     </div>
 	
 </header>
