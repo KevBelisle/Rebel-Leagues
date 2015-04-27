@@ -340,12 +340,111 @@ div.playersReview {
                 span.fullname {
                     color: $xdark_color;
                 }
-                span.lastgame {
+                span.lastgame, span.gameCounts {
                     display: block;
                     font-size: $small_text;
                 }
             }
             
+        }
+        
+        > section {
+            > h2 {
+                color: $xxdark_color;
+                font-weight: $medium_weight;
+            }
+        }
+        
+        section#frequentOpponents {
+        }
+        
+        section#factionEfficiencyStats {
+            div.faction {
+                font-size: $small_text;
+                
+                @media only screen and (min-width: 1200px) {
+                    span:first-child:after {
+                        content: " avec ";
+                    }
+                }
+                
+                div.stats_bar {
+                    height: 15px;
+                    margin-top: 5px;
+                    
+                    div {
+                        height: 100%;
+                        float: left;
+                        background-color: $accent-color;
+                    }
+                    div.lighter {
+                        background-color: lighten( $accent-color, 10%);
+                    }
+                    div.darker {
+                        background-color: darken( $accent-color, 10%);
+                    }
+                    div.faction_stats_bar div:hover {
+                        box-sizing: border-box;
+                        border-bottom: 15px solid rgba(200,200,200,0.5);
+                    }
+                }
+            }
+        
+            div.faction.titleRow {
+                font-weight: $medium_weight;
+                color: $xxdark_color;
+                
+                img {
+                    height: 14px;
+                    cursor: pointer;
+                    margin-bottom: -1px;
+                }
+            }
+        }
+        
+        section#opponentStats {
+            
+            ul {
+                li {
+                    display: table;
+                    width: 100%;
+                    padding: 10px;
+                        
+                    border-bottom: 1px solid $dark_color;
+                    
+                    > span {
+                        font-size: $small_text;
+                        color: $xdark_color;
+                        strong {
+                            font-weight: $heavy_weight;
+                            color: $xxdark_color;
+                        }
+                    }
+                    
+                    div.stats_bar {
+                        height: 15px;
+                        margin-top: 5px;
+                        
+                        div {
+                            height: 100%;
+                            float: left;
+                            background-color: $accent-color;
+                        }
+                        div.lighter {
+                            background-color: lighten( $accent-color, 10%);
+                        }
+                        div.darker {
+                            background-color: darken( $accent-color, 10%);
+                        }
+                    }
+                    
+                }
+                
+                li:nth-child(2n) {
+                    background-color: $xlight_color;
+                }
+            }
+        
         }
         
         > section {

@@ -263,15 +263,11 @@ class League {
 			array( ':player_id' => $player_id )
 		);
 		
-		$totalGames = getDatabase()->one("
-			SELECT COUNT(*) AS total_games
-			FROM games_split
-			WHERE player_id = :player_id",
-			array( ':player_id' => $player_id )
-		);
-		
-		$onlineGames = getDatabase()->one("
-			SELECT SUM(is_online) AS online_games
+		$gameCounts = getDatabase()->one("
+			SELECT
+                COUNT(*) AS total,
+                SUM(is_online) AS online,
+                COUNT(*)-SUM(is_online) AS in_person
 			FROM games_split
 			WHERE player_id = :player_id",
 			array( ':player_id' => $player_id )
@@ -333,8 +329,7 @@ class League {
 			'lastgame' => $lastgame,
 			'mostPlayedFaction' => $mostPlayedFaction,
 			'factionEfficiencyRatios' => $factionEfficiencyRatios,
-			'totalGames' => $totalGames,
-			'onlineGames' => $onlineGames
+			'gameCounts' => $gameCounts
 		) );
 	}
 	
@@ -400,8 +395,6 @@ class League {
 		if ($ranking_method == -1) // Requested ranking method not allowed -> revert to default
 			$ranking_method = $default_ranking_method;
 	
-
-		
 		switch ($ranking_method) {
 			// ELO rating
 			case 3:

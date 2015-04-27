@@ -162,6 +162,49 @@ div#wrapper { width: $cols4; }
             > section {
                 padding: 10px;
             }
+            
+            section#factionEfficiencyStats {
+                position: relative;
+                    
+                div.faction {
+                    padding: 10px 10px 10px 56px;
+                    min-height: 66px;
+                    
+                    overflow: auto;
+                    
+                    > img.badge {
+                        height: 46px;
+                        margin-right: 10px;
+                        position: absolute;
+                        left: 10px;
+                    }
+                    
+                    div.with, div.against {
+                        width: 50%;
+                        float: left;
+                        
+                        span {
+                            display: block;
+                        }
+                    }
+
+                    div.with {
+                        padding-right: 5px;
+                    }
+                    div.against {
+                        padding-left: 5px;
+                    }
+                    
+                    div.stats_bar {
+                        display: none;
+                    }
+                }
+                
+                div.faction.titleRow {
+                    padding-bottom: 0px;
+                    min-height: 0px;
+                }
+            }
         }
     }
     
@@ -224,16 +267,30 @@ div#wrapper { width: $cols4; }
 	div#topBar div { width: $cols7; }
 	div#wrapper { width: $cols7; }
 	
-		div#right {
-			width: $cols7;
-			
-			header {  }
-			aside {  }
-		}
-		
-		div#left {
-			width: $cols7;
-		}
+    div#right {
+        width: $cols7;
+        
+        header {  }
+        aside {  }
+    }
+    
+    div#left {
+        width: $cols7;
+    }
+        
+    div.playersReview {        
+        > section {
+            
+            section#factionEfficiencyStats {
+                    
+                div.faction {
+                    div.stats_bar {
+                        display: block;
+                    }
+                }
+            }
+        }
+    }
 
 	.modal-dialog {
 		width: $cols7;
@@ -458,13 +515,31 @@ div#wrapper { width: $cols4; }
 	div#topBar div { width: $cols15; }
 	div#wrapper { width: $cols15; }
 	
-		div#right {
-			width: $cols4;
-		}
-		
-		div#left {
-			width: $cols11;
-		}
+    div#right {
+        width: $cols4;
+    }
+    
+    div#left {
+        width: $cols11;
+    }
+    
+    div.playersReview {        
+        > section {
+            
+            section#factionEfficiencyStats {
+                    
+                div.faction {
+                    
+                    div.with, div.against {
+                        
+                        span {
+                            display: inline;
+                        }
+                    }
+                }
+            }
+        }
+    }
 
 }
 
