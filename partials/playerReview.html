@@ -68,7 +68,7 @@
 		
 		<div class="against">
 			<div class="faction" ng-repeat="faction in playerStats.factionEfficiencyRatiosAgainst">
-			<img class="badge" src="api/factions/{{ faction.faction_id }}/logo" tooltip="{{ faction.faction_name }}">
+				<img class="badge" src="api/factions/{{ faction.faction_id }}/logo" tooltip="{{ faction.faction_name }}">
 				<span><strong>{{ faction.efficiencyRatioAgainst | number:0 }}%</strong> d'efficacité</span>
                 <span><strong>{{ faction.games_played_against }} parties</strong> jouées contre ({{ faction.games_won_against }}-{{ faction.games_lost_against }}-{{ faction.games_tied_against }})</span>
                 
@@ -82,7 +82,7 @@
                     
                 </div>
 			</div>
-			
+		</div>	
 		
 </section>
 
