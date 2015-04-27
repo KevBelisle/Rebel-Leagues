@@ -396,8 +396,16 @@ div.playersReview {
                 
                 img {
                     height: 14px;
-                    cursor: pointer;
                     margin-bottom: -1px;
+                }
+                
+                div {
+                    padding-bottom: 1px;
+                }
+                
+                strong {
+                    cursor: pointer;
+                    border-bottom: 1px dashed $xdark_color;
                 }
             }
         }
