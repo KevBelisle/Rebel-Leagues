@@ -264,14 +264,14 @@ class League {
 		);
 		
 		$totalGames = getDatabase()->one("
-			SELECT COUNT(*) AS total_games,
+			SELECT COUNT(*) AS total_games
 			FROM games_split
 			WHERE player_id = :player_id",
 			array( ':player_id' => $player_id )
 		);
 		
 		$onlineGames = getDatabase()->one("
-			SELECT SUM(is_online) AS online_games,
+			SELECT SUM(is_online) AS online_games
 			FROM games_split
 			WHERE player_id = :player_id",
 			array( ':player_id' => $player_id )
