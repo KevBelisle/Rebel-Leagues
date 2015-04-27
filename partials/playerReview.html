@@ -51,7 +51,7 @@
 				<span><strong>{{ faction.efficiencyRatioWith | number:0 }}%</strong> d'efficacité</span>
                 <span><strong>{{ faction.games_played_with }} parties</strong> jouées avec ({{ faction.games_won_with }}-{{ faction.games_lost_with }}-{{ faction.games_tied_with }})</span>
                 
-                <div class="stats_bar" style="width: 100.00%"> <!--ng-attr-style="width: {{ 100 * player.games_played / max | number:2 | decimalDot }}%" -->
+                <div class="stats_bar" ng-attr-style="width: {{ 100 * faction.games_played_with / playerStats.maxGamesWithFaction | number:2 | decimalDot }}%">
                 
                     <div class="faction_stats_bar darker" ng-attr-style="width: {{ 99.99 * faction.games_won_with / faction.games_played_with | number:2 | decimalDot }}%;" tooltip="{{ faction.games_won_with }} victoires avec {{ faction.faction_name }}"></div>
                 
@@ -66,7 +66,7 @@
 				<span><strong>{{ faction.efficiencyRatioAgainst | number:0 }}%</strong> d'efficacité</span>
                 <span><strong>{{ faction.games_played_against }} parties</strong> jouées contre ({{ faction.games_won_against }}-{{ faction.games_lost_against }}-{{ faction.games_tied_against }})</span>
                 
-                <div class="stats_bar" style="width: 100.00%"> <!--ng-attr-style="width: {{ 100 * player.games_played / max | number:2 | decimalDot }}%" -->
+                <div class="stats_bar" ng-attr-style="width: {{ 100 * faction.games_played_against / playerStats.maxGamesAgainstFaction | number:2 | decimalDot }}%">
                 
                     <div class="faction_stats_bar darker" ng-attr-style="width: {{ 99.99 * faction.games_won_against / faction.games_played_against | number:2 | decimalDot }}%;" tooltip="{{ faction.games_won_against }} victoires contre {{ faction.faction_name }}"></div>
                 
@@ -93,7 +93,7 @@
                 <strong>{{ player.games_played }} parties</strong> jouées contre <strong>{{ player.rival_nickname }}</strong> ({{ player.rival_firstname }} {{ player.rival_lastname }}) : {{ player.games_won }} victoires<span ng-show="player.games_lost">, {{ player.games_lost }} défaites</span><span ng-show="player.games_tied">, {{ player.games_tied }} nulles</span>
             </span>
 			
-            <div class="stats_bar" style="width: 100%"> <!--ng-attr-style="width: {{ 100 * player.games_played / max | number:2 | decimalDot }}%"-->
+            <div class="stats_bar" ng-attr-style="width: {{ 100 * player.games_played / playerStats.maxGamesAgainstPlayer | number:2 | decimalDot }}%">
                 <div class="darker" ng-attr-style="width: {{ 99.99 * player.games_won / player.games_played | number:2 | decimalDot }}%" tooltip="{{ player.games_won }} parties gagnées"></div>
                 <div ng-attr-style="width: {{ 99.99 * player.games_tied / player.games_played | number:2 | decimalDot }}%" tooltip="{{ player.games_tied }} parties annulées"></div>
                 <div class="lighter" ng-attr-style="width: {{ 99.99 * player.games_lost / player.games_played | number:2 | decimalDot }}%" tooltip="{{ player.games_lost }} parties perdues"></div>
