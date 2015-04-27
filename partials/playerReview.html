@@ -26,65 +26,68 @@
 </section>
 -->
 
-<section id="factionEfficiencyStats">
+<section id="factionEfficiencyStatsWith">
 		
-		<h2>
-			Statistiques avec les différentes factions
-		</h2>
-        
-        <div class="faction titleRow">
-            <div class="with">
-                Efficacité en jouant <strong ng-click="showEfficiencyWithInfo()">avec<sup>?</sup></strong>
-            </div>
-            
-            <div class="against">
-                Efficacité en jouant <strong ng-click="showEfficiencyAgainstInfo()">contre<sup>?</sup></strong>
-            </div>
+    <h2>
+        Statistiques en jouant avec les différentes factions
+    </h2>
+    <!--
+    <div class="faction titleRow">
+        <div class="with">
+            Efficacité en jouant <strong ng-click="showEfficiencyWithInfo()">avec<sup>?</sup></strong>
         </div>
+        
+        <div class="against">
+            Efficacité en jouant <strong ng-click="showEfficiencyAgainstInfo()">contre<sup>?</sup></strong>
+        </div>
+    </div>
+    -->
+    
+    <div class="faction" ng-repeat="faction in playerStats.factionEfficiencyRatiosWith">
+    
+        <img class="badge" src="api/factions/{{ faction.faction_id }}/logo" tooltip="{{ faction.faction_name }}">
+        
+        <span><strong>{{ faction.efficiencyRatioWith | number:0 }}%</strong> d'efficacité avec <strong>{{ faction.games_played_with }} parties</strong> jouées avec ({{ faction.games_won_with }}-{{ faction.games_lost_with }}-{{ faction.games_tied_with }})</span>
+        
+        <div class="stats_bar" ng-attr-style="width: {{ 100 * faction.games_played_with / playerStats.maxGamesWithFaction | number:2 | decimalDot }}%">
+        
+            <div class="faction_stats_bar darker" ng-attr-style="width: {{ 99.99 * faction.games_won_with / faction.games_played_with | number:2 | decimalDot }}%;" tooltip="{{ faction.games_won_with }} victoires avec {{ faction.faction_name }}"></div>
+        
+            <div class="faction_stats_bar" ng-attr-style="width: {{ 99.99 * faction.games_tied_with / faction.games_played_with | number:2 | decimalDot }}%;" tooltip="{{ faction.games_tied_with }} nulles avec {{ faction.faction_name }}"></div>
+            
+            <div class="faction_stats_bar lighter" ng-attr-style="width: {{ 99.99 * faction.games_lost_with / faction.games_played_with | number:2 | decimalDot }}%;" tooltip="{{ faction.games_lost_with }} défaites avec {{ faction.faction_name }}"></div>
+            
+        </div>
+    </div>
+    
+</section>
 		
-		
-		
-		
-			
-			
-		<div class="with">
-			<div class="faction" ng-repeat="faction in playerStats.factionEfficiencyRatiosWith">
-				<img class="badge" src="api/factions/{{ faction.faction_id }}/logo" tooltip="{{ faction.faction_name }}">
-				<span><strong>{{ faction.efficiencyRatioWith | number:0 }}%</strong> d'efficacité</span>
-                <span><strong>{{ faction.games_played_with }} parties</strong> jouées avec ({{ faction.games_won_with }}-{{ faction.games_lost_with }}-{{ faction.games_tied_with }})</span>
-                
-                <div class="stats_bar" ng-attr-style="width: {{ 100 * faction.games_played_with / playerStats.maxGamesWithFaction | number:2 | decimalDot }}%">
-                
-                    <div class="faction_stats_bar darker" ng-attr-style="width: {{ 99.99 * faction.games_won_with / faction.games_played_with | number:2 | decimalDot }}%;" tooltip="{{ faction.games_won_with }} victoires avec {{ faction.faction_name }}"></div>
-                
-                    <div class="faction_stats_bar" ng-attr-style="width: {{ 99.99 * faction.games_tied_with / faction.games_played_with | number:2 | decimalDot }}%;" tooltip="{{ faction.games_tied_with }} nulles avec {{ faction.faction_name }}"></div>
-                    
-                    <div class="faction_stats_bar lighter" ng-attr-style="width: {{ 99.99 * faction.games_lost_with / faction.games_played_with | number:2 | decimalDot }}%;" tooltip="{{ faction.games_lost_with }} défaites avec {{ faction.faction_name }}"></div>
-                    
-                </div>
-			</div>
-		
-		</div>
-		
-		<div class="against">
-			<div class="faction" ng-repeat="faction in playerStats.factionEfficiencyRatiosAgainst">
-				<img class="badge" src="api/factions/{{ faction.faction_id }}/logo" tooltip="{{ faction.faction_name }}">
-				<span><strong>{{ faction.efficiencyRatioAgainst | number:0 }}%</strong> d'efficacité</span>
-                <span><strong>{{ faction.games_played_against }} parties</strong> jouées contre ({{ faction.games_won_against }}-{{ faction.games_lost_against }}-{{ faction.games_tied_against }})</span>
-                
-                <div class="stats_bar" ng-attr-style="width: {{ 100 * faction.games_played_against / playerStats.maxGamesAgainstFaction | number:2 | decimalDot }}%">
-                
-                    <div class="faction_stats_bar darker" ng-attr-style="width: {{ 99.99 * faction.games_won_against / faction.games_played_against | number:2 | decimalDot }}%;" tooltip="{{ faction.games_won_against }} victoires contre {{ faction.faction_name }}"></div>
-                
-                    <div class="faction_stats_bar" ng-attr-style="width: {{ 99.99 * faction.games_tied_against / faction.games_played_against | number:2 | decimalDot }}%;" tooltip="{{ faction.games_tied_against }} nulles contre {{ faction.faction_name }}"></div>
-                    
-                    <div class="faction_stats_bar lighter" ng-attr-style="width: {{ 99.99 * faction.games_lost_against / faction.games_played_against | number:2 | decimalDot }}%;" tooltip="{{ faction.games_lost_against }} défaites contre {{ faction.faction_name }}"></div>
-                    
-                </div>
-			</div>
-		</div>	
+        
+<section id="factionEfficiencyStatsAgainst">
+
+    <h2>
+        Statistiques en contre avec les différentes factions
+    </h2>
+    
+    <div class="faction" ng-repeat="faction in playerStats.factionEfficiencyRatiosAgainst">
+    
+        <img class="badge" src="api/factions/{{ faction.faction_id }}/logo" tooltip="{{ faction.faction_name }}">
+        
+        <span><strong>{{ faction.efficiencyRatioAgainst | number:0 }}%</strong> d'efficacité avec <strong>{{ faction.games_played_against }} parties</strong> jouées contre ({{ faction.games_won_against }}-{{ faction.games_lost_against }}-{{ faction.games_tied_against }})</span>
+        
+        <div class="stats_bar" ng-attr-style="width: {{ 100 * faction.games_played_against / playerStats.maxGamesAgainstFaction | number:2 | decimalDot }}%">
+        
+            <div class="faction_stats_bar darker" ng-attr-style="width: {{ 99.99 * faction.games_won_against / faction.games_played_against | number:2 | decimalDot }}%;" tooltip="{{ faction.games_won_against }} victoires contre {{ faction.faction_name }}"></div>
+        
+            <div class="faction_stats_bar" ng-attr-style="width: {{ 99.99 * faction.games_tied_against / faction.games_played_against | number:2 | decimalDot }}%;" tooltip="{{ faction.games_tied_against }} nulles contre {{ faction.faction_name }}"></div>
+            
+            <div class="faction_stats_bar lighter" ng-attr-style="width: {{ 99.99 * faction.games_lost_against / faction.games_played_against | number:2 | decimalDot }}%;" tooltip="{{ faction.games_lost_against }} défaites contre {{ faction.faction_name }}"></div>
+            
+        </div>
+    </div>
 		
 </section>
+
 
 <section id="opponentStats">
 		

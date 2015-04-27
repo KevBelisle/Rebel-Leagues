@@ -358,15 +358,10 @@ div.playersReview {
         section#frequentOpponents {
         }
         
-        section#factionEfficiencyStats {
+        section#factionEfficiencyStatsWith,
+        section#factionEfficiencyStatsAgainst {
             div.faction {
                 font-size: $small_text;
-                
-                @media only screen and (min-width: 1200px) {
-                    span:first-child:after {
-                        content: " avec ";
-                    }
-                }
                 
                 div.stats_bar {
                     height: 15px;
@@ -389,25 +384,6 @@ div.playersReview {
                     }
                 }
             }
-        
-            div.faction.titleRow {
-                font-weight: $medium_weight;
-                color: $xxdark_color;
-                
-                img {
-                    height: 14px;
-                    margin-bottom: -1px;
-                }
-                
-                div {
-                    padding-bottom: 1px;
-                }
-                
-                strong {
-                    cursor: pointer;
-                    border-bottom: 1px dashed $xdark_color;
-                }
-            }
         }
         
         section#opponentStats {
@@ -418,7 +394,7 @@ div.playersReview {
                     width: 100%;
                     padding: 10px;
                         
-                    border-bottom: 1px solid $dark_color;
+                    /*border-bottom: 1px solid $dark_color;*/
                     
                     > span {
                         font-size: $small_text;
@@ -449,7 +425,7 @@ div.playersReview {
                 }
                 
                 li:nth-child(2n) {
-                    background-color: $xlight_color;
+                    /*background-color: $xlight_color;*/
                 }
             }
         
