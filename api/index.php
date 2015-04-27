@@ -283,7 +283,7 @@ class League {
 			DESC",
 			array( ':player_id' => $player_id )
 		);
-    
+    /*
 		$factionEfficiencyRatios = getDatabase()->all("	
 			SELECT
 				PFWS.faction_id AS faction_id,
@@ -314,6 +314,37 @@ class League {
 			ORDER BY efficiencyRatioWith DESC",
 			array( ':player_id1' => $player_id, ':player_id2' => $player_id )
 		);
+		*/
+		
+		$factionEfficiencyRatiosWith = getDatabase()->all("	
+			SELECT
+				PFWS.faction_id AS faction_id,
+				PFWS.faction_name AS faction_name,
+				PFWS.games_won_with,
+				PFWS.games_lost_with,
+				PFWS.games_tied_with,
+				PFWS.games_won_with/PFWS.games_played_with*100 AS efficiencyRatioWith,
+				PFWS.games_played_with AS games_played_with
+			FROM players_factions_with_stats AS PFWS
+            WHERE games_played_with > 0 AND player_id = :player_id
+			ORDER BY efficiencyRatioWith DESC",
+			array( ':player_id' => $player_id)
+		);
+		
+		$factionEfficiencyRatiosAgainst = getDatabase()->all("	
+			SELECT
+				PFAS.faction_id AS faction_id,
+				PFAS.faction_name AS faction_name,
+				PFAS.games_won_against,
+				PFAS.games_lost_against,
+				PFAS.games_tied_against,
+				PFAS.games_won_against/PFAS.games_played_against*100 AS efficiencyRatioAgainst,
+				PFAS.games_played_against AS games_played_against
+			FROM players_factions_against_stats AS PFAS
+            WHERE games_played_against > 0 AND player_id = :player_id
+			ORDER BY efficiencyRatioAgainst DESC",
+			array( ':player_id' => $player_id )
+		);
 		
 		$mostPlayedFaction = getDatabase()->one("	
 			SELECT faction_id, faction_name, faction_color
@@ -328,7 +359,8 @@ class League {
 			'opponents' => $opponents,
 			'lastgame' => $lastgame,
 			'mostPlayedFaction' => $mostPlayedFaction,
-			'factionEfficiencyRatios' => $factionEfficiencyRatios,
+			'factionEfficiencyRatiosWith' => $factionEfficiencyRatiosWith,
+			'factionEfficiencyRatiosAgainst' => $factionEfficiencyRatiosAgainst,
 			'gameCounts' => $gameCounts
 		) );
 	}

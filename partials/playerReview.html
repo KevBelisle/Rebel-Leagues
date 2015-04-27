@@ -43,11 +43,13 @@
         </div>
 		
 		
-		<div class="faction" ng-repeat="faction in playerStats.factionEfficiencyRatios">
 		
-			<img class="badge" src="api/factions/{{ faction.faction_id }}/logo" tooltip="{{ faction.faction_name }}">
+		
 			
-			<div class="with">
+			
+		<div class="with">
+			<div class="faction" ng-repeat="faction in playerStats.factionEfficiencyRatiosWith">
+				<img class="badge" src="api/factions/{{ faction.faction_id }}/logo" tooltip="{{ faction.faction_name }}">
 				<span><strong>{{ faction.efficiencyRatioWith | number:0 }}%</strong> d'efficacité</span>
                 <span><strong>{{ faction.games_played_with }} parties</strong> jouées avec ({{ faction.games_won_with }}-{{ faction.games_lost_with }}-{{ faction.games_tied_with }})</span>
                 
@@ -61,8 +63,12 @@
                     
                 </div>
 			</div>
-			
-			<div class="against">
+		
+		</div>
+		
+		<div class="against">
+			<div class="faction" ng-repeat="faction in playerStats.factionEfficiencyRatiosAgainst">
+			<img class="badge" src="api/factions/{{ faction.faction_id }}/logo" tooltip="{{ faction.faction_name }}">
 				<span><strong>{{ faction.efficiencyRatioAgainst | number:0 }}%</strong> d'efficacité</span>
                 <span><strong>{{ faction.games_played_against }} parties</strong> jouées contre ({{ faction.games_won_against }}-{{ faction.games_lost_against }}-{{ faction.games_tied_against }})</span>
                 
@@ -77,7 +83,6 @@
                 </div>
 			</div>
 			
-		</div>
 		
 </section>
 
