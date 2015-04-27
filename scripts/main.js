@@ -43,6 +43,11 @@ rebelLeaguesApp.config([
 				controller: 'playersRankingCtrl'
 			})
 			
+			.when('/playersReview', {
+				templateUrl: 'partials/playersReview.html',
+				controller: 'playersReviewCtrl'
+			})
+			
 			.otherwise({
 				redirectTo: '/gamesHistory'
 			});

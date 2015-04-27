@@ -61,6 +61,7 @@ rebelLeaguesControllers.controller('gamesHistoryCtrl', ['$scope', '$http', '$mod
 		};
 		
 		
+
 		$scope.showFactionModal = function ($factionId) {
 			console.log("Faction ID : " + $factionId);
 			
@@ -98,6 +99,83 @@ rebelLeaguesControllers.controller('gamesHistoryCtrl', ['$scope', '$http', '$mod
 	}
 ]);
 
+rebelLeaguesControllers.controller('playersReviewCtrl', ['$scope', '$http', '$modal',
+	function($scope, $http, $modal) {
+		
+		$scope.playerSelected = false;
+		$scope.playerid;
+		$scope.players = [];
+		
+		$http.get('api/players/')
+			.then(
+				function success(response) {
+                    //$scope.activePlayers = $.grep(response.data.data.players, function(a){return a.active > 0;});
+                    //$scope.inactivePlayers = $.grep(response.data.data.players, function(a){return a.active > 0;}, true);
+                    $scope.players = response.data.data.players;
+                },
+				function error(reason)     { return false; }
+			);
+		
+		$scope.getPlayerStats = function () {
+			$http.get('api/players/' + $scope.playerid)
+				.then(
+					function success(response) {
+						$scope.playerInfo = response.data.data;
+					},
+					function error(reason) {return false; }
+				);
+				
+			$http.get('api/players/' + $scope.playerid + '/stats')
+				.then(
+					function success(response) {
+						$scope.playerStats = response.data.data;
+						
+						var lastGameDate = new Date(
+							$scope.playerStats.lastgame.date.substring(0,4),
+							parseInt($scope.playerStats.lastgame.date.substring(5,7))-1,
+							$scope.playerStats.lastgame.date.substring(8,10)
+						);
+						
+						$scope.playerStats.lastgame.date = lastGameDate.getDate() + " " +
+															monthNames[lastGameDate.getMonth()] + " " +
+															lastGameDate.getFullYear();
+
+                        $scope.playerStats.maxGamesWithFaction      = Math.max.apply(null, $scope.playerStats.factionEfficiencyRatiosWith.map(function(a){return a.games_played_with;}));
+                        $scope.playerStats.maxGamesAgainstFaction   = Math.max.apply(null, $scope.playerStats.factionEfficiencyRatiosAgainst.map(function(a){return a.games_played_against;}));
+                        
+                        $scope.playerStats.maxGamesAgainstPlayer    = Math.max.apply(null, $scope.playerStats.opponents.map(function(a){return a.games_played;}));
+						
+						console.log($scope);
+					},
+					function error(reason) {return false; }
+				);
+				
+			$scope.playerSelected = true;
+        }
+        
+		$scope.showEfficiencyWithInfo = function () {
+			$modal.open({
+				'templateUrl' : 'partials/showEfficiencyWithInfo.html',
+				'controller' : 'playersReviewCtrl',
+				'windowClass' : 'something',
+				"resolve": {
+				}
+			});
+		};
+		
+		$scope.showEfficiencyAgainstInfo = function () {
+            console.log("!!!");
+			$modal.open({
+				'templateUrl' : 'partials/showEfficiencyAgainstInfo.html',
+				'controller' : 'playersReviewCtrl',
+				'windowClass' : 'something',
+				"resolve": {
+				}
+			});
+		};
+		
+	}
+]);
 
 rebelLeaguesControllers.controller('playersRankingCtrl', ['$scope', '$http', '$modal',
 	function ($scope, $http, $modal) {
@@ -203,6 +281,8 @@ rebelLeaguesControllers.controller('leagueInfoCtrl', ['$scope', '$http',
 				
 	}
 ]);
+
+
 
 
 
