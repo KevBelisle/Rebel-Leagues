@@ -258,11 +258,24 @@ class League {
 		error_reporting(E_ALL);
 		ini_set('display_errors', 1);
 		
-		$opponents = getDatabase()->all(
-			"SELECT * FROM players_stats WHERE player_id = :player_id ORDER BY games_played DESC",
+		$opponents = getDatabase()->all("
+			SELECT * FROM players_stats WHERE player_id = :player_id ORDER BY games_played DESC",
 			array( ':player_id' => $player_id )
 		);
 		
+		$totalGames = getDatabase()->one("
+			SELECT COUNT(*) AS total_games,
+			FROM games_split
+			WHERE player_id = :player_id",
+			array( ':player_id' => $player_id )
+		);
+		
+		$onlineGames = getDatabase()->one("
+			SELECT SUM(is_online) AS online_games,
+			FROM games_split
+			WHERE player_id = :player_id",
+			array( ':player_id' => $player_id )
+		);
 		
         $lastgame = getDatabase()->one("
 			SELECT players.firstname, players.lastname, players.nickname, games_split.date as date
@@ -279,8 +292,14 @@ class League {
 			SELECT
 				PFWS.faction_id AS faction_id,
 				PFWS.faction_name AS faction_name,
+				PFWS.games_won_with,
+				PFWS.games_lost_with,
+				PFWS.games_tied_with,
 				PFWS.games_won_with/PFWS.games_played_with*100 AS efficiencyRatioWith,
 				PFWS.games_played_with AS games_played_with,
+				PFAS.games_won_against,
+				PFAS.games_lost_against,
+				PFAS.games_tied_against,
 				PFAS.games_won_against/PFAS.games_played_against*100 AS efficiencyRatioAgainst,
 				PFAS.games_played_against AS games_played_against
 			FROM
@@ -313,7 +332,9 @@ class League {
 			'opponents' => $opponents,
 			'lastgame' => $lastgame,
 			'mostPlayedFaction' => $mostPlayedFaction,
-			'factionEfficiencyRatios' => $factionEfficiencyRatios
+			'factionEfficiencyRatios' => $factionEfficiencyRatios,
+			'totalGames' => $totalGames,
+			'onlineGames' => $onlineGames
 		) );
 	}
 	
