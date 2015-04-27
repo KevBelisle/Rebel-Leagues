@@ -99,8 +99,8 @@ rebelLeaguesControllers.controller('gamesHistoryCtrl', ['$scope', '$http', '$mod
 	}
 ]);
 
-rebelLeaguesControllers.controller('playersReviewCtrl', ['$scope', '$http',
-	function($scope, $http) {
+rebelLeaguesControllers.controller('playersReviewCtrl', ['$scope', '$http', '$modal',
+	function($scope, $http, $modal) {
 		
 		$scope.playerSelected = false;
 		$scope.playerid;
@@ -142,7 +142,29 @@ rebelLeaguesControllers.controller('playersReviewCtrl', ['$scope', '$http',
 					function error(reason) {return false; }
 				);
 				
-			$scope.playerSelected = true;		}
+			$scope.playerSelected = true;
+        }
+        
+		$scope.showEfficiencyWithInfo = function () {
+			$modal.open({
+				'templateUrl' : 'partials/showEfficiencyWithInfo.html',
+				'controller' : 'playersReviewCtrl',
+				'windowClass' : 'something',
+				"resolve": {
+				}
+			});
+		};
+		
+		$scope.showEfficiencyAgainstInfo = function () {
+            console.log("!!!");
+			$modal.open({
+				'templateUrl' : 'partials/showEfficiencyAgainstInfo.html',
+				'controller' : 'playersReviewCtrl',
+				'windowClass' : 'something',
+				"resolve": {
+				}
+			});
+		};
 		
 	}
 ]);
