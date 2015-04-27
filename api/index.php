@@ -26,6 +26,10 @@ getRoute()->get('/leagues/logo(?:/?)', array('League', 'getLeagueLogo'));
 getRoute()->get('/players(?:/?)', array('League', 'getPlayers'));
 getRoute()->get('/players/(\d+)(?:/?)', array('League', 'getPlayer'));
 getRoute()->get('/players/(\d+)/stats(?:/?)', array('League', 'getPlayerStats'));
+getRoute()->get('/players/(\d+)/efficiencyRatiosWith', array('League', 'getEfficiencyRatiosWith')); 
+getRoute()->get('/players/(\d+)/efficiencyRatiosAgainst', array('League', 'getEfficiencyRatiosAgainst')); 
+getRoute()->get('/players/(\d+)/lastgame', array('League', 'getPlayerLastGame'));
+getRoute()->get('/players/(\d+)/mostPlayedFaction', array('League', 'getMostPlayedFaction'));
 
 getRoute()->get('/games(?:/?)', array('League', 'getGamesHistory'));
 getRoute()->get('/games/(\d+)(?:/?)', array('League', 'getGamesHistory'));
@@ -94,10 +98,11 @@ function check_property_equals($property = "", $value = 0) {
 function outputSuccess($data) {
 	return json_encode( array('status' => 'success', 'data' => $data), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
 }
+
+
 function outputError($data) {
 	return json_encode( array('status' => 'error', 'data' => $data), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
 }
-
 
 
 class League {
@@ -105,6 +110,7 @@ class League {
 		echo "Nope.";
 	}
 	
+    
 	public static function internal_getLeague($league_id = 1) {
 		$league = getDatabase()->one(
 		'SELECT
@@ -140,6 +146,7 @@ class League {
 		return array($league, $ranking_methods);
 	}
 	
+    
 	public static function getLeague($league_id = 1) {
 		list($league, $ranking_methods) = self::internal_getLeague($league_id);
 		echo outputSuccess( array( 'league' => $league, 'ranking_methods' => $ranking_methods ) );
@@ -159,11 +166,26 @@ class League {
 		header('Content-Type: image/png');
 		readfile($logo);
 	}
-	
-
+	/*
+        SELECT COUNT(DISTINCT player_id) AS active_players
+        FROM games_split
+        WHERE date > DATE_SUB(NOW(), INTERVAL 60 DAY)
+    */
 	public static function getPlayers() {
 		$players = getDatabase()->all(
-		'SELECT * FROM players ORDER BY nickname'
+		'SELECT
+            p.player_id,
+            p.nickname,
+            p.firstname,
+            p.lastname,
+            IFNULL(MAX(g.date) > DATE_SUB(NOW(), INTERVAL 60 DAY), 0) AS active
+        FROM
+            players p
+        LEFT JOIN
+            games_split g
+        ON p.player_id = g.player_id
+        GROUP BY p.player_id
+        ORDER BY nickname'
 		);
 		echo outputSuccess( array( 'players' => $players ) );
 	}
@@ -196,6 +218,7 @@ class League {
 		echo outputSuccess( array( 'factions' => $factions ) );
 	}
 	
+    
 	public static function getLeafFactions() {
 		$factions = getDatabase()->all(
 		'SELECT
@@ -246,11 +269,83 @@ class League {
 	
 
 	public static function getPlayerStats($player_id) {
-		$players = getDatabase()->all(
-			"SELECT * FROM players_stats WHERE player_id = :player_id ORDER BY games_played DESC",
+		
+		error_reporting(E_ALL);
+		ini_set('display_errors', 1);
+		
+		$opponents = getDatabase()->all("
+			SELECT * FROM players_stats WHERE player_id = :player_id ORDER BY games_played DESC",
 			array( ':player_id' => $player_id )
 		);
-		echo outputSuccess( array( 'players' => $players ) );
+		
+		$gameCounts = getDatabase()->one("
+			SELECT
+                COUNT(*) AS total,
+                SUM(is_online) AS online,
+                COUNT(*)-SUM(is_online) AS in_person
+			FROM games_split
+			WHERE player_id = :player_id",
+			array( ':player_id' => $player_id )
+		);
+		
+        $lastgame = getDatabase()->one("
+			SELECT players.firstname, players.lastname, players.nickname, games_split.date as date
+            FROM games_split
+            JOIN players
+            ON games_split.rival_player_id = players.player_id
+            WHERE games_split.player_id = :player_id
+			ORDER BY date
+			DESC",
+			array( ':player_id' => $player_id )
+		);
+		
+		$factionEfficiencyRatiosWith = getDatabase()->all("	
+			SELECT
+				PFWS.faction_id AS faction_id,
+				PFWS.faction_name AS faction_name,
+				PFWS.games_won_with,
+				PFWS.games_lost_with,
+				PFWS.games_tied_with,
+				PFWS.games_won_with/PFWS.games_played_with*100 AS efficiencyRatioWith,
+				PFWS.games_played_with AS games_played_with
+			FROM players_factions_with_stats AS PFWS
+            WHERE games_played_with > 0 AND player_id = :player_id
+			ORDER BY efficiencyRatioWith DESC",
+			array( ':player_id' => $player_id)
+		);
+		
+		$factionEfficiencyRatiosAgainst = getDatabase()->all("	
+			SELECT
+				PFAS.faction_id AS faction_id,
+				PFAS.faction_name AS faction_name,
+				PFAS.games_won_against,
+				PFAS.games_lost_against,
+				PFAS.games_tied_against,
+				PFAS.games_won_against/PFAS.games_played_against*100 AS efficiencyRatioAgainst,
+				PFAS.games_played_against AS games_played_against
+			FROM players_factions_against_stats AS PFAS
+            WHERE games_played_against > 0 AND player_id = :player_id
+			ORDER BY efficiencyRatioAgainst DESC",
+			array( ':player_id' => $player_id )
+		);
+		
+		$mostPlayedFaction = getDatabase()->one("	
+			SELECT faction_id, faction_name, faction_color
+			FROM players_factions_with_stats
+			WHERE player_id = :player_id
+			ORDER BY games_played_with
+			DESC",
+			array( ':player_id' => $player_id )
+		);	
+		
+		echo outputSuccess( array(
+			'opponents' => $opponents,
+			'lastgame' => $lastgame,
+			'mostPlayedFaction' => $mostPlayedFaction,
+			'factionEfficiencyRatiosWith' => $factionEfficiencyRatiosWith,
+			'factionEfficiencyRatiosAgainst' => $factionEfficiencyRatiosAgainst,
+			'gameCounts' => $gameCounts
+		) );
 	}
 	
 	
@@ -315,8 +410,6 @@ class League {
 		if ($ranking_method == -1) // Requested ranking method not allowed -> revert to default
 			$ranking_method = $default_ranking_method;
 	
-
-		
 		switch ($ranking_method) {
 			// ELO rating
 			case 3:
@@ -408,6 +501,60 @@ class League {
 		echo outputSuccess( array( 'stats' => $stats ) );
 		
 	}
+	
+    
+    public static function getPlayerLastGame($player_id) {
+		
+        $lastgame = getDatabase()->one("
+			SELECT players.firstname, players.lastname, players.nickname, games_split.date as date
+            FROM games_split
+            JOIN players
+            ON games_split.rival_player_id = players.player_id
+            WHERE games_split.player_id = :player_id
+			ORDER BY date
+			DESC",
+			array( ':player_id' => $player_id )
+		);
+		echo outputSuccess( $lastgame );
+	}
+	
+    
+	public static function getEfficiencyRatiosWith($player_id) {
+		$efficiencyRatiosWith = getDatabase()->all("
+			SELECT player_id, player_nickname, player_firstname, player_lastname, faction_id, faction_name, games_won_with/games_played_with*100 AS efficiencyRatio, games_played_with
+			FROM players_factions_with_stats
+            WHERE games_played_with > 4 AND player_id = :player_id
+			ORDER BY efficiencyRatio DESC",
+			array( ':player_id' => $player_id )
+		);
+		echo outputSuccess( $efficiencyRatiosWith );
+	}
+	
+    
+	public static function getEfficiencyRatiosAgainst($player_id) {
+		$efficiencyRatiosAgainst = getDatabase()->all("	
+			SELECT player_id, player_nickname, player_firstname, player_lastname, faction_id, faction_name, games_won_against/games_played_against*100 AS efficiencyRatio, games_played_against
+			FROM players_factions_against_stats
+            WHERE games_played_against > 4 AND player_id = :player_id
+			ORDER BY efficiencyRatio DESC",
+			array( ':player_id' => $player_id )
+		);
+		echo outputSuccess( $efficiencyRatiosAgainst );
+	}
+	
+	public static function getMostPlayedFaction($player_id) {
+		$mostPlayedFaction = getDatabase()->one("	
+			SELECT *
+			FROM players_factions_with_stats
+			WHERE player_id = :player_id
+			ORDER BY games_played_with
+			DESC",
+			array( ':player_id' => $player_id )
+		);
+		echo outputSuccess( $mostPlayedFaction );
+	}
+	
+	
 }
 
 

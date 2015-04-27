@@ -1,0 +1,22 @@
+
+<div class="playersReview">
+
+    <header>
+
+		<select
+			ng-model="playerid"
+			ng-change="getPlayerStats()">
+			<option value="" disabled>Choisir un joueur...</option>
+			<option value="" disabled></option>
+			<option value="" disabled>Joueurs actifs</option>
+            <option ng-repeat="player in players | filter:{active : 1}" value="{{player.player_id}}">&nbsp;&nbsp;&nbsp;{{player.nickname}} ({{player.firstname}} {{player.lastname}})</option>
+			<option value="" disabled></option>
+			<option value="" disabled>Joueurs inactifs</option>
+            <option ng-repeat="player in players | filter:{active : 0}" value="{{player.player_id}}">&nbsp;&nbsp;&nbsp;{{player.nickname}} ({{player.firstname}} {{player.lastname}})</option>
+		</select>
+        
+    </header>
+		
+    <section ng-if="playerSelected" ng-include="'partials/playerReview.html'"></section>
+
+</div>

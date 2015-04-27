@@ -22,7 +22,10 @@ $main_font: "Signika", sans-serif;
     clear: both;
 }
 
-
+.scrollbar-dynamic {
+    max-height: 600px;
+    overflow: auto;
+}
 
 
 /*  GENERAL STYLING */
@@ -56,7 +59,6 @@ div#topBar {
 }
 
 div#wrapper {
-}
 
 	div#right {
 		
@@ -307,6 +309,140 @@ div#wrapper {
 			}
 		}
 	}
+}
+
+
+
+div.playersReview {
+    > header {
+        background-color: $dark_color;
+        
+        select {
+            font-size: $small_text;
+        }
+    }
+    
+    > section {
+        border-top: 3px solid $accent_color;
+        background-color: $xlight_color;
+        
+        > header {
+            background-color: $xlight_color;
+            
+            div.playerid {
+                text-align: left;
+            
+                span.nickname {
+                    color: $xxdark_color;
+                    font-weight: $medium_weight;
+                    font-size: $large_text;
+                }
+                span.fullname {
+                    color: $xdark_color;
+                }
+                span.lastgame, span.gameCounts {
+                    display: block;
+                    font-size: $small_text;
+                }
+            }
+            
+        }
+        
+        > section {
+            > h2 {
+                color: $xxdark_color;
+                font-weight: $medium_weight;
+            }
+        }
+        
+        section#frequentOpponents {
+        }
+        
+        section#factionEfficiencyStatsWith,
+        section#factionEfficiencyStatsAgainst {
+            div.faction {
+                font-size: $small_text;
+                
+                div.stats_bar {
+                    height: 15px;
+                    margin-top: 5px;
+                    
+                    div {
+                        height: 100%;
+                        float: left;
+                        background-color: $accent-color;
+                    }
+                    div.lighter {
+                        background-color: lighten( $accent-color, 10%);
+                    }
+                    div.darker {
+                        background-color: darken( $accent-color, 10%);
+                    }
+                    div.faction_stats_bar div:hover {
+                        box-sizing: border-box;
+                        border-bottom: 15px solid rgba(200,200,200,0.5);
+                    }
+                }
+            }
+        }
+        
+        section#opponentStats {
+            
+            ul {
+                li {
+                    display: table;
+                    width: 100%;
+                    padding: 10px;
+                        
+                    /*border-bottom: 1px solid $dark_color;*/
+                    
+                    > span {
+                        font-size: $small_text;
+                        color: $xdark_color;
+                        strong {
+                            font-weight: $heavy_weight;
+                            color: $xxdark_color;
+                        }
+                    }
+                    
+                    div.stats_bar {
+                        height: 15px;
+                        margin-top: 5px;
+                        
+                        div {
+                            height: 100%;
+                            float: left;
+                            background-color: $accent-color;
+                        }
+                        div.lighter {
+                            background-color: lighten( $accent-color, 10%);
+                        }
+                        div.darker {
+                            background-color: darken( $accent-color, 10%);
+                        }
+                    }
+                    
+                }
+                
+                li:nth-child(2n) {
+                    /*background-color: $xlight_color;*/
+                }
+            }
+        
+        }
+        
+        > section {
+            border-top: 1px dashed $accent_color;
+            background-color: $dark_color;
+        }
+        
+        > section:nth-child(2n+1) {
+            background-color: $light_color;
+        }
+    }
+}
+
+
 
 div.tooltip {
 	position: absolute;

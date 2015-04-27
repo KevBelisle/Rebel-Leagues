@@ -49,10 +49,10 @@ div#wrapper { width: $cols4; }
 	div#left {
 		width: $cols4;
 		
-		section {
+		> section {
 			width: 100%;
 			
-			nav a { width: 50%; }
+			nav a { width: 33.3333%; }
 			
 			div#main {
 				div.game {
@@ -130,6 +130,66 @@ div#wrapper { width: $cols4; }
 
 		}
 	}
+    
+    
+    div.playersReview {
+        > header {
+            padding: 20px 0;
+            
+            select {
+                width: 80%;
+                margin: 0 10%;
+            }
+        }
+        
+        > section {            
+            > header {
+                padding: 10px 10px 10px 66px;
+                position: relative;
+                
+                div.playerid {
+                    overflow: auto;
+                    
+                    img.badge {
+                        height: 46px;
+                        margin-right: 10px;
+                        position: absolute;
+                        left: 10px;
+                    }
+                }
+            }
+            
+            > section {
+                padding: 10px;
+            }
+            
+            section#factionEfficiencyStatsWith,
+            section#factionEfficiencyStatsAgainst {
+                position: relative;
+                    
+                div.faction {
+                    padding: 10px 10px 10px 56px;
+                    min-height: 66px;
+                    width: 100%;
+                    
+                    overflow: auto;
+                    
+                    > img.badge {
+                        height: 46px;
+                        margin-right: 10px;
+                        position: absolute;
+                        left: 10px;
+                    }
+                }
+                
+                div.faction.titleRow {
+                    padding-bottom: 0px;
+                    min-height: 0px;
+                }
+            }
+        }
+    }
+    
 
 	.modal-dialog {
 		width: $cols4;
@@ -189,17 +249,17 @@ div#wrapper { width: $cols4; }
 	div#topBar div { width: $cols7; }
 	div#wrapper { width: $cols7; }
 	
-		div#right {
-			width: $cols7;
-			
-			header {  }
-			aside {  }
-		}
-		
-		div#left {
-			width: $cols7;
-		}
-
+    div#right {
+        width: $cols7;
+        
+        header {  }
+        aside {  }
+    }
+    
+    div#left {
+        width: $cols7;
+    }
+        
 	.modal-dialog {
 		width: $cols7;
 		margin-left: -( $cols7/2 );
@@ -423,13 +483,13 @@ div#wrapper { width: $cols4; }
 	div#topBar div { width: $cols15; }
 	div#wrapper { width: $cols15; }
 	
-		div#right {
-			width: $cols4;
-		}
-		
-		div#left {
-			width: $cols11;
-		}
+    div#right {
+        width: $cols4;
+    }
+    
+    div#left {
+        width: $cols11;
+    }
 
 }
 
