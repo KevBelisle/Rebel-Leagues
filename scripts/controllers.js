@@ -144,6 +144,15 @@ rebelLeaguesControllers.controller('playersReviewCtrl', ['$scope', '$http', '$mo
                         $scope.playerStats.maxGamesAgainstFaction   = Math.max.apply(null, $scope.playerStats.factionEfficiencyRatiosAgainst.map(function(a){return a.games_played_against;}));
                         
                         $scope.playerStats.maxGamesAgainstPlayer    = Math.max.apply(null, $scope.playerStats.opponents.map(function(a){return a.games_played;}));
+                        
+                        $scope.playerStats.performanceGraph = {};
+						$scope.playerStats.performanceGraph.data = [$scope.playerStats.performanceHistory.map(function(a){return parseFloat(a.tenGameAverage)})];
+						$scope.playerStats.performanceGraph.labels = $scope.playerStats.performanceHistory.map(function(a){return ""});
+						
+$scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
+$scope.data = [
+[28, 48, 40, 19, 86, 27, 90]
+];
 						
 						console.log($scope);
 					},
