@@ -129,6 +129,12 @@ rebelLeaguesControllers.controller('playersReviewCtrl', ['$scope', '$http', '$mo
 				.then(
 					function success(response) {
 						$scope.playerStats = response.data.data;
+                        
+                        $scope.playerStats.allOpponentsVisible = false;
+                        
+                        if ($scope.playerStats.opponents.length <= 5) {
+                            $scope.playerStats.allOpponentsVisible = true;
+                        }
 						
 						var lastGameDate = new Date(
 							$scope.playerStats.lastgame.date.substring(0,4),
@@ -144,8 +150,30 @@ rebelLeaguesControllers.controller('playersReviewCtrl', ['$scope', '$http', '$mo
                         $scope.playerStats.maxGamesAgainstFaction   = Math.max.apply(null, $scope.playerStats.factionEfficiencyRatiosAgainst.map(function(a){return a.games_played_against;}));
                         
                         $scope.playerStats.maxGamesAgainstPlayer    = Math.max.apply(null, $scope.playerStats.opponents.map(function(a){return a.games_played;}));
-						
-						console.log($scope);
+                        
+                        if ($scope.playerStats.performanceHistory) {
+                            $scope.playerStats.performanceGraph = {};
+                            $scope.playerStats.performanceGraph.data = [$scope.playerStats.performanceHistory.map(function(a){return parseFloat(a.tenGameAverage)})];
+                            $scope.playerStats.performanceGraph.labels = $scope.playerStats.performanceHistory.map(function(a){return ""});
+                            $scope.playerStats.performanceGraph.options = {
+                                                                            animation: false,
+                                                                            pointDot : false,
+                                                                            scaleShowVerticalLines: false,
+                                                                            pointHitDetectionRadius : 0,
+                                                                            bezierCurveTension : 0.1,
+                                                                            scaleOverride: true,
+                                                                            scaleSteps: 4,
+                                                                            scaleStepWidth: 0.25,
+                                                                            scaleStartValue: 0,
+                                                                            scaleLabel: "<%=value*100%>%",
+                                                                            showTooltips: false,
+                                                                            maintainAspectRatio: false
+                            }
+                            $scope.playerStats.performanceGraph.colours = [{
+                                                                            "fillColor": 'rgba(102, 82, 200, 0.2)',
+                                                                            "strokeColor": 'rgba(102, 82, 200, 0.8)'
+                            }];
+                        }
 					},
 					function error(reason) {return false; }
 				);

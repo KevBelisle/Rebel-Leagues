@@ -25,7 +25,8 @@ var rebelLeaguesApp = angular.module('rebelLeaguesApp', [
 	'ngAnimate',
 	'rebelLeaguesControllers',
 	'link',
-	'ui.bootstrap'
+	'ui.bootstrap',
+	'chart.js'
 ]);
 
 rebelLeaguesApp.config([
