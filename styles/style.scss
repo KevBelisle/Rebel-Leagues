@@ -282,6 +282,7 @@ div#wrapper {
 					text-align: center;
 					cursor: pointer;
 					border-bottom: none;
+                    font-size: $small_text;
 				}
 				div.loadMore:hover {
 					background-color: $accent-color;
@@ -355,7 +356,12 @@ div.playersReview {
             }
         }
         
-        section#frequentOpponents {
+        
+            
+        section#performanceHistory {
+            > span {
+                font-size: $small_text;
+            }
         }
         
         section#factionEfficiencyStatsWith,
@@ -424,9 +430,16 @@ div.playersReview {
                     
                 }
                 
-                li:nth-child(2n) {
-                    /*background-color: $xlight_color;*/
-                }
+                li.showAll {
+					padding: 10px;
+					text-align: center;
+					cursor: pointer;
+                    font-size: $small_text;
+				}
+				li.showAll:hover {
+					background-color: $accent-color;
+					color: $light-color;
+				}
             }
         
         }
