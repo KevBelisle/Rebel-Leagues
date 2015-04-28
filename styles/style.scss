@@ -355,7 +355,12 @@ div.playersReview {
             }
         }
         
-        section#frequentOpponents {
+        
+            
+        section#performanceHistory {
+            > span {
+                font-size: $small_text;
+            }
         }
         
         section#factionEfficiencyStatsWith,

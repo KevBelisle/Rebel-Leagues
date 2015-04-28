@@ -26,8 +26,22 @@
 </section>
 -->
 
-<section id="performanceHistory">
-	<canvas style="height: 200px" class="chart chart-line" data="playerStats.performanceGraph.data" labels="playerStats.performanceGraph.labels">
+<section id="performanceHistory" ng-if="playerStats.performanceHistory">
+		
+    <h2>
+        Historique de performance
+    </h2>
+    
+    <span>
+        Ce graphique représente votre moyenne d'efficacité (pourcentage de victoires), calculée grâce à une moyenne mobile sur les 10 dernières parties.
+    </span>
+    
+	<canvas style="height: 200px"
+        class="chart chart-line"
+        data="playerStats.performanceGraph.data"
+        labels="playerStats.performanceGraph.labels"
+        options="playerStats.performanceGraph.options"
+        colours="playerStats.performanceGraph.colours">
 	</canvas>
 </section>
 

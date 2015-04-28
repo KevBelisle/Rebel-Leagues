@@ -285,58 +285,64 @@ class League {
 			array( ':player_id' => $player_id )
 		);
 		
-		getDatabase()->execute("SET @row_numa = 0;");
-		getDatabase()->execute("SET @row_numb = 0;");
-		
-		$performanceHistory = getDatabase()->all("			
-			SELECT
-				a.is_win,
-				a.is_draw,
-				a.is_loss,
-				a.score,
-				a.date,
-				a.row_index,
-				(
-					SELECT
-						SUM(b.score) / COUNT(b.score) as movingAverage
-					FROM (
-						SELECT
-							is_win,
-							is_draw,
-							is_loss,
-							date,
-							IF(is_win, 1, IF(is_draw, 0.5, 0)) as score,
-							@row_numb := @row_numb + 1 as row_index
-						
-						FROM games_split
-						WHERE player_id = :player_id_b
-						ORDER BY date asc
-					) as b
-					WHERE
-						b.row_index > a.row_index - 10
-						AND
-						b.row_index <= a.row_index
-				) as tenGameAverage
-			
-			FROM (
-				SELECT
-					is_win,
-					is_draw,
-					is_loss,
-					date,
-					IF(is_win, 1, IF(is_draw, 0.5, 0)) as score,
-					@row_numa := @row_numa + 1 as row_index
-				
-				FROM games_split
-				WHERE player_id = :player_id_a
-				ORDER BY date asc
-			) as a
-			ORDER BY a.row_index ASC;",
-			array(
-				':player_id_a' => $player_id,
-				':player_id_b' => $player_id
-			)
-		);
+        if ( $gameCounts["total"] >= 20 ) {
+            
+            getDatabase()->execute("SET @row_numa = 0;");
+            getDatabase()->execute("SET @row_numb = 0;");
+            
+            $performanceHistory = getDatabase()->all("			
+                SELECT
+                    a.is_win,
+                    a.is_draw,
+                    a.is_loss,
+                    a.score,
+                    a.date,
+                    a.row_index,
+                    (
+                        SELECT
+                            SUM(b.score) / COUNT(b.score) as movingAverage
+                        FROM (
+                            SELECT
+                                is_win,
+                                is_draw,
+                                is_loss,
+                                date,
+                                IF(is_win, 1, IF(is_draw, 0.5, 0)) as score,
+                                @row_numb := @row_numb + 1 as row_index
+                            
+                            FROM games_split
+                            WHERE player_id = :player_id_b
+                            ORDER BY date asc
+                        ) as b
+                        WHERE
+                            b.row_index > a.row_index - 10
+                            AND
+                            b.row_index <= a.row_index
+                    ) as tenGameAverage
+                
+                FROM (
+                    SELECT
+                        is_win,
+                        is_draw,
+                        is_loss,
+                        date,
+                        IF(is_win, 1, IF(is_draw, 0.5, 0)) as score,
+                        @row_numa := @row_numa + 1 as row_index
+                    
+                    FROM games_split
+                    WHERE player_id = :player_id_a
+                    ORDER BY date asc
+                ) as a
+                WHERE a.row_index >= 10
+                ORDER BY a.row_index ASC;",
+                array(
+                    ':player_id_a' => $player_id,
+                    ':player_id_b' => $player_id
+                )
+            );
+        } else {
+            $performanceHistory = NULL;
+        }
 		
         $lastgame = getDatabase()->one("
 			SELECT players.firstname, players.lastname, players.nickname, games_split.date as date

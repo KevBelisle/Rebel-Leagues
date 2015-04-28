@@ -145,14 +145,29 @@ rebelLeaguesControllers.controller('playersReviewCtrl', ['$scope', '$http', '$mo
                         
                         $scope.playerStats.maxGamesAgainstPlayer    = Math.max.apply(null, $scope.playerStats.opponents.map(function(a){return a.games_played;}));
                         
-                        $scope.playerStats.performanceGraph = {};
-						$scope.playerStats.performanceGraph.data = [$scope.playerStats.performanceHistory.map(function(a){return parseFloat(a.tenGameAverage)})];
-						$scope.playerStats.performanceGraph.labels = $scope.playerStats.performanceHistory.map(function(a){return ""});
-						
-$scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
-$scope.data = [
-[28, 48, 40, 19, 86, 27, 90]
-];
+                        if ($scope.playerStats.performanceHistory) {
+                            $scope.playerStats.performanceGraph = {};
+                            $scope.playerStats.performanceGraph.data = [$scope.playerStats.performanceHistory.map(function(a){return parseFloat(a.tenGameAverage)})];
+                            $scope.playerStats.performanceGraph.labels = $scope.playerStats.performanceHistory.map(function(a){return ""});
+                            $scope.playerStats.performanceGraph.options = {
+                                                                            animation: false,
+                                                                            pointDot : false,
+                                                                            scaleShowVerticalLines: false,
+                                                                            pointHitDetectionRadius : 0,
+                                                                            bezierCurveTension : 0.1,
+                                                                            scaleOverride: true,
+                                                                            scaleSteps: 4,
+                                                                            scaleStepWidth: 0.25,
+                                                                            scaleStartValue: 0,
+                                                                            scaleLabel: "<%=value*100%>%",
+                                                                            showTooltips: false,
+                                                                            maintainAspectRatio: false
+                            }
+                            $scope.playerStats.performanceGraph.colours = [{
+                                                                            "fillColor": 'rgba(102, 82, 200, 0.2)',
+                                                                            "strokeColor": 'rgba(102, 82, 200, 0.8)'
+                            }];
+                        }
 						
 						console.log($scope);
 					},
