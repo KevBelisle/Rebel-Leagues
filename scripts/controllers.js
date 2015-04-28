@@ -213,9 +213,15 @@ rebelLeaguesControllers.controller('factionsReviewCtrl', ['$scope', '$http', '$m
 				.then(
 					function success(response) {
 						$scope.factionStats = response.data.data;
+						$scope.factionStats.maxGamesAgainstFaction   = Math.max.apply(null, $scope.factionStats.efficiencyRatiosAgainst.map(function(a){return a.games_played;}));
+						
 					},
 					function error(reason) {return false; }
+					
 				);
+				
+			
+						
 		
 		$scope.factionSelected = true;
 		

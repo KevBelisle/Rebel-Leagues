@@ -4,19 +4,34 @@
     <div class="factionid">
         <img class="badge" src="api/factions/{{ factionInfo.faction_id }}/logo" tooltip="{{ factionInfo.faction_name }}">
 
-        <span class="something"><strong>{{ factionRanking.games_played }} parties</strong> jouées. Fiche de: {{ factionRanking.games_won }}-{{ factionRanking.games_lost }}-{{ factionRanking.games_tied }}</span>
+        <span class="something">Faction utilisée <strong>{{ factionRanking.games_played }} fois</strong>. {{ factionRanking.games_won }}-{{ factionRanking.games_lost }}-{{ factionRanking.games_tied }}</span>
 		
     </div>
 	
 </header>
-
-		
+<section>
+		<span class="something">Statistiques contre les autres factions</span>
 			<div class="something" ng-repeat="opponent in factionStats.efficiencyRatiosAgainst">
 				<img class="badge" src="api/factions/{{ opponent.rival_faction_id }}/logo" tooltip="{{ opponent.rival_faction_name }}">
-				<span class="name">contre {{ opponent.rival_faction_name }}: </span>
-				<span class="something"><strong>{{ opponent.games_played }} parties</strong> jouées. Fiche de : {{ opponent.games_won }}-{{ opponent.games_lost }}-{{ opponent.games_tied }}
+				<span class="something">Efficacité de {{ opponent.efficiencyRatioAgainst | number:0  }}% avec <strong>{{ opponent.games_played }} parties</strong> jouées. {{ opponent.games_won }}-{{ opponent.games_lost }}-{{ opponent.games_tied }}
 				</span>
 			</div>
+			
+			<div class="stats_bar" ng-attr-style="width: {{ 100 * opponent.games_played / factionStats.maxGamesWithFaction | number:2 | decimalDot }}%">
+        
+            <div class="faction_stats_bar darker" ng-attr-style="width: {{ 99.99 * opponent.games_won / opponent.games_played | number:2 | decimalDot }}%;" tooltip="{{ opponent.games_won }} victoires avec {{ opponent.rival_faction_name }}"></div>
+        
+            <div class="faction_stats_bar" ng-attr-style="width: {{ 99.99 * opponent.games_tied / opponent.games_played | number:2 | decimalDot }}%;" tooltip="{{ opponent.games_tied }} nulles avec {{ opponent.rival_faction_name }}"></div>
+            
+            <div class="faction_stats_bar lighter" ng-attr-style="width: {{ 99.99 * opponent.games_lost / opponent.games_played | number:2 | decimalDot }}%;" tooltip="{{ opponent.games_lost }} défaites avec {{ opponent.rival_faction_name }}"></div>
+            
+        </div>
+		
+</section>
+<section>
+
+</section>
+
 
 		
 

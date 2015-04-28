@@ -290,9 +290,7 @@ class League {
 			array( ':faction_id' => $faction_id )
 		);
 		
-		echo outputSuccess( array(
-			'efficiencyRatiosAgainst' => $efficiencyRatiosAgainst
-		) );
+		echo outputSuccess( $efficiencyRatiosAgainst );
 	}
 	
 	
