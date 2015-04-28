@@ -131,6 +131,10 @@ rebelLeaguesControllers.controller('playersReviewCtrl', ['$scope', '$http', '$mo
 						$scope.playerStats = response.data.data;
                         
                         $scope.playerStats.allOpponentsVisible = false;
+                        
+                        if ($scope.playerStats.opponents.length <= 5) {
+                            $scope.playerStats.allOpponentsVisible = true;
+                        }
 						
 						var lastGameDate = new Date(
 							$scope.playerStats.lastgame.date.substring(0,4),
@@ -170,8 +174,6 @@ rebelLeaguesControllers.controller('playersReviewCtrl', ['$scope', '$http', '$mo
                                                                             "strokeColor": 'rgba(102, 82, 200, 0.8)'
                             }];
                         }
-						
-						console.log($scope);
 					},
 					function error(reason) {return false; }
 				);
