@@ -42,8 +42,7 @@ getRoute()->get('/factions(?:/?)', array('League', 'getFactions'));
 getRoute()->get('/factions/leafs(?:/?)', array('League', 'getLeafFactions'));
 getRoute()->get('/factions/(\d+)(?:/?)', array('League', 'getFaction'));
 getRoute()->get('/factions/(\d+)/stats(?:/?)', array('League', 'getFactionStats'));
-getRoute()->get('/factions/allstats(?:/?)', array('League', 'getFactionsStats'));
-getRoute()->get('/factions/(\d+)/ranking(?:/?)', array('League', 'getFactionRankings'));
+getRoute()->get('/factions/(\d+)/ranking(?:/?)', array('League', 'getFactionRanking'));
 getRoute()->get('/factions/rankings(?:/?)', array('League', 'getFactionsRankings'));
 getRoute()->get('/factions/(\d+)/logo(?:/?)', array('League', 'getFactionLogo'));
 
@@ -221,13 +220,13 @@ class League {
 		echo outputSuccess( array( 'factions' => $factions ) );
 	}
 	
-	public static function getFactionRankings($faction_id) {
-		$factionRankings = getDatabase()->one(
+	public static function getFactionRanking($faction_id) {
+		$factionRanking = getDatabase()->one(
 		"SELECT * FROM factions_ranking
 		WHERE faction_id = :faction_id",
 			array( ':faction_id' => $faction_id )
 		);
-		echo outputSuccess( array( 'factionRankings' => $factionRankings ) );
+		echo outputSuccess( $factionRanking );
 	}
 	
 	public static function getFactionsRankings() {
@@ -278,19 +277,25 @@ class League {
 	
 	
 	public static function getFactionStats($faction_id) {
-		$factions = getDatabase()->all(
-			"SELECT * FROM factions_stats WHERE faction_id = :faction_id ORDER BY games_played DESC",
+		
+		error_reporting(E_ALL);
+		ini_set('display_errors', 1);
+		
+		$efficiencyRatiosAgainst = getDatabase()->all("	
+			SELECT *,
+				FS.games_won/FS.games_played*100 AS efficiencyRatioAgainst
+			FROM factions_stats AS FS
+            WHERE games_played > 0 AND faction_id = :faction_id
+			ORDER BY efficiencyRatioAgainst DESC",
 			array( ':faction_id' => $faction_id )
 		);
-		echo outputSuccess( array( 'factions' => $factions ) );
+		
+		echo outputSuccess( array(
+			'efficiencyRatiosAgainst' => $efficiencyRatiosAgainst
+		) );
 	}
 	
-	public static function getFactionsStats() {
-		$factions = getDatabase()->all(
-			"SELECT * FROM factions_stats"
-		);
-		echo outputSuccess( array( 'factions' => $factions ) );
-	}
+	
 	public static function getPlayerStats($player_id) {
 		
 		error_reporting(E_ALL);

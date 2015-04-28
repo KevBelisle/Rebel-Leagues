@@ -180,6 +180,9 @@ rebelLeaguesControllers.controller('playersReviewCtrl', ['$scope', '$http', '$mo
 rebelLeaguesControllers.controller('factionsReviewCtrl', ['$scope', '$http', '$modal',
 	function($scope, $http, $modal) {
 		
+		$scope.factionSelected = false;
+		$scope.factionid;
+		
 		$http.get('api/factions/')
 			.then(
 				function success(response) {
@@ -188,21 +191,37 @@ rebelLeaguesControllers.controller('factionsReviewCtrl', ['$scope', '$http', '$m
 				function error(reason)     { return false; }
 			);
 		
-		$http.get('api/factions/rankings')
-			.then(
-				function success(response) {
-					$scope.factionsRankings = response.data.data;
-				},
-				function error(reason) {return false; }
-			);
+		$scope.getFactionStats = function () {
+		
+			$http.get('api/factions/' + $scope.factionid)
+				.then(
+					function success(response) {
+						$scope.factionInfo = response.data.data;
+					},
+					function error(reason) {return false; }
+				);
+				
+			$http.get('api/factions/' + $scope.factionid + '/ranking')
+				.then(
+					function success(response) {
+						$scope.factionRanking = response.data.data;
+					},
+					function error(reason) {return false; }
+				);
 			
-		$http.get('api/factions/allstats')
-			.then(
-				function success(response) {
-					$scope.factionsStats = response.data.data;
-				},
-				function error(reason) {return false; }
-			);
+			$http.get('api/factions/' + $scope.factionid  + '/stats')
+				.then(
+					function success(response) {
+						$scope.factionStats = response.data.data;
+					},
+					function error(reason) {return false; }
+				);
+		
+		$scope.factionSelected = true;
+		
+		}
+		
+		
 	
 		console.log($scope);
 	}
