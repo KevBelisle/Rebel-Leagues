@@ -129,6 +129,8 @@ rebelLeaguesControllers.controller('playersReviewCtrl', ['$scope', '$http', '$mo
 				.then(
 					function success(response) {
 						$scope.playerStats = response.data.data;
+                        
+                        $scope.playerStats.allOpponentsVisible = false;
 						
 						var lastGameDate = new Date(
 							$scope.playerStats.lastgame.date.substring(0,4),

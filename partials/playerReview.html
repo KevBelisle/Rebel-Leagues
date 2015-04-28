@@ -115,7 +115,7 @@
     </h2>
         
 	<ul>
-		<li ng-repeat="player in playerStats.opponents">
+		<li ng-repeat="player in playerStats.opponents | limitTo:5">
             <span>
                 <strong>{{ player.games_played }} parties</strong> jouées contre <strong>{{ player.rival_nickname }}</strong> ({{ player.rival_firstname }} {{ player.rival_lastname }}) : {{ player.games_won }} victoires<span ng-show="player.games_lost">, {{ player.games_lost }} défaites</span><span ng-show="player.games_tied">, {{ player.games_tied }} nulles</span>
             </span>
@@ -126,6 +126,22 @@
                 <div class="lighter" ng-attr-style="width: {{ 99.99 * player.games_lost / player.games_played | number:2 | decimalDot }}%" tooltip="{{ player.games_lost }} parties perdues"></div>
             </div>
 		</li>
+        
+		<li ng-repeat="player in playerStats.opponents.slice(5)" ng-show="playerStats.allOpponentsVisible">
+            <span>
+                <strong>{{ player.games_played }} parties</strong> jouées contre <strong>{{ player.rival_nickname }}</strong> ({{ player.rival_firstname }} {{ player.rival_lastname }}) : {{ player.games_won }} victoires<span ng-show="player.games_lost">, {{ player.games_lost }} défaites</span><span ng-show="player.games_tied">, {{ player.games_tied }} nulles</span>
+            </span>
+			
+            <div class="stats_bar" ng-attr-style="width: {{ 100 * player.games_played / playerStats.maxGamesAgainstPlayer | number:2 | decimalDot }}%">
+                <div class="darker" ng-attr-style="width: {{ 99.99 * player.games_won / player.games_played | number:2 | decimalDot }}%" tooltip="{{ player.games_won }} parties gagnées"></div>
+                <div ng-attr-style="width: {{ 99.99 * player.games_tied / player.games_played | number:2 | decimalDot }}%" tooltip="{{ player.games_tied }} parties annulées"></div>
+                <div class="lighter" ng-attr-style="width: {{ 99.99 * player.games_lost / player.games_played | number:2 | decimalDot }}%" tooltip="{{ player.games_lost }} parties perdues"></div>
+            </div>
+		</li>
+        
+        <li class="showAll" ng-hide="playerStats.allOpponentsVisible" ng-click="playerStats.allOpponentsVisible = true">
+            Montrer tous les autres joueurs...
+        </li>
 	</ul>
 
 </section>
