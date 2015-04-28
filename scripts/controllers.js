@@ -177,6 +177,37 @@ rebelLeaguesControllers.controller('playersReviewCtrl', ['$scope', '$http', '$mo
 	}
 ]);
 
+rebelLeaguesControllers.controller('factionsReviewCtrl', ['$scope', '$http', '$modal',
+	function($scope, $http, $modal) {
+		
+		$http.get('api/factions/')
+			.then(
+				function success(response) {
+                    $scope.factions = response.data.data;
+                },
+				function error(reason)     { return false; }
+			);
+		
+		$http.get('api/factions/rankings')
+			.then(
+				function success(response) {
+					$scope.factionsRankings = response.data.data;
+				},
+				function error(reason) {return false; }
+			);
+			
+		$http.get('api/factions/allstats')
+			.then(
+				function success(response) {
+					$scope.factionsStats = response.data.data;
+				},
+				function error(reason) {return false; }
+			);
+	
+		console.log($scope);
+	}
+]);
+
 rebelLeaguesControllers.controller('playersRankingCtrl', ['$scope', '$http', '$modal',
 	function ($scope, $http, $modal) {
 		$http.get('api/ranking').success(function(data) {

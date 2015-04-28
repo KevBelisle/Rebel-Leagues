@@ -1,0 +1,20 @@
+
+<div class="factionsReview">
+
+    <div class="faction" ng-repeat="faction in factions.factions">
+		<section>
+			<img class="badge" src="api/factions/{{ faction.faction_id }}/logo" tooltip="{{ faction.faction_name }}">
+				<span class="name">{{ faction.name }}: </span>
+			<span class="something"><strong>{{ factionsRankings.factionsRankings[faction.faction_id-1].games_played }} parties</strong> jouées avec fiche de: {{ factionsRankings.factionsRankings[faction.faction_id-1].games_won }}-{{ factionsRankings.factionsRankings[faction.faction_id-1].games_lost }}-{{ factionsRankings.factionsRankings[faction.faction_id-1].games_tied }}</span>
+			<div class="againstFaction" ng-repeat="againstFaction in factions.factions">
+				<img class="badge" src="api/factions/{{ againstFaction.faction_id }}/logo" tooltip="{{ againstFaction.faction_name }}">
+				<span class="name">contre {{ againstFaction.name }}: </span>
+				<span class="something"><strong>{{ factionsStats.factionsStats[faction.faction_id-1].games_played }}</strong>
+				</span>
+			</div>
+		</section>
+
+</div>
+
+
+	

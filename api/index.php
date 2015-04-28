@@ -42,6 +42,9 @@ getRoute()->get('/factions(?:/?)', array('League', 'getFactions'));
 getRoute()->get('/factions/leafs(?:/?)', array('League', 'getLeafFactions'));
 getRoute()->get('/factions/(\d+)(?:/?)', array('League', 'getFaction'));
 getRoute()->get('/factions/(\d+)/stats(?:/?)', array('League', 'getFactionStats'));
+getRoute()->get('/factions/allstats(?:/?)', array('League', 'getFactionsStats'));
+getRoute()->get('/factions/(\d+)/ranking(?:/?)', array('League', 'getFactionRankings'));
+getRoute()->get('/factions/rankings(?:/?)', array('League', 'getFactionsRankings'));
 getRoute()->get('/factions/(\d+)/logo(?:/?)', array('League', 'getFactionLogo'));
 
 getRoute()->get('/stats(?:/?)', array('League', 'getStats'));
@@ -218,7 +221,22 @@ class League {
 		echo outputSuccess( array( 'factions' => $factions ) );
 	}
 	
-    
+	public static function getFactionRankings($faction_id) {
+		$factionRankings = getDatabase()->one(
+		"SELECT * FROM factions_ranking
+		WHERE faction_id = :faction_id",
+			array( ':faction_id' => $faction_id )
+		);
+		echo outputSuccess( array( 'factionRankings' => $factionRankings ) );
+	}
+	
+	public static function getFactionsRankings() {
+		$factionsRankings = getDatabase()->all(
+		"SELECT * FROM factions_ranking"
+		);
+		echo outputSuccess( array( 'factionsRankings' => $factionsRankings) );
+    }
+	
 	public static function getLeafFactions() {
 		$factions = getDatabase()->all(
 		'SELECT
@@ -267,7 +285,12 @@ class League {
 		echo outputSuccess( array( 'factions' => $factions ) );
 	}
 	
-
+	public static function getFactionsStats() {
+		$factions = getDatabase()->all(
+			"SELECT * FROM factions_stats"
+		);
+		echo outputSuccess( array( 'factions' => $factions ) );
+	}
 	public static function getPlayerStats($player_id) {
 		
 		error_reporting(E_ALL);
