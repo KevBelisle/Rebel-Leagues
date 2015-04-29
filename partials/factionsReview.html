@@ -1,0 +1,21 @@
+
+<div class="playersReview">
+
+    <header>
+
+		<select
+			ng-model="factionid"
+			ng-change="getFactionStats()">
+			<option value="" disabled>Choisir une faction...</option>
+            <option ng-repeat="faction in factions.factions" value="{{faction.faction_id}}">&nbsp;&nbsp;&nbsp;{{faction.name}}</option>
+		</select>
+        
+    </header>
+		
+    <section ng-if="factionSelected" ng-include="'partials/factionReview.html'"></section>
+
+</div>
+
+
+
+	

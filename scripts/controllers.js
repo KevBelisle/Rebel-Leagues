@@ -205,6 +205,62 @@ rebelLeaguesControllers.controller('playersReviewCtrl', ['$scope', '$http', '$mo
 	}
 ]);
 
+rebelLeaguesControllers.controller('factionsReviewCtrl', ['$scope', '$http', '$modal',
+	function($scope, $http, $modal) {
+		
+		$scope.factionSelected = false;
+		$scope.factionid;
+		
+		$http.get('api/factions/')
+			.then(
+				function success(response) {
+                    $scope.factions = response.data.data;
+                },
+				function error(reason)     { return false; }
+			);
+		
+		$scope.getFactionStats = function () {
+		
+			$http.get('api/factions/' + $scope.factionid)
+				.then(
+					function success(response) {
+						$scope.factionInfo = response.data.data;
+					},
+					function error(reason) {return false; }
+				);
+				
+			$http.get('api/factions/' + $scope.factionid + '/ranking')
+				.then(
+					function success(response) {
+						$scope.factionRanking = response.data.data;
+					},
+					function error(reason) {return false; }
+				);
+			
+			$http.get('api/factions/' + $scope.factionid  + '/stats')
+				.then(
+					function success(response) {
+						$scope.factionStats = response.data.data;
+						$scope.factionStats.maxGamesAgainstFaction   = Math.max.apply(null, $scope.factionStats.efficiencyRatiosAgainst.map(function(a){return a.games_played;}));
+						
+					},
+					function error(reason) {return false; }
+					
+				);
+				
+			
+						
+		
+		$scope.factionSelected = true;
+		
+		}
+		
+		
+	
+		console.log($scope);
+	}
+]);
+
 rebelLeaguesControllers.controller('playersRankingCtrl', ['$scope', '$http', '$modal',
 	function ($scope, $http, $modal) {
 		$http.get('api/ranking').success(function(data) {
