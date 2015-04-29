@@ -283,25 +283,54 @@ class League {
 			array( ':faction_id' => $faction_id )
 		);
 		
+        /*
 		$frequentUseList = getDatabase()->all("
 			SELECT * FROM (
-    SELECT *,  100*highest/total as ratio
+    SELECT *,  100*highest/total_games_played as percentage_played_with
 			FROM
 				(SELECT *, MAX(games_played_with) as highest
-					, SUM(games_played_with) as total
+					, SUM(games_played_with) as total_games_played
 				FROM
 					(SELECT * FROM players_factions_with_stats ORDER BY games_played_with DESC) x
 				GROUP BY player_id
 				) y
 			WHERE faction_id = :faction_id AND highest > 9
-			ORDER BY ratio DESC
+			ORDER BY percentage_played_with DESC
     ) z
-WHERE ratio >=50
+WHERE percentage_played_with >=50
+		",
+		array( ':faction_id' => $faction_id)
+		);
+        */
+        
+		$frequentUseList = getDatabase()->all("
+            SELECT
+                a.player_id,
+                a.player_nickname,
+                a.player_firstname,
+                a.player_lastname,
+                a.games_played_with,
+                100 * a.games_played_with / b.games_played AS percentage_played_with,
+                b.games_played AS total_games_played
+            FROM
+                players_factions_with_stats AS a
+                JOIN
+                players_ranking AS b
+                ON a.player_id = b.player_id
+            WHERE
+                b.games_played >= 10
+                AND
+                a.faction_id = :faction_id
+            ORDER BY
+                percentage_played_with DESC,
+                games_played_with DESC,
+                total_games_played DESC
 		",
 		array( ':faction_id' => $faction_id)
 		);
 		
-		echo outputSuccess( array('efficiencyRatiosAgainst' => $efficiencyRatiosAgainst,
+		echo outputSuccess( array
+            'efficiencyRatiosAgainst' => $efficiencyRatiosAgainst,
 			'frequentUseList' => $frequentUseList
 		));
 	}
