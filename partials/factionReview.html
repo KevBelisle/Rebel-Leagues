@@ -7,12 +7,19 @@
         <span class="something">Faction utilisée <strong>{{ factionRanking.games_played }} fois</strong>. {{ factionRanking.games_won }}-{{ factionRanking.games_lost }}-{{ factionRanking.games_tied }}</span>
 		<p>
 		<span class="something">Joueurs pour lesquels cette faction est leur choix le plus fréquent: </span></p>
-			<div class="something" ng-repeat="player in factionStats.frequentUseList">
-				<strong>{{ player.player_nickname }}</strong> ({{ player.player_firstname }} {{ player.player_lastname }}) {{ player.games_played_with }} fois ({{ 100* player.games_played_with / player.total | number:0 }}% de ses parties)
-			</div>
+			<ul>
+				<li ng-repeat="player in factionStats.frequentUseList  | limitTo:5">
+					<strong>{{ player.player_nickname }}</strong> ({{ player.player_firstname }} {{ player.player_lastname }}) {{ player.games_played_with }} fois ({{ 100* player.games_played_with / player.total | number:0 }}% de ses {{ player.total }} parties)
+				</li>
+				
+				<li ng-repeat="player in factionStats.frequentUseList.slice(5)" ng-show="factionStats.allUsersVisible">
+					<strong>{{ player.player_nickname }}</strong> ({{ player.player_firstname }} {{ player.player_lastname }}) {{ player.games_played_with }} fois ({{ 100* player.games_played_with / player.total | number:0 }}% de ses {{ player.total }} parties)
+				</li>
 
-
-		
+				<li class="showAll" ng-hide="factionStats.allUsersVisible" ng-click="factionStats.allUsersVisible = true">
+				Montrer tous les autres joueurs...
+				</li>
+			</ul>
     </div>
 	
 </header>
