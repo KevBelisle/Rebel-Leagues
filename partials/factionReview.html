@@ -5,11 +5,18 @@
         <img class="badge" src="api/factions/{{ factionInfo.faction_id }}/logo" tooltip="{{ factionInfo.faction_name }}">
 
         <span class="something">Faction utilisée <strong>{{ factionRanking.games_played }} fois</strong>. {{ factionRanking.games_won }}-{{ factionRanking.games_lost }}-{{ factionRanking.games_tied }}</span>
+		<p>
+		<span class="something">Joueurs pour lesquels cette faction est leur choix le plus fréquent: </span></p>
+			<div class="something" ng-repeat="player in factionStats.frequentUseList">
+				<strong>{{ player.player_nickname }}</strong> ({{ player.player_firstname }} {{ player.player_lastname }}) {{ player.games_played_with }} fois ({{ 100* player.games_played_with / player.total | number:0 }}% des parties)
+			</div>
+
+
 		
     </div>
 	
 </header>
-<section>
+<section id="factionEfficiencyStatsWith">
 		<span class="something">Statistiques contre les autres factions</span>
 			<div class="faction" ng-repeat="opponent in factionStats.efficiencyRatiosAgainst">
 				<img class="badge" src="api/factions/{{ opponent.rival_faction_id }}/logo" tooltip="{{ opponent.rival_faction_name }}">
@@ -28,9 +35,6 @@
 				</div>
 			</div>
 		
-</section>
-<section>
-
 </section>
 
 

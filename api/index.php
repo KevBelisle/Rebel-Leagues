@@ -290,7 +290,24 @@ class League {
 			array( ':faction_id' => $faction_id )
 		);
 		
-		echo outputSuccess( array('efficiencyRatiosAgainst' => $efficiencyRatiosAgainst ));
+		$frequentUseList = getDatabase()->all("
+			SELECT *
+			FROM
+				(SELECT *, MAX(games_played_with) as highest
+					, SUM(games_played_with) as total
+				FROM
+					(SELECT * FROM players_factions_with_stats ORDER BY games_played_with DESC) x
+				GROUP BY player_id
+				) y
+			WHERE faction_id = :faction_id 
+			ORDER BY highest DESC
+		",
+		array( ':faction_id' => $faction_id)
+		);
+		
+		echo outputSuccess( array('efficiencyRatiosAgainst' => $efficiencyRatiosAgainst,
+			'frequentUseList' => $frequentUseList
+		));
 	}
 	
 	
