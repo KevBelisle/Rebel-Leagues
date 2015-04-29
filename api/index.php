@@ -329,7 +329,7 @@ WHERE percentage_played_with >=50
 		array( ':faction_id' => $faction_id)
 		);
 		
-		echo outputSuccess( array
+		echo outputSuccess( array(
             'efficiencyRatiosAgainst' => $efficiencyRatiosAgainst,
 			'frequentUseList' => $frequentUseList
 		));
