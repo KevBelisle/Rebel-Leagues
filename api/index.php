@@ -327,6 +327,38 @@ class League {
 			WHERE player_id = :player_id",
 			array( ':player_id' => $player_id )
 		);
+        
+        getDatabase()->execute("SET @row_numa = 0;");
+        getDatabase()->execute("SET @row_numb = 0;");
+        getDatabase()->execute("SET @row_numc = 0;");
+        getDatabase()->execute("SET @row_numd = 0;");
+        $longestStreak = getDatabase()->one("
+            SELECT MIN( c.id ) - a.id + 1 as longestStreak
+
+            FROM (SELECT @row_numa := @row_numa + 1 as id, is_win FROM games_split WHERE player_id = :player_id_a ORDER BY date asc) AS a
+
+            LEFT JOIN (SELECT @row_numb := @row_numb + 1 as id, is_win FROM games_split WHERE player_id = :player_id_b ORDER BY date asc) AS b ON a.id = b.id + 1 AND b.is_win = 1
+
+            LEFT JOIN (SELECT @row_numc := @row_numc + 1 as id, is_win FROM games_split WHERE player_id = :player_id_c ORDER BY date asc) AS c ON a.id <= c.id AND c.is_win = 1
+
+            LEFT JOIN (SELECT @row_numd := @row_numd + 1 as id, is_win FROM games_split WHERE player_id = :player_id_d ORDER BY date asc) AS d ON c.id = d.id - 1 AND d.is_win = 1
+
+            WHERE
+                a.is_win = 1
+                AND b.id IS NULL
+                AND c.id IS NOT NULL
+                AND d.id IS NULL
+            GROUP BY a.id
+            ORDER BY longestStreak DESC LIMIT 1;",
+            array(
+                ':player_id_a' => $player_id,
+                ':player_id_b' => $player_id,
+                ':player_id_c' => $player_id,
+                ':player_id_d' => $player_id
+            )
+        );
+        
+        $gameCounts["longestStreak"] = $longestStreak["longestStreak"];
 		
         if ( $gameCounts["total"] >= 20 ) {
             
