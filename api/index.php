@@ -275,12 +275,19 @@ class League {
 		ini_set('display_errors', 1);
 		
 		$efficiencyRatiosAgainst = getDatabase()->all("	
-			SELECT *,
+			SELECT
+                *,
 				FS.games_won/FS.games_played*100 AS efficiencyRatioAgainst
 			FROM factions_stats AS FS
-            WHERE games_played > 0 AND faction_id = :faction_id
+            WHERE
+                games_played > 0
+                AND faction_id = :faction_id_a
+                AND rival_faction_id != :faction_id_b
 			ORDER BY efficiencyRatioAgainst DESC",
-			array( ':faction_id' => $faction_id )
+			array(
+                ':faction_id_a' => $faction_id,
+                ':faction_id_b' => $faction_id
+            )
 		);
 		
         /*
