@@ -143,6 +143,11 @@ div#wrapper { width: $cols4; }
             }
         }
         
+        
+        > section#usageGraph {
+            padding: 10px;
+        }
+        
         > section {
             > header {
                 padding: 10px 10px 10px 66px;

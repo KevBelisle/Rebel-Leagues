@@ -324,6 +324,19 @@ div.factionsReview {
         }
     }
     
+    > section#usageGraph {
+        border-top: 0;
+        border-bottom: 3px solid $accent_color;
+        
+        h2 {
+            color: $xxdark_color;
+            font-weight: $medium_weight;
+        }
+        > span {
+            font-size: $small_text;
+        }
+    }
+    
     > section {
         border-top: 3px solid $accent_color;
         background-color: $xlight_color;

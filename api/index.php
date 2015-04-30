@@ -31,12 +31,14 @@ getRoute()->get('/games(?:/?)', array('League', 'getGamesHistory'));
 getRoute()->get('/games/(\d+)(?:/?)', array('League', 'getGamesHistory'));
 getRoute()->get('/games/(\d+)/(\d+)(?:/?)', array('League', 'getGamesHistory'));
 getRoute()->get('/games(?:/?)/all', array('League', 'getGamesHistoryAll'));
+
 getRoute()->get('/ranking(?:/?)', array('League', 'getRanking'));
 getRoute()->get('/ranking/(\d+)(?:/?)', array('League', 'getRanking'));
 
 getRoute()->get('/factions(?:/?)', array('League', 'getFactions'));
 getRoute()->get('/factions/leafs(?:/?)', array('League', 'getLeafFactions'));
 getRoute()->get('/factions/(\d+)(?:/?)', array('League', 'getFaction'));
+getRoute()->get('/factions/stats(?:/?)', array('League', 'getFactionsStats'));
 getRoute()->get('/factions/(\d+)/stats(?:/?)', array('League', 'getFactionStats'));
 getRoute()->get('/factions/(\d+)/ranking(?:/?)', array('League', 'getFactionRanking'));
 getRoute()->get('/factions/rankings(?:/?)', array('League', 'getFactionsRankings'));
@@ -94,7 +96,7 @@ function check_property_equals($property = "", $value = 0) {
 
 
 function outputSuccess($data) {
-	return json_encode( array('status' => 'success', 'data' => $data), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
+	return json_encode( array('status' => 'success', 'data' => $data), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK );
 }
 
 
@@ -267,6 +269,72 @@ class League {
 		);
 		echo outputSuccess( $faction );
 	}
+    
+    
+    public static function getFactionsStats() {
+		$factions = getDatabase()->all("
+            SELECT
+                c.faction_id AS faction_id
+            FROM factions c
+            LEFT JOIN factions p ON c.parent_faction_id = p.faction_id
+            WHERE c.faction_id NOT IN (
+                    SELECT parent_faction_id AS faction_id
+                    FROM factions
+                    WHERE parent_faction_id IS NOT NULL
+                )
+            ORDER BY c.faction_id"
+		);
+        
+        $factionsStats = array();
+        
+        foreach( $factions as $faction ) {
+            getDatabase()->execute("SET @row_numa = 0");
+            getDatabase()->execute("SET @row_numb = 0");
+        
+            $factionsStatsRaw = getDatabase()->all("
+                SELECT
+                    a.row_index,
+                    (
+                        SELECT
+                            SUM(b.faction_use) / 20 as tenGameAverage
+                        FROM ( 
+                            SELECT
+                                @row_numb := @row_numb + 1 AS row_index,
+                                (player1_faction_id = :faction_id_a) + (player2_faction_id = :faction_id_b) AS faction_use
+                            FROM games
+                            ORDER BY game_id ASC
+                        ) AS b
+                        WHERE
+                            b.row_index > a.row_index - 10
+                            AND
+                            b.row_index <= a.row_index
+                    ) AS tenGameAverage
+                FROM ( 
+                    SELECT
+                        @row_numa := @row_numa + 1 AS row_index
+                    FROM games
+                    ORDER BY game_id ASC
+                ) AS a
+                WHERE a.row_index >= 10
+                ORDER BY a.row_index ASC",
+                array(
+                    ':faction_id_a' => $faction["faction_id"],
+                    ':faction_id_b' => $faction["faction_id"]
+                )
+            );
+            
+            //print_r($factionsStatsRaw);
+            
+            $factionsStats[$faction["faction_id"]] = array();
+            
+            foreach( $factionsStatsRaw as $row ) {
+                $factionsStats[$faction["faction_id"]][] = $row["tenGameAverage"];
+            }
+        }
+        
+		echo outputSuccess( $factionsStats );
+    }
+    
 	
 	
 	public static function getFactionStats($faction_id) {
