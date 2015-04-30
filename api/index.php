@@ -364,7 +364,7 @@ WHERE percentage_played_with >=50
         getDatabase()->execute("SET @row_numb = 0;");
         getDatabase()->execute("SET @row_numc = 0;");
         getDatabase()->execute("SET @row_numd = 0;");
-        $streakInfo = getDatabase()->all("
+        $streakInfo = getDatabase()->one("
             SELECT
                 MAX(f.currentStreak) AS currentStreak,
                 MAX(f.longestStreak) AS longestStreak

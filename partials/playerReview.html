@@ -8,7 +8,13 @@
         <span class="nickname">{{ playerInfo.nickname }}</span>
         <span class="fullname">({{ playerInfo.firstname }} {{ playerInfo.lastname }})</span>
         <span class="lastgame">Dernière partie le {{ playerStats.lastgame.date }} contre {{ playerStats.lastgame.nickname }} ({{ playerStats.lastgame.firstname }} {{ playerStats.lastgame.lastname }}).</span>
-		<span class="gameCounts">{{ playerStats.gameCounts.total }} parties jouées ({{ playerStats.gameCounts.in_person }} en personne et {{ playerStats.gameCounts.online }} sur internet).</span>
+        <span class="currentStreak" ng-show="playerStats.gameCounts.streakInfo.currentStreak > 3">
+            Présentement sur une séquence de {{ playerStats.gameCounts.streakInfo.currentStreak }} victoires consécutives!
+        </span>
+        <span class="longestStreak" ng-show="playerStats.gameCounts.streakInfo.longestStreak > 3">
+            Série de victoires consécutive la plus longue: {{ playerStats.gameCounts.streakInfo.longestStreak }} victoires!
+        </span>
+		<span class="gameCounts">{{ playerStats.gameCounts.total }} parties jouées en tout<span ng-show="playerStats.gameCounts.online > 0"> ({{ playerStats.gameCounts.in_person }} en personne et {{ playerStats.gameCounts.online }} sur internet)</span>.</span>
 
     </div>
 	

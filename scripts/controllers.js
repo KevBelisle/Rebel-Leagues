@@ -174,6 +174,8 @@ rebelLeaguesControllers.controller('playersReviewCtrl', ['$scope', '$http', '$mo
                                                                             "strokeColor": 'rgba(102, 82, 200, 0.8)'
                             }];
                         }
+                        
+                        console.log($scope);
 					},
 					function error(reason) {return false; }
 				);

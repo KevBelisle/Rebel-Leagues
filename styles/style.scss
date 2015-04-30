@@ -337,11 +337,14 @@ div.playersReview {
                     color: $xxdark_color;
                     font-weight: $medium_weight;
                     font-size: $large_text;
+                    display: inline;
                 }
                 span.fullname {
                     color: $xdark_color;
+                    font-size: $normal_text;
+                    display: inline;
                 }
-                span.lastgame, span.gameCounts {
+                > span {
                     display: block;
                     font-size: $small_text;
                 }
