@@ -314,7 +314,8 @@ div#wrapper {
 
 
 
-div.playersReview {
+div.playersReview,
+div.factionsReview {
     > header {
         background-color: $dark_color;
         
@@ -330,10 +331,11 @@ div.playersReview {
         > header {
             background-color: $xlight_color;
             
-            div.playerid {
+            div.playerid,
+            div.factionid {
                 text-align: left;
             
-                span.nickname {
+                span.name, span.nickname {
                     color: $xxdark_color;
                     font-weight: $medium_weight;
                     font-size: $large_text;
@@ -368,9 +370,15 @@ div.playersReview {
         }
         
         section#factionEfficiencyStatsWith,
-        section#factionEfficiencyStatsAgainst {
+        section#factionEfficiencyStatsAgainst,
+        section#factionEfficiencyStats {
             div.faction {
                 font-size: $small_text;
+                
+                strong {
+                    font-weight: $heavy_weight;
+                    color: $xxdark_color;
+                }
                 
                 div.stats_bar {
                     height: 15px;
@@ -396,14 +404,11 @@ div.playersReview {
         }
         
         section#opponentStats {
-            
             ul {
                 li {
                     display: table;
                     width: 100%;
                     padding: 10px;
-                        
-                    /*border-bottom: 1px solid $dark_color;*/
                     
                     > span {
                         font-size: $small_text;
@@ -444,7 +449,53 @@ div.playersReview {
 					color: $light-color;
 				}
             }
+        }
         
+        section#frequentUsers {
+            ul {
+                margin-top: 10px;
+                
+                li {
+                    list-style-type: none;
+                    font-size: $small_text;
+                    
+                    padding: 10px;
+                    
+                    strong {
+                        color: $xxdark_color;
+                    }
+                    
+                    div.stats_bar {
+                        height: 15px;
+                        margin-top: 5px;
+                        background-color: lighten( $accent-color, 10%);
+                        
+                        div {
+                            height: 100%;
+                            float: left;
+                            background-color: $accent-color;
+                        }
+                        div.darker {
+                            background-color: darken( $accent-color, 10%);
+                        }
+                        div.percentage_played_with div:hover {
+                            box-sizing: border-box;
+                            border-bottom: 15px solid rgba(200,200,200,0.5);
+                        }
+                    }
+                }
+                
+                li.showAll {
+					padding: 10px;
+					text-align: center;
+					cursor: pointer;
+                    font-size: $small_text;
+                }
+				li.showAll:hover {
+					background-color: $accent-color;
+					color: $light-color;
+				}
+            }
         }
         
         > section {
@@ -457,7 +508,6 @@ div.playersReview {
         }
     }
 }
-
 
 
 div.tooltip {

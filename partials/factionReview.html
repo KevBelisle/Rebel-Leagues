@@ -4,28 +4,37 @@
     <div class="factionid">
         <img class="badge" src="api/factions/{{ factionInfo.faction_id }}/logo" tooltip="{{ factionInfo.faction_name }}">
 
+        <span class="name">{{ factionInfo.faction_name }}</span>
         <span class="something">Faction utilisée <strong>{{ factionRanking.games_played }} fois</strong>: {{ factionRanking.games_won }} victoires, {{ factionRanking.games_lost }} défaites et {{ factionRanking.games_tied }} nulles.</span>
 </header>
 
-<section id="factionEfficiencyStatsWith">
-    <h2>Joueurs pour lesquels cette faction est leur choix le plus fréquent: </h2>
+<section id="frequentUsers">
+    <h2>Joueurs qui utilisent fréquemment cette faction</h2>
     
     <ul>
         <li ng-repeat="player in factionStats.frequentUseList  | limitTo:5">
             <strong>{{ player.player_nickname }}</strong> ({{ player.player_firstname }} {{ player.player_lastname }}) {{ player.games_played_with }} fois ({{ player.percentage_played_with | number:0 }}% de ses {{ player.total_games_played }} parties)
+            
+            <div class="stats_bar" ng-attr-style="width: 100%">
+                <div class="percentage_played_with darker" ng-attr-style="width: {{ player.percentage_played_with | number:2 | decimalDot }}%;" tooltip="{{ player.percentage_played_with | number:0 }}% d'utilisation"></div>
+            </div>
         </li>
         
         <li ng-repeat="player in factionStats.frequentUseList.slice(5)" ng-show="factionStats.allUsersVisible">
-            <strong>{{ player.player_nickname }}</strong> ({{ player.player_firstname }} {{ player.player_lastname }}) {{ player.games_played_with }} fois ({{ 100* player.games_played_with / player.total | number:0 }}% de ses {{ player.total }} parties)
+            <strong>{{ player.player_nickname }}</strong> ({{ player.player_firstname }} {{ player.player_lastname }}) {{ player.games_played_with }} fois ({{ player.percentage_played_with | number:0 }}% de ses {{ player.total_games_played }} parties)
+            
+            <div class="stats_bar" ng-attr-style="width: 100%">
+                <div class="percentage_played_with darker" ng-attr-style="width: {{ player.percentage_played_with | number:2 | decimalDot }}%;" tooltip="{{ player.percentage_played_with | number:0 }}% d'utilisation"></div>
+            </div>
         </li>
 
         <li class="showAll" ng-hide="factionStats.allUsersVisible" ng-click="factionStats.allUsersVisible = true">
-        Montrer tous les autres joueurs...
+        Montrer les autres joueurs...
         </li>
     </ul>
 </section>
 	
-<section id="factionEfficiencyStatsWith">
+<section id="factionEfficiencyStats">
     <h2>Statistiques contre les autres factions</h2>
     
     <div class="faction" ng-repeat="opponent in factionStats.efficiencyRatiosAgainst">

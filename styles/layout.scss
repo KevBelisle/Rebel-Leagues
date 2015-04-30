@@ -132,7 +132,8 @@ div#wrapper { width: $cols4; }
 	}
     
     
-    div.playersReview {
+    div.playersReview,
+    div.factionsReview {
         > header {
             padding: 20px 0;
             
@@ -142,12 +143,14 @@ div#wrapper { width: $cols4; }
             }
         }
         
-        > section {            
+        > section {
             > header {
                 padding: 10px 10px 10px 66px;
                 position: relative;
+                min-height: 66px;
                 
-                div.playerid {
+                div.playerid,
+                div.factionid {
                     overflow: auto;
                     
                     img.badge {
@@ -171,7 +174,8 @@ div#wrapper { width: $cols4; }
             }
             
             section#factionEfficiencyStatsWith,
-            section#factionEfficiencyStatsAgainst {
+            section#factionEfficiencyStatsAgainst,
+            section#factionEfficiencyStats {
                 position: relative;
                     
                 div.faction {
