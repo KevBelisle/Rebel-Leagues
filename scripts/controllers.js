@@ -3,6 +3,14 @@ var monthNames = [ "janvier", "février", "mars", "avril", "mai", "juin",
 
 var rebelLeaguesControllers = angular.module('rebelLeaguesControllers', ['ui.bootstrap']);
 
+rebelLeaguesControllers.controller('mobileMenuCtrl', ['$scope',
+	function ($scope) {
+		
+		$scope.showMenu = false;
+		
+	}
+]);
+
 rebelLeaguesControllers.controller('gamesHistoryCtrl', ['$scope', '$http', '$modal',
 	function ($scope, $http, $modal) {
 	

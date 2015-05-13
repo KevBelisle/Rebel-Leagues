@@ -22,10 +22,6 @@ div#wrapper {
 
 	div#left {
 		section {
-			nav a {
-				display: block;
-				float: left;
-			}
 		}
 	}
 }
@@ -33,7 +29,21 @@ div#wrapper {
 
 
 // Default styling here
-div#topBar div { width: $cols4; }
+div#topBar div {
+	 width: $cols4;
+	 
+ 	 nav div {
+		position: absolute;
+		top: 40px;
+		
+		a {
+			display: block;
+			width: 100%;
+		}
+	 }
+
+}
+
 div#wrapper { width: $cols4; }
 
 	div#right {
@@ -43,6 +53,7 @@ div#wrapper { width: $cols4; }
 			width: 100%;
 			margin-top: 20px;
 		}
+		nav { display: none; }
 		aside { display: none; }
 	}
 	
@@ -51,8 +62,6 @@ div#wrapper { width: $cols4; }
 		
 		> section {
 			width: 100%;
-			
-			nav a { width: 33.3333%; }
 			
 			div#main {
 				div.game {
@@ -285,7 +294,13 @@ div#wrapper { width: $cols4; }
 
 // Larger pads
 @media only screen and (min-width: 768px) {
-	div#topBar div { width: $cols9; }
+	div#topBar {
+		 div {
+		 	width: $cols9;
+		 	
+		 	nav { display: none; }
+	 	}
+	}
 	div#wrapper { width: $cols9; }
 	
 		div#right {
@@ -295,7 +310,8 @@ div#wrapper { width: $cols4; }
 			header {
 				margin-top: 70px;
 			}
-			aside {
+			
+			nav, aside {
 				display: block;
 				width: 100%;
 			}

@@ -46,14 +46,45 @@ div#topBar {
 	color: $xlight_color;
 	
 	div {
-		line-height: 40px;
-		text-align: right;
-		a {
+		
+	 	 nav {
+			i {
+				float: left;
+				line-height: 40px;
+				padding: 0 12px;
+				cursor: pointer;
+			}
+			
+			i:hover {
+				color: #c30008;
+				background-color: $xlight_color;
+			}
+		
+	 	 	div {
+				background: $light_color;
+				border-bottom: 3px solid $accent_color;
+				
+				a {
+					color: $xxdark_color;
+					text-align: center;
+					line-height: 40px;
+					text-decoration: none;
+				}
+				a:hover {
+					font-weight: $heavy_weight;
+				}
+	 	 	}
+		 }
+		
+		a.rebelLeagues {
+			line-height: 40px;
 			text-decoration: none;
 			color: inherit;
-		}
-		strong {
-			font-weight: $heavy_weight;
+			float: right;
+			
+			strong {
+				font-weight: $heavy_weight;
+			}
 		}
 	}
 }
@@ -93,10 +124,35 @@ div#wrapper {
 			}
 		}
 		
-		aside {
+		nav {
+			color: $xdark_color;
+			
 			border-top: 3px solid $xlight_color;
 			margin-top: 30px;
-			padding-top: 30px;
+			padding-top: 10px;
+			
+			border-bottom: 3px solid $xlight_color;
+			margin-bottom: 30px;
+			padding-bottom: 10px;
+			
+			a {
+				display: block;
+				font-weight: $xlight_weight;
+				text-align: center;
+				padding: 5px 0 4px 0;
+				text-decoration: none;
+				color: $xlight_color;
+			}
+			a:hover {
+				font-weight: $heavy_weight;
+			}
+			a.active {
+				background-color: $accent_color;
+				color: $xlight_color;
+			}
+		}
+		
+		aside {
 			
 			div#stats {
 				ul {
@@ -144,24 +200,10 @@ div#wrapper {
 	}
 	
 	div#left {
+        
+        margin-top: 30px;
 	
 		section {
-			nav {
-				color: $xdark_color;
-				
-				a {
-					font-weight: $light_weight;
-					text-align: center;
-					padding: 20px 0 10px 0;
-					text-decoration: none;
-					color: $xdark_color;
-				}
-				a.active {
-					border-bottom: 4px solid $accent_color;
-					color: $accent_color;
-					font-weight: $heavy_weight;
-				}
-			}
 			div#main {
 				background: $xlight_color;
 				color: $xdark_color;
