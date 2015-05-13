@@ -3,6 +3,14 @@ var monthNames = [ "janvier", "février", "mars", "avril", "mai", "juin",
 
 var rebelLeaguesControllers = angular.module('rebelLeaguesControllers', ['ui.bootstrap']);
 
+rebelLeaguesControllers.controller('mobileMenuCtrl', ['$scope',
+	function ($scope) {
+		
+		$scope.showMenu = false;
+		
+	}
+]);
+
 rebelLeaguesControllers.controller('gamesHistoryCtrl', ['$scope', '$http', '$modal',
 	function ($scope, $http, $modal) {
 	
@@ -174,6 +182,8 @@ rebelLeaguesControllers.controller('playersReviewCtrl', ['$scope', '$http', '$mo
                                                                             "strokeColor": 'rgba(102, 82, 200, 0.8)'
                             }];
                         }
+                        
+                        console.log($scope);
 					},
 					function error(reason) {return false; }
 				);
@@ -202,6 +212,114 @@ rebelLeaguesControllers.controller('playersReviewCtrl', ['$scope', '$http', '$mo
 			});
 		};
 		
+	}
+]);
+
+rebelLeaguesControllers.controller('factionsReviewCtrl', ['$scope', '$http', '$modal',
+	function($scope, $http, $modal) {
+		
+		$scope.factionSelected = false;
+		$scope.factionid;
+		
+		$http.get('api/factions/')
+			.then(
+				function success(response) {
+                    $scope.factions = response.data.data.factions;
+                },
+				function error(reason)     { return false; }
+			);
+            
+		$http.get('api/factions/stats/')
+			.then(
+				function success(response) {
+                
+                    //$scope.factionsStats.rawUsageData = response.data.data;
+                    
+                    var data = response.data.data;
+                    
+                    $scope.factionsStats = {};
+                    $scope.factionsStats.usageGraph = {};
+                    $scope.factionsStats.usageGraph.data = [];
+                    $scope.factionsStats.usageGraph.series = [];
+                    $scope.factionsStats.usageGraph.colours = [];
+                    
+                    $scope.factions.forEach( function(faction) {
+                        var id = faction.faction_id;
+                        $scope.factionsStats.usageGraph.data.push( data[id] );
+                        $scope.factionsStats.usageGraph.series.push(faction.name);
+                        $scope.factionsStats.usageGraph.colours.push({
+                            "fillColor": '#' + faction.color,
+                            "strokeColor": '#' + faction.color
+                        });
+                    });
+                    
+                    for ( var i = $scope.factionsStats.usageGraph.data.length-2; i >= 0; i-- ) {
+                        var dataset = $scope.factionsStats.usageGraph.data[i];
+                        dataset.forEach( function (data, index, dataset) {
+                            dataset[index] = dataset[index] + $scope.factionsStats.usageGraph.data[i+1][index];
+                        });
+                    }
+                    
+                    $scope.factionsStats.usageGraph.labels = $scope.factionsStats.usageGraph.data[0].map(function(a){return ""});
+                    $scope.factionsStats.usageGraph.options = {
+                                                                    animation: false,
+                                                                    pointDot : false,
+                                                                    scaleShowVerticalLines: false,
+                                                                    pointHitDetectionRadius : 0,
+                                                                    bezierCurveTension : 0.1,
+                                                                    datasetStroke : false,
+                                                                    datasetStrokeWidth : 0,
+                                                                    scaleOverride: true,
+                                                                    scaleSteps: 4,
+                                                                    scaleStepWidth: 0.25,
+                                                                    scaleStartValue: 0,
+                                                                    scaleLabel: "<%=100*value%>%",
+                                                                    showTooltips: false,
+                                                                    maintainAspectRatio: false
+                    };
+                },
+				function error(reason)     { return false; }
+			);
+		
+		$scope.getFactionStats = function () {
+		
+			$http.get('api/factions/' + $scope.factionid)
+				.then(
+					function success(response) {
+						$scope.factionInfo = response.data.data;
+					},
+					function error(reason) {return false; }
+				);
+				
+			$http.get('api/factions/' + $scope.factionid + '/ranking')
+				.then(
+					function success(response) {
+						$scope.factionRanking = response.data.data;
+					},
+					function error(reason) {return false; }
+				);
+			
+			$http.get('api/factions/' + $scope.factionid  + '/stats')
+				.then(
+					function success(response) {
+						$scope.factionStats = response.data.data;
+						$scope.factionStats.maxGamesAgainstFaction   = Math.max.apply(null, $scope.factionStats.efficiencyRatiosAgainst.map(function(a){return a.games_played;}));
+						
+					},
+					function error(reason) {return false; }
+					
+				);
+				
+			
+						
+		
+		$scope.factionSelected = true;
+		
+		}
+		
+		
+	
+		console.log($scope);
 	}
 ]);
 

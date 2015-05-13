@@ -31,13 +31,17 @@ getRoute()->get('/games(?:/?)', array('League', 'getGamesHistory'));
 getRoute()->get('/games/(\d+)(?:/?)', array('League', 'getGamesHistory'));
 getRoute()->get('/games/(\d+)/(\d+)(?:/?)', array('League', 'getGamesHistory'));
 getRoute()->get('/games(?:/?)/all', array('League', 'getGamesHistoryAll'));
+
 getRoute()->get('/ranking(?:/?)', array('League', 'getRanking'));
 getRoute()->get('/ranking/(\d+)(?:/?)', array('League', 'getRanking'));
 
 getRoute()->get('/factions(?:/?)', array('League', 'getFactions'));
 getRoute()->get('/factions/leafs(?:/?)', array('League', 'getLeafFactions'));
 getRoute()->get('/factions/(\d+)(?:/?)', array('League', 'getFaction'));
+getRoute()->get('/factions/stats(?:/?)', array('League', 'getFactionsStats'));
 getRoute()->get('/factions/(\d+)/stats(?:/?)', array('League', 'getFactionStats'));
+getRoute()->get('/factions/(\d+)/ranking(?:/?)', array('League', 'getFactionRanking'));
+getRoute()->get('/factions/rankings(?:/?)', array('League', 'getFactionsRankings'));
 getRoute()->get('/factions/(\d+)/logo(?:/?)', array('League', 'getFactionLogo'));
 
 getRoute()->get('/stats(?:/?)', array('League', 'getStats'));
@@ -92,7 +96,7 @@ function check_property_equals($property = "", $value = 0) {
 
 
 function outputSuccess($data) {
-	return json_encode( array('status' => 'success', 'data' => $data), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
+	return json_encode( array('status' => 'success', 'data' => $data), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK );
 }
 
 
@@ -211,7 +215,22 @@ class League {
 		echo outputSuccess( array( 'factions' => $factions ) );
 	}
 	
-    
+	public static function getFactionRanking($faction_id) {
+		$factionRanking = getDatabase()->one(
+		"SELECT * FROM factions_ranking
+		WHERE faction_id = :faction_id",
+			array( ':faction_id' => $faction_id )
+		);
+		echo outputSuccess( $factionRanking );
+	}
+	
+	public static function getFactionsRankings() {
+		$factionsRankings = getDatabase()->all(
+		"SELECT * FROM factions_ranking"
+		);
+		echo outputSuccess( array( 'factionsRankings' => $factionsRankings) );
+    }
+	
 	public static function getLeafFactions() {
 		$factions = getDatabase()->all(
 		'SELECT
@@ -250,17 +269,148 @@ class League {
 		);
 		echo outputSuccess( $faction );
 	}
+    
+    
+    public static function getFactionsStats() {
+		$factions = getDatabase()->all("
+            SELECT
+                c.faction_id AS faction_id
+            FROM factions c
+            LEFT JOIN factions p ON c.parent_faction_id = p.faction_id
+            WHERE c.faction_id NOT IN (
+                    SELECT parent_faction_id AS faction_id
+                    FROM factions
+                    WHERE parent_faction_id IS NOT NULL
+                )
+            ORDER BY c.faction_id"
+		);
+        
+        $factionsStats = array();
+        
+        foreach( $factions as $faction ) {
+            getDatabase()->execute("SET @row_numa = 0");
+            getDatabase()->execute("SET @row_numb = 0");
+        
+            $factionsStatsRaw = getDatabase()->all("
+                SELECT
+                    a.row_index,
+                    (
+                        SELECT
+                            SUM(b.faction_use) / 20 as tenGameAverage
+                        FROM ( 
+                            SELECT
+                                @row_numb := @row_numb + 1 AS row_index,
+                                (player1_faction_id = :faction_id_a) + (player2_faction_id = :faction_id_b) AS faction_use
+                            FROM games
+                            ORDER BY game_id ASC
+                        ) AS b
+                        WHERE
+                            b.row_index > a.row_index - 10
+                            AND
+                            b.row_index <= a.row_index
+                    ) AS tenGameAverage
+                FROM ( 
+                    SELECT
+                        @row_numa := @row_numa + 1 AS row_index
+                    FROM games
+                    ORDER BY game_id ASC
+                ) AS a
+                WHERE a.row_index >= 10
+                ORDER BY a.row_index ASC",
+                array(
+                    ':faction_id_a' => $faction["faction_id"],
+                    ':faction_id_b' => $faction["faction_id"]
+                )
+            );
+            
+            //print_r($factionsStatsRaw);
+            
+            $factionsStats[$faction["faction_id"]] = array();
+            
+            foreach( $factionsStatsRaw as $row ) {
+                $factionsStats[$faction["faction_id"]][] = $row["tenGameAverage"];
+            }
+        }
+        
+		echo outputSuccess( $factionsStats );
+    }
+    
 	
 	
 	public static function getFactionStats($faction_id) {
-		$factions = getDatabase()->all(
-			"SELECT * FROM factions_stats WHERE faction_id = :faction_id ORDER BY games_played DESC",
-			array( ':faction_id' => $faction_id )
+		
+		error_reporting(E_ALL);
+		ini_set('display_errors', 1);
+		
+		$efficiencyRatiosAgainst = getDatabase()->all("	
+			SELECT
+                *,
+				FS.games_won/FS.games_played*100 AS efficiencyRatioAgainst
+			FROM factions_stats AS FS
+            WHERE
+                games_played > 0
+                AND faction_id = :faction_id_a
+                AND rival_faction_id != :faction_id_b
+			ORDER BY efficiencyRatioAgainst DESC",
+			array(
+                ':faction_id_a' => $faction_id,
+                ':faction_id_b' => $faction_id
+            )
 		);
-		echo outputSuccess( array( 'factions' => $factions ) );
+		
+        /*
+		$frequentUseList = getDatabase()->all("
+			SELECT * FROM (
+    SELECT *,  100*highest/total_games_played as percentage_played_with
+			FROM
+				(SELECT *, MAX(games_played_with) as highest
+					, SUM(games_played_with) as total_games_played
+				FROM
+					(SELECT * FROM players_factions_with_stats ORDER BY games_played_with DESC) x
+				GROUP BY player_id
+				) y
+			WHERE faction_id = :faction_id AND highest > 9
+			ORDER BY percentage_played_with DESC
+    ) z
+WHERE percentage_played_with >=50
+		",
+		array( ':faction_id' => $faction_id)
+		);
+        */
+        
+		$frequentUseList = getDatabase()->all("
+            SELECT
+                a.player_id,
+                a.player_nickname,
+                a.player_firstname,
+                a.player_lastname,
+                a.games_played_with,
+                100 * a.games_played_with / b.games_played AS percentage_played_with,
+                b.games_played AS total_games_played
+            FROM
+                players_factions_with_stats AS a
+                JOIN
+                players_ranking AS b
+                ON a.player_id = b.player_id
+            WHERE
+                b.games_played >= 10
+                AND
+                a.faction_id = :faction_id
+            ORDER BY
+                percentage_played_with DESC,
+                games_played_with DESC,
+                total_games_played DESC
+		",
+		array( ':faction_id' => $faction_id)
+		);
+		
+		echo outputSuccess( array(
+            'efficiencyRatiosAgainst' => $efficiencyRatiosAgainst,
+			'frequentUseList' => $frequentUseList
+		));
 	}
 	
-
+	
 	public static function getPlayerStats($player_id) {
 		
 		error_reporting(E_ALL);
@@ -284,6 +434,51 @@ class League {
 			WHERE player_id = :player_id",
 			array( ':player_id' => $player_id )
 		);
+        
+        getDatabase()->execute("SET @row_numa = 0;");
+        getDatabase()->execute("SET @row_numb = 0;");
+        getDatabase()->execute("SET @row_numc = 0;");
+        getDatabase()->execute("SET @row_numd = 0;");
+        $streakInfo = getDatabase()->one("
+            SELECT
+                MAX(f.currentStreak) AS currentStreak,
+                MAX(f.longestStreak) AS longestStreak
+            FROM (
+                SELECT
+                    IF(c.id = e.games_played, MIN(c.id)-a.id+1, 0) as currentStreak,
+                    MIN( c.id ) - a.id + 1 as longestStreak
+                
+                FROM
+                    (SELECT @row_numa := @row_numa + 1 as id, is_win, player_id FROM games_split WHERE player_id = :player_id_a ORDER BY date asc) AS a
+                    
+                    LEFT JOIN (SELECT @row_numb := @row_numb + 1 as id, is_win FROM games_split WHERE player_id = :player_id_b ORDER BY date asc) AS b
+                    ON a.id = b.id + 1 AND b.is_win = 1
+                    
+                    LEFT JOIN (SELECT @row_numc := @row_numc + 1 as id, is_win FROM games_split WHERE player_id = :player_id_c ORDER BY date asc) AS c
+                    ON a.id <= c.id AND c.is_win = 1
+                    
+                    LEFT JOIN (SELECT @row_numd := @row_numd + 1 as id, is_win FROM games_split WHERE player_id = :player_id_d ORDER BY date asc) AS d
+                    ON c.id = d.id - 1 AND d.is_win = 1
+                
+                    LEFT JOIN players_ranking AS e ON e.player_id = a.player_id
+                
+                WHERE
+                    a.is_win = 1
+                    AND b.id IS NULL
+                    AND c.id IS NOT NULL
+                    AND d.id IS NULL
+                GROUP BY a.id
+                ORDER BY a.id DESC
+            ) AS f",
+            array(
+                ':player_id_a' => $player_id,
+                ':player_id_b' => $player_id,
+                ':player_id_c' => $player_id,
+                ':player_id_d' => $player_id
+            )
+        );
+        
+        $gameCounts["streakInfo"] = $streakInfo;
 		
         if ( $gameCounts["total"] >= 20 ) {
             
