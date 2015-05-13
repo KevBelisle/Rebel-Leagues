@@ -33,7 +33,17 @@
 
 <div id="topBar">
 	<div>
-		<a href="//rebelleagues.com">Rebel<strong>Leagues</strong></a>
+		<nav ng-controller="mobileMenuCtrl">
+			<i class="fa fa-bars" ng-click="showMenu = !showMenu"></i>
+			<div ng-show="showMenu">
+				<a active-link="active" href="#/gamesHistory" ng-click="showMenu = false">Historique des parties</a>
+				<a active-link="active" href="#/playersRanking" ng-click="showMenu = false">Classement des joueurs</a>
+				<a active-link="active" href="#/factionsReview" ng-click="showMenu = false">Statistiques des factions</a>
+				<a active-link="active" href="#/playersReview" ng-click="showMenu = false">Statistiques des joueurs</a>
+			</show>
+		</nav>
+	
+		<a class="rebelLeagues" href="//rebelleagues.com">Rebel<strong>Leagues</strong></a>
 	</div>
 </div>
 
@@ -47,6 +57,13 @@
 			<h2>{{ subtitle }}</h2>
 		</header>
 		
+		<nav class="clear">
+			<a active-link="active" href="#/gamesHistory">Historique des parties</a>
+			<a active-link="active" href="#/playersRanking">Classement des joueurs</a>
+			<a active-link="active" href="#/factionsReview">Statistiques des factions</a>
+			<a active-link="active" href="#/playersReview">Statistiques des joueurs</a>
+		</nav>
+			
 		<aside>
 			<div id="stats" ng-controller="leagueStatsCtrl">
 				<ul>
@@ -68,13 +85,7 @@
 	</div>
 	
 	<div id="left" class="clear">
-		<section>
-			<nav class="clear">
-				<a active-link="active" href="#/gamesHistory">Historique des parties</a>
-				<a active-link="active" href="#/playersRanking">Classement des joueurs</a>
-				<a active-link="active" href="#/playersReview">Statistiques des joueurs</a>
-			</nav>
-			
+		<section>			
 			<div id="main" ng-view ng-animate class="anim-appear">
 			</div>
 		</section>

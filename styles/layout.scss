@@ -22,10 +22,6 @@ div#wrapper {
 
 	div#left {
 		section {
-			nav a {
-				display: block;
-				float: left;
-			}
 		}
 	}
 }
@@ -33,26 +29,45 @@ div#wrapper {
 
 
 // Default styling here
-div#topBar div { width: $cols4; }
-div#wrapper { width: $cols4; }
+div#topBar div {
+	 width: 100%;
+	 
+ 	 nav {
+	 	 div {
+			position: absolute;
+			top: 40px;
+			
+			a {
+				display: block;
+				width: 100%;
+			}
+		 }
+ 	 }
+
+	 a.rebelLeagues {
+	 	margin-right: 10px;
+	 }
+
+}
+
+div#wrapper { width: 100%; }
 
 	div#right {
-		width: $cols4;
+		width: 100%;
 		
 		header {
 			width: 100%;
 			margin-top: 20px;
 		}
+		nav { display: none; }
 		aside { display: none; }
 	}
 	
 	div#left {
-		width: $cols4;
+		width: 100%;
 		
 		> section {
 			width: 100%;
-			
-			nav a { width: 33.3333%; }
 			
 			div#main {
 				div.game {
@@ -132,7 +147,8 @@ div#wrapper { width: $cols4; }
 	}
     
     
-    div.playersReview {
+    div.playersReview,
+    div.factionsReview {
         > header {
             padding: 20px 0;
             
@@ -142,12 +158,19 @@ div#wrapper { width: $cols4; }
             }
         }
         
-        > section {            
+        
+        > section#usageGraph {
+            padding: 10px;
+        }
+        
+        > section {
             > header {
                 padding: 10px 10px 10px 66px;
                 position: relative;
+                min-height: 66px;
                 
-                div.playerid {
+                div.playerid,
+                div.factionid {
                     overflow: auto;
                     
                     img.badge {
@@ -171,7 +194,8 @@ div#wrapper { width: $cols4; }
             }
             
             section#factionEfficiencyStatsWith,
-            section#factionEfficiencyStatsAgainst {
+            section#factionEfficiencyStatsAgainst,
+            section#factionEfficiencyStats {
                 position: relative;
                     
                 div.faction {
@@ -231,7 +255,15 @@ div#wrapper { width: $cols4; }
 
 // Little larger screen
 @media only screen and (min-width: 480px) {
-	div#topBar div { width: $cols6; }
+	div#topBar div {
+		width: $cols6;
+		
+
+		a.rebelLeagues {
+			margin-right: 0;
+		}
+	 
+	}
 	div#wrapper { width: $cols6; }
 	
 		div#right {
@@ -276,7 +308,13 @@ div#wrapper { width: $cols4; }
 
 // Larger pads
 @media only screen and (min-width: 768px) {
-	div#topBar div { width: $cols9; }
+	div#topBar {
+		 div {
+		 	width: $cols9;
+		 	
+		 	nav { display: none; }
+	 	}
+	}
 	div#wrapper { width: $cols9; }
 	
 		div#right {
@@ -286,7 +324,8 @@ div#wrapper { width: $cols4; }
 			header {
 				margin-top: 70px;
 			}
-			aside {
+			
+			nav, aside {
 				display: block;
 				width: 100%;
 			}

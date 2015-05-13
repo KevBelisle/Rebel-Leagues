@@ -46,14 +46,45 @@ div#topBar {
 	color: $xlight_color;
 	
 	div {
-		line-height: 40px;
-		text-align: right;
-		a {
+		
+	 	 nav {
+			i {
+				float: left;
+				line-height: 40px;
+				padding: 0 12px;
+				cursor: pointer;
+			}
+			
+			i:hover {
+				color: #c30008;
+				background-color: $xlight_color;
+			}
+		
+	 	 	div {
+				background: $light_color;
+				border-bottom: 3px solid $accent_color;
+				
+				a {
+					color: $xxdark_color;
+					text-align: center;
+					line-height: 40px;
+					text-decoration: none;
+				}
+				a:hover {
+					font-weight: $heavy_weight;
+				}
+	 	 	}
+		 }
+		
+		a.rebelLeagues {
+			line-height: 40px;
 			text-decoration: none;
 			color: inherit;
-		}
-		strong {
-			font-weight: $heavy_weight;
+			float: right;
+			
+			strong {
+				font-weight: $heavy_weight;
+			}
 		}
 	}
 }
@@ -93,10 +124,35 @@ div#wrapper {
 			}
 		}
 		
-		aside {
+		nav {
+			color: $xdark_color;
+			
 			border-top: 3px solid $xlight_color;
 			margin-top: 30px;
-			padding-top: 30px;
+			padding-top: 10px;
+			
+			border-bottom: 3px solid $xlight_color;
+			margin-bottom: 30px;
+			padding-bottom: 10px;
+			
+			a {
+				display: block;
+				font-weight: $xlight_weight;
+				text-align: center;
+				padding: 5px 0 4px 0;
+				text-decoration: none;
+				color: $xlight_color;
+			}
+			a:hover {
+				font-weight: $heavy_weight;
+			}
+			a.active {
+				background-color: $accent_color;
+				color: $xlight_color;
+			}
+		}
+		
+		aside {
 			
 			div#stats {
 				ul {
@@ -144,24 +200,10 @@ div#wrapper {
 	}
 	
 	div#left {
+        
+        margin-top: 30px;
 	
 		section {
-			nav {
-				color: $xdark_color;
-				
-				a {
-					font-weight: $light_weight;
-					text-align: center;
-					padding: 20px 0 10px 0;
-					text-decoration: none;
-					color: $xdark_color;
-				}
-				a.active {
-					border-bottom: 4px solid $accent_color;
-					color: $accent_color;
-					font-weight: $heavy_weight;
-				}
-			}
 			div#main {
 				background: $xlight_color;
 				color: $xdark_color;
@@ -314,11 +356,25 @@ div#wrapper {
 
 
 
-div.playersReview {
+div.playersReview,
+div.factionsReview {
     > header {
         background-color: $dark_color;
         
         select {
+            font-size: $small_text;
+        }
+    }
+    
+    > section#usageGraph {
+        border-top: 0;
+        border-bottom: 3px solid $accent_color;
+        
+        h2 {
+            color: $xxdark_color;
+            font-weight: $medium_weight;
+        }
+        > span {
             font-size: $small_text;
         }
     }
@@ -330,18 +386,22 @@ div.playersReview {
         > header {
             background-color: $xlight_color;
             
-            div.playerid {
+            div.playerid,
+            div.factionid {
                 text-align: left;
             
-                span.nickname {
+                span.name, span.nickname {
                     color: $xxdark_color;
                     font-weight: $medium_weight;
                     font-size: $large_text;
+                    display: inline;
                 }
                 span.fullname {
                     color: $xdark_color;
+                    font-size: $normal_text;
+                    display: inline;
                 }
-                span.lastgame, span.gameCounts {
+                > span {
                     display: block;
                     font-size: $small_text;
                 }
@@ -365,9 +425,15 @@ div.playersReview {
         }
         
         section#factionEfficiencyStatsWith,
-        section#factionEfficiencyStatsAgainst {
+        section#factionEfficiencyStatsAgainst,
+        section#factionEfficiencyStats {
             div.faction {
                 font-size: $small_text;
+                
+                strong {
+                    font-weight: $heavy_weight;
+                    color: $xxdark_color;
+                }
                 
                 div.stats_bar {
                     height: 15px;
@@ -393,14 +459,11 @@ div.playersReview {
         }
         
         section#opponentStats {
-            
             ul {
                 li {
                     display: table;
                     width: 100%;
                     padding: 10px;
-                        
-                    /*border-bottom: 1px solid $dark_color;*/
                     
                     > span {
                         font-size: $small_text;
@@ -441,7 +504,53 @@ div.playersReview {
 					color: $light-color;
 				}
             }
+        }
         
+        section#frequentUsers {
+            ul {
+                margin-top: 10px;
+                
+                li {
+                    list-style-type: none;
+                    font-size: $small_text;
+                    
+                    padding: 10px;
+                    
+                    strong {
+                        color: $xxdark_color;
+                    }
+                    
+                    div.stats_bar {
+                        height: 15px;
+                        margin-top: 5px;
+                        background-color: lighten( $accent-color, 10%);
+                        
+                        div {
+                            height: 100%;
+                            float: left;
+                            background-color: $accent-color;
+                        }
+                        div.darker {
+                            background-color: darken( $accent-color, 10%);
+                        }
+                        div.percentage_played_with div:hover {
+                            box-sizing: border-box;
+                            border-bottom: 15px solid rgba(200,200,200,0.5);
+                        }
+                    }
+                }
+                
+                li.showAll {
+					padding: 10px;
+					text-align: center;
+					cursor: pointer;
+                    font-size: $small_text;
+                }
+				li.showAll:hover {
+					background-color: $accent-color;
+					color: $light-color;
+				}
+            }
         }
         
         > section {
@@ -454,7 +563,6 @@ div.playersReview {
         }
     }
 }
-
 
 
 div.tooltip {
