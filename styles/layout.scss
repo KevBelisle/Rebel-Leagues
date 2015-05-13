@@ -30,24 +30,30 @@ div#wrapper {
 
 // Default styling here
 div#topBar div {
-	 width: $cols4;
+	 width: 100%;
 	 
- 	 nav div {
-		position: absolute;
-		top: 40px;
-		
-		a {
-			display: block;
-			width: 100%;
-		}
+ 	 nav {
+	 	 div {
+			position: absolute;
+			top: 40px;
+			
+			a {
+				display: block;
+				width: 100%;
+			}
+		 }
+ 	 }
+
+	 a.rebelLeagues {
+	 	margin-right: 10px;
 	 }
 
 }
 
-div#wrapper { width: $cols4; }
+div#wrapper { width: 100%; }
 
 	div#right {
-		width: $cols4;
+		width: 100%;
 		
 		header {
 			width: 100%;
@@ -58,7 +64,7 @@ div#wrapper { width: $cols4; }
 	}
 	
 	div#left {
-		width: $cols4;
+		width: 100%;
 		
 		> section {
 			width: 100%;
@@ -249,7 +255,15 @@ div#wrapper { width: $cols4; }
 
 // Little larger screen
 @media only screen and (min-width: 480px) {
-	div#topBar div { width: $cols6; }
+	div#topBar div {
+		width: $cols6;
+		
+
+		a.rebelLeagues {
+			margin-right: 0;
+		}
+	 
+	}
 	div#wrapper { width: $cols6; }
 	
 		div#right {
