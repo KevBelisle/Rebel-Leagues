@@ -1,0 +1,20 @@
+
+<form id="addAttribute" class="clear">
+
+	<div class="left">
+		<input type="text" class="fullWidth" ng-model="attribute.name" placeholder="Nom de l'attribut" required></input>
+	</div>
+	
+	<div class="right">
+		<input type="text" class="fullWidth" ng-model="attribute.attribute_group" placeholder="Groupe de l'attribut"></input>
+		<div class="fullWidth info">
+			Groupes existants :
+			<span ng-repeat="attribute_group in attribute_groups">
+				{{attribute_group.attribute_group}}<span ng-if="$first || $middle">, </span>
+			</span>
+		</div>
+	</div>
+	
+	<button ng-click="submit(attribute)" class="fullWidth">Submit</button>
+	
+</form>

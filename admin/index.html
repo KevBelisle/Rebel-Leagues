@@ -79,6 +79,16 @@
 			<h1 ng-click="toggle()">{{ title }} <i class="fa fa-chevron-down"></i></h1>
 			<div class="partial" ng-include="partial" ng-if="expanded"></div>
 		</div>
+	
+		<div ng-controller="addAttributeCtrl" ng-class="{expanded: expanded}" ng-if="user.tier <= 1">
+			<h1 ng-click="toggle()">{{ title }} <i class="fa fa-chevron-down"></i></h1>
+			<div class="partial" ng-include="partial" ng-if="expanded"></div>
+		</div>
+	
+		<div ng-controller="editAttributeCtrl" ng-class="{expanded: expanded}" ng-if="user.tier <= 1">
+			<h1 ng-click="toggle()">{{ title }} <i class="fa fa-chevron-down"></i></h1>
+			<div class="partial" ng-include="partial" ng-if="expanded"></div>
+		</div>
 		
 	</div>
 

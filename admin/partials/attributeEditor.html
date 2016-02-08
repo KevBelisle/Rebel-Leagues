@@ -1,0 +1,23 @@
+
+		<div ng-repeat="group in attribute_groups">
+			<b>{{group.attribute_group}} :</b>
+			<select class="fullWidth" ng-model="group.selected_attribute_id" ng-options="attr.attribute_id as attr.name for attr in group.group_attributes" ng-change="attributeGroupChange()">
+				<option value="">Choisir une option</option>
+			</select>
+		</div>
+		
+		<div class="well">
+			<div class="fullWidth">
+				<b>Attributs :</b>
+				<span ng-repeat="game_attribute in game_attributes" class="attribute">
+					{{ game_attribute.name }}
+					<a ng-click="removeAttribute(game_attribute)" class="removeAttribute">x</a>
+				</span>
+			</div>
+			
+			<select class="fullWidth" ng-model="selected_attribute" ng-options="t.attribute_id as t.name for t in attributes">
+				<option value="">Choisir un attribut à ajouter</option>
+			</select>
+			
+			<button ng-click="addAttribute(selected_attribute)" class="fullWidth">Ajouter l'attribut</button>
+		</div>

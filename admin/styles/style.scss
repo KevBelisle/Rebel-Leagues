@@ -142,6 +142,13 @@ div#wrapper {
 			}
 		}
 		
+		div.well {
+			width: 100%;
+			background: rgba(0,0,0,0.1);
+			padding: 10px;
+			margin-bottom: 10px;
+		}
+		
 		form {
 			width: 100%;
 			margin-top: 20px;
@@ -158,7 +165,7 @@ div#wrapper {
 				padding-left: 10px;
 			}
 			
-			select, input, textarea, label, button.fullWidth {
+			select, input, textarea, label, button.fullWidth, div.info {
 				box-sizing: border-box;
 				display: block;
 				padding: 5px 0;
@@ -188,6 +195,32 @@ div#wrapper {
 			button.danger {
 				border-color: red;
 				color: red;
+			}
+			
+			span.attribute {
+			    padding: 2px 5px;
+				border: 1px solid grey;
+				border-radius: 2px;
+				margin-right: 2px;
+			
+				a.removeAttribute {
+				    color: red;
+					position: relative;
+					top: -5px;
+					margin-left: 5px;
+					cursor: pointer;
+				}
+			}
+		}
+		
+		form.inline {
+			display: block;
+			
+			select, input, textarea, label, button.fullWidth, div.info {
+				box-sizing: border-box;
+				display: inline-block;
+				padding: 5px 0;
+				margin: 10px 0;
 			}
 		}
 		
