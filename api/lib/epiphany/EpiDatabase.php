@@ -23,6 +23,46 @@ class EpiDatabase
     return self::$instances[$hash];
   }
   
+  public function begin()
+  {
+    $this->init();
+    try
+    {
+      return $this->dbh->beginTransaction();
+    }
+    catch(PDOException $e)
+    {
+      EpiException::raise(new EpiDatabaseQueryException("Query error: {$e->getMessage()} - {$sql}"));
+      return false;
+    }
+  }
+  public function commit()
+  {
+    $this->init();
+    try
+    {
+      return $this->dbh->commit();
+    }
+    catch(PDOException $e)
+    {
+      EpiException::raise(new EpiDatabaseQueryException("Query error: {$e->getMessage()} - {$sql}"));
+      return false;
+    }
+  }
+  public function rollBack()
+  {
+    $this->init();
+    try
+    {
+      return $this->dbh->rollBack();
+    }
+    catch(PDOException $e)
+    {
+      EpiException::raise(new EpiDatabaseQueryException("Query error: {$e->getMessage()} - {$sql}"));
+      return false;
+    }
+  }
+  
   public function execute($sql = false, $params = array())
   {
     $this->init();

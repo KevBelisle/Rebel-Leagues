@@ -30,7 +30,10 @@ getRoute()->get('/players/(\d+)/stats(?:/?)', array('League', 'getPlayerStats'))
 getRoute()->get('/games(?:/?)', array('League', 'getGamesHistory'));
 getRoute()->get('/games/(\d+)(?:/?)', array('League', 'getGamesHistory'));
 getRoute()->get('/games/(\d+)/(\d+)(?:/?)', array('League', 'getGamesHistory'));
-getRoute()->get('/games(?:/?)/all', array('League', 'getGamesHistoryAll'));
+getRoute()->get('/games/all(?:/?)', array('League', 'getGamesHistoryAll'));
+
+getRoute()->get('/attributes(?:/?)', array('League', 'getAttributes'));
+getRoute()->get('/attributes/groups(?:/?)', array('League', 'getAttributeGroups'));
 
 getRoute()->get('/ranking(?:/?)', array('League', 'getRanking'));
 getRoute()->get('/ranking/(\d+)(?:/?)', array('League', 'getRanking'));
@@ -54,6 +57,7 @@ getRoute()->get('/admins(?:/?)', array('Admin', 'getAdmins'));
 getRoute()->post('/admins(?:/?)', array('Admin', 'addAdmin'));
 getRoute()->post('/players(?:/?)', array('Admin', 'addPlayer'));
 getRoute()->post('/factions(?:/?)', array('Admin', 'addFaction'));
+getRoute()->post('/attributes(?:/?)', array('Admin', 'addAttribute'));
 
 getRoute()->post('/games(?:/?)', array('Admin', 'addGame'));
 getRoute()->put('/games/(\d+)(?:/?)', array('Admin', 'editGame'));
@@ -197,6 +201,29 @@ class League {
 			array( ':player_id' => $player_id )
 		);
 		echo outputSuccess( $player );
+	}
+	
+	
+	public static function getAttributes() {
+		$attributes = getDatabase()->all(
+		'SELECT
+			attribute_id,
+			name,
+			attribute_group
+		FROM attributes
+		ORDER BY attribute_group'
+		);
+		echo outputSuccess( array( 'attributes' => $attributes ) );
+	}
+	
+	
+	public static function getAttributeGroups() {
+		$attribute_groups = getDatabase()->all(
+		'SELECT attribute_group
+		FROM attributes
+		GROUP BY attribute_group'
+		);
+		echo outputSuccess( array( 'attribute_groups' => $attribute_groups ) );
 	}
 	
 	
@@ -633,6 +660,33 @@ WHERE percentage_played_with >=50
 		$games = getDatabase()->all(
 			'SELECT * FROM games_history ORDER BY date DESC'
 		);
+		$games_attributes = getDatabase()->all(
+			'SELECT * FROM games_attributes'
+		);
+		$games_attributes_dict = array();
+		foreach($games_attributes as $game_attribute) {
+			if (array_key_exists($game_attribute['game_id'], $games_attributes_dict))
+			{
+				$games_attributes_dict[$game_attribute['game_id']][] = $game_attribute["attribute_id"];
+			}
+			else
+			{
+				$games_attributes_dict[$game_attribute['game_id']] = [$game_attribute["attribute_id"],];
+			}
+		}
+		
+		foreach ($games as $index => $game)
+		{
+			if (array_key_exists($game['game_id'], $games_attributes_dict))
+			{
+				$games[$index]["attributes"] = $games_attributes_dict[$game['game_id']];
+			}
+			else
+			{
+				$games[$index]["attributes"] = array();
+			}
+		}
+		
 		echo outputSuccess( array( 'games' => $games ) );
 	}
 	
@@ -975,9 +1029,11 @@ class Admin {
 	public static function addGame() {
 		//self::checkTier(3);
 		
-		self::checkFields( array('player1_id', 'player1_faction_id', 'player2_id', 'player2_faction_id', 'date', 'is_draw', 'is_ranked', 'is_time_runout', 'is_online'), $_POST );
+		self::checkFields( array('player1_id', 'player1_faction_id', 'player2_id', 'player2_faction_id', 'date', 'is_draw', 'is_ranked', 'is_time_runout', 'is_online', 'attributes'), $_POST );
 		
 		try {
+			getDatabase()->begin();
+		
 			$game_id = getDatabase()->execute('INSERT INTO games (player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES (:player1_id, :player1_faction_id, :player2_id, :player2_faction_id, :date, :is_draw, :is_ranked, :is_time_runout, :is_online, :notes)',
 			array(
 				':player1_id' => $_POST['player1_id'],
@@ -992,21 +1048,36 @@ class Admin {
 				':notes' => $_POST['notes']
 			)
 			);
+			
+			foreach ($_POST['attributes'] as $attribute_id) {
+				getDatabase()->execute('INSERT INTO games_attributes (game_id, attribute_id) VALUES (:game_id, :attribute_id)',
+				array(
+					':game_id' => $game_id,
+					':attribute_id' => intval($attribute_id)
+				)
+				);
+			}
+			
+			getDatabase()->commit();
+			
 			echo outputSuccess( array( 'game_id' => $game_id ) );
 			
 		} catch (Exception $e) {
+			getDatabase()->rollBack();
 			echo outputError($e->getMessage());
 		}
 	}
 	
 	
-	public static function editGame($gameId) {
+	public static function editGame($game_id) {
 		self::checkTier(2);
 		
-		self::checkFields( array('player1_id', 'player1_faction_id', 'player2_id', 'player2_faction_id', 'date', 'is_draw', 'is_ranked', 'is_time_runout', 'is_online'), $_POST );
+		self::checkFields( array('player1_id', 'player1_faction_id', 'player2_id', 'player2_faction_id', 'date', 'is_draw', 'is_ranked', 'is_time_runout', 'is_online', 'attributes'), $_POST );
 		
 		try {
-			$game_id = getDatabase()->execute('UPDATE games SET
+			getDatabase()->begin();
+		
+			getDatabase()->execute('UPDATE games SET
 					player1_id = :player1_id,
 					player1_faction_id = :player1_faction_id,
 					player2_id = :player2_id,
@@ -1018,23 +1089,57 @@ class Admin {
 					is_online = :is_online,
 					notes = :notes
 				WHERE game_id = :game_id',
-			array(
-				':player1_id' => $_POST['player1_id'],
-				':player1_faction_id' => $_POST['player1_faction_id'],
-				':player2_id' => $_POST['player2_id'],
-				':player2_faction_id' => $_POST['player2_faction_id'],
-				':date' => $_POST['date'],
-				':is_draw' => $_POST['is_draw'],
-				':is_ranked' => $_POST['is_ranked'],
-				':is_time_runout' => $_POST['is_time_runout'],
-				':is_online' => $_POST['is_online'],
-				':notes' => $_POST['notes'],
-				':game_id' => $gameId
-			)
+				array(
+					':player1_id' => $_POST['player1_id'],
+					':player1_faction_id' => $_POST['player1_faction_id'],
+					':player2_id' => $_POST['player2_id'],
+					':player2_faction_id' => $_POST['player2_faction_id'],
+					':date' => $_POST['date'],
+					':is_draw' => $_POST['is_draw'],
+					':is_ranked' => $_POST['is_ranked'],
+					':is_time_runout' => $_POST['is_time_runout'],
+					':is_online' => $_POST['is_online'],
+					':notes' => $_POST['notes'],
+					':game_id' => $game_id
+				)
 			);
-			echo outputSuccess( array( 'game_id' => $gameId ) );
+			
+			$game_attributes = getDatabase()->all(
+				'SELECT * FROM games_attributes WHERE game_id = :game_id',
+				array(':game_id' => $game_id)
+			);
+			
+			foreach ($game_attributes as $key => $game_attribute) {
+				if (!in_array($game_attribute["attribute_id"], $_POST['attributes'])) {
+					getDatabase()->execute('DELETE FROM games_attributes WHERE game_id = :game_id AND attribute_id = :attribute_id',
+						array(
+							':game_id' => $game_id,
+							':attribute_id' => $game_attribute["attribute_id"]
+						)
+					);
+				}
+			}
+			
+			$game_attributes = array_map(function($a) { return $a["attribute_id"]; }, $game_attributes);
+			
+			foreach ($_POST['attributes'] as $attribute_id) {
+				if ( !in_array($attribute_id, $game_attributes) ) {
+					getDatabase()->execute(
+						'INSERT INTO games_attributes (game_id, attribute_id) VALUES (:game_id, :attribute_id)',
+						array(
+							':game_id' => $game_id,
+							':attribute_id' => intval($attribute_id)
+						)
+					);
+				}
+			}
+			
+			getDatabase()->commit();
+			
+			echo outputSuccess( array( 'game_id' => $game_id ) );
 			
 		} catch (Exception $e) {
+			getDatabase()->rollBack();
 			echo outputError($e->getMessage());
 		}
 	}
@@ -1112,6 +1217,33 @@ class Admin {
 		}
 		
 	}
+
+	
+	public static function addAttribute() {
+		self::checkTier(1);
+		self::checkFields( array('name'), $_POST );
+		
+		$attribute_group = "";
+		
+		if( array_key_exists('attribute_group', $_POST) ) {
+			$attribute_group = $_POST['attribute_group'];
+		}
+		
+		try {
+			$attribute_id = getDatabase()->execute('INSERT INTO attributes (name, attribute_group) VALUES(:name, :attribute_group)',
+			array(
+				':name' => $_POST['name'],
+				':attribute_group' => $_POST['attribute_group']
+			)
+			);
+			echo outputSuccess( array( 'attribute_id' => $attribute_id ) );
+			
+		} catch (Exception $e) {
+			echo outputError($e->getMessage());
+		}
+		
+	}
+	
 }
 
 

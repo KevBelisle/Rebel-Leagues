@@ -15,6 +15,8 @@ BEGIN
 	CREATE TABLE IF NOT EXISTS players ( player_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ) ENGINE=InnoDB DEFAULT CHARSET=utf8;  
 	CREATE TABLE IF NOT EXISTS factions ( faction_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 	CREATE TABLE IF NOT EXISTS games ( game_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+	CREATE TABLE IF NOT EXISTS attributes ( attribute_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+	CREATE TABLE IF NOT EXISTS games_attributes ( game_attribute_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 	
 	/* CREATE leagues COLUMNS
@@ -244,6 +246,42 @@ BEGIN
 	ALTER TABLE games ADD
 		FOREIGN KEY (player2_id)
 		REFERENCES players(player_id)
+		ON DELETE CASCADE
+		ON UPDATE CASCADE;
+		
+		
+	/* CREATE attributes COLUMNS
+	============================================= */
+	
+	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'attributes' AND column_name = 'name' ) = 0 THEN
+		ALTER TABLE attributes ADD name VARCHAR(40) NOT NULL;
+	END IF;
+	
+	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'attributes' AND column_name = 'attribute_group' ) = 0 THEN
+		ALTER TABLE attributes ADD attribute_group VARCHAR(40);
+	END IF;
+		
+		
+	/* CREATE games_attributes COLUMNS + FOREIGN KEY CONSTRAINTS
+	============================================= */
+	
+	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'games_attributes' AND column_name = 'game_id' ) = 0 THEN
+		ALTER TABLE games_attributes ADD game_id INT NOT NULL;
+	END IF;
+
+	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'games_attributes' AND column_name = 'attribute_id' ) = 0 THEN
+		ALTER TABLE games_attributes ADD attribute_id INT NOT NULL;
+	END IF;
+	
+	ALTER TABLE games_attributes ADD
+		FOREIGN KEY (game_id)
+		REFERENCES games(game_id)
+		ON DELETE CASCADE
+		ON UPDATE CASCADE;
+	
+	ALTER TABLE games_attributes ADD
+		FOREIGN KEY (attribute_id)
+		REFERENCES attributes(attribute_id)
 		ON DELETE CASCADE
 		ON UPDATE CASCADE;
 	
@@ -683,6 +721,7 @@ BEGIN
 			SUM(games_played_against) AS games_played_against
 		FROM players_factions_split_stats
 		GROUP BY player_id, faction_id;
+		
 	
 END //
 DELIMITER ;
