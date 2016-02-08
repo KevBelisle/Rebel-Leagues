@@ -92,11 +92,6 @@ rebelLeaguesAdminControllers.controller('addGameCtrl', ['$scope', '$http',
 		
 		$scope.expanded = false;
 		$scope.toggle = function () { $scope.expanded = !$scope.expanded };
-		
-		$scope.buggy = {keep_values: false};
-		$scope.checked = function(){
-			console.log($scope.buggy.keep_values);
-		};
 	
 		(function() {
 			Date.prototype.toYMDHMS = Date_toYMDHMS;
@@ -162,33 +157,19 @@ rebelLeaguesAdminControllers.controller('addGameCtrl', ['$scope', '$http',
 			
 			$http.post('../api/games', game).success( function (data) {
 				alert("Partie ajoutée.");
-				
-				console.log($scope);
-				
-				if ($scope.buggy.keep_values) {
-					$scope.game.player1_id = null;
-					$scope.game.player1_faction_id = null;
-					$scope.game.player2_id = null;
-					$scope.game.player2_faction_id = null;
-					$scope.game.is_draw = false;
-					$scope.game.is_time_runout = false;
-				}
-				else
-				{
-					$scope.game = {
-						player1_id: null,
-						player1_faction_id: null,
-						player2_id: null,
-						player2_faction_id: null,
-						is_draw: false,
-						is_ranked: true,
-						is_time_runout: false,
-						is_online: false,
-						datetime: new Date(),
-						notes: "",
-						attributes: ""
-					};
-				}
+				$scope.game = {
+					player1_id: null,
+					player1_faction_id: null,
+					player2_id: null,
+					player2_faction_id: null,
+					is_draw: false,
+					is_ranked: true,
+					is_time_runout: false,
+					is_online: false,
+					datetime: new Date(),
+					notes: "",
+					attributes: ""
+				};
 				$scope.game_attributes = [];
 				console.log(data);
 			}).error( function(data) {
