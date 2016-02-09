@@ -92,6 +92,11 @@ rebelLeaguesAdminControllers.controller('addGameCtrl', ['$scope', '$http',
 		
 		$scope.expanded = false;
 		$scope.toggle = function () { $scope.expanded = !$scope.expanded };
+		
+		$scope.buggy = {keep_values: false};
+		$scope.checked = function(){
+			console.log($scope.buggy.keep_values);
+		};
 	
 		(function() {
 			Date.prototype.toYMDHMS = Date_toYMDHMS;
@@ -143,7 +148,8 @@ rebelLeaguesAdminControllers.controller('addGameCtrl', ['$scope', '$http',
 			is_time_runout: false,
 			is_online: false,
 			datetime: new Date(),
-			notes: ""
+			notes: "",
+			attributes: ""
 		};
 		
 		$scope.game.datetime.setHours( ((($scope.game.datetime.getMinutes()/105 + .5) | 0) + $scope.game.datetime.getHours()) % 24 );
@@ -156,18 +162,34 @@ rebelLeaguesAdminControllers.controller('addGameCtrl', ['$scope', '$http',
 			
 			$http.post('../api/games', game).success( function (data) {
 				alert("Partie ajoutée.");
-				$scope.game = {
-					player1_id: null,
-					player1_faction_id: null,
-					player2_id: null,
-					player2_faction_id: null,
-					is_draw: false,
-					is_ranked: true,
-					is_time_runout: false,
-					is_online: false,
-					datetime: new Date(),
-					notes: ""
-				};
+				
+				console.log($scope);
+				
+				if ($scope.buggy.keep_values) {
+					$scope.game.player1_id = null;
+					$scope.game.player1_faction_id = null;
+					$scope.game.player2_id = null;
+					$scope.game.player2_faction_id = null;
+					$scope.game.is_draw = false;
+					$scope.game.is_time_runout = false;
+				}
+				else
+				{
+					$scope.game = {
+						player1_id: null,
+						player1_faction_id: null,
+						player2_id: null,
+						player2_faction_id: null,
+						is_draw: false,
+						is_ranked: true,
+						is_time_runout: false,
+						is_online: false,
+						datetime: new Date(),
+						notes: "",
+						attributes: ""
+					};
+				}
+				$scope.game_attributes = [];
 				console.log(data);
 			}).error( function(data) {
 				alert("Une erreur est survenue.");
@@ -262,7 +284,8 @@ rebelLeaguesAdminControllers.controller('editGameCtrl', ['$scope', '$http',
 		$scope.games = [];
 		$scope.factions = [];
 		$scope.players = [];
-		
+		$scope.attribute_groups = {};
+		$scope.attributes = [];
 		
 		$http.get('../api/games/all')
 			.then(
@@ -279,10 +302,37 @@ rebelLeaguesAdminControllers.controller('editGameCtrl', ['$scope', '$http',
 				function success(response) { $scope.players = response.data.data.players; },
 				function error(reason)     { return false; }
 			);
+		$http.get('../api/attributes/')
+			.then(
+				function success(response) {
+					response.data.data.attributes.forEach(function (attribute, index) {
+						if (attribute.attribute_group == null) {
+							$scope.attributes.push(attribute);
+						} else {
+							if (attribute.attribute_group in $scope.attribute_groups) {
+								$scope.attribute_groups[attribute.attribute_group]["group_attributes"].push(attribute);
+							} else {
+								$scope.attribute_groups[attribute.attribute_group] = {
+									"attribute_group": attribute.attribute_group,
+									"selected_attribute_id": null,
+									"group_attributes": [attribute]
+								};
+							}
+						}
+					});
+					console.log("attributes:");
+					console.log($scope.attribute_groups);
+					console.log($scope.attributes);
+				},
+				function error(reason)     { return false; }
+			);
 		
 		$scope.submit = function (selectedGame) {
 			
 			selectedGame.date = selectedGame.datetime.toYMDHMS();
+			
+			console.log("Editing...");
+			console.log(selectedGame);
 			
 			$http.put('../api/games/'+selectedGame.game_id, selectedGame).success( function (data) {
 				alert("Partie modifiée.");
@@ -331,7 +381,7 @@ rebelLeaguesAdminControllers.controller('editLeagueCtrl', ['$scope', '$http',
 		
 		$scope.league = {};
 		$scope.ranking_methods = [];
-		
+				
 		$http.get('../api/leagues')
 			.then(
 				function success(response) { $scope.league = response.data.data.league;
@@ -357,6 +407,245 @@ rebelLeaguesAdminControllers.controller('editLeagueCtrl', ['$scope', '$http',
 		};
 	}
 ]);
+
+
+rebelLeaguesAdminControllers.controller('addAttributeCtrl', ['$scope', '$http',
+	function ($scope, $http) {
+	
+		$scope.title = "Ajouter un attribut";
+		$scope.partial = "partials/addAttribute.html";
+	
+		$scope.expanded = false;
+		$scope.toggle = function () { $scope.expanded = !$scope.expanded };
+		
+		$scope.attribute_groups = [];
+		
+		$http.get('../api/attributes/groups')
+			.then(
+				function success(response) { $scope.attribute_groups = response.data.data.attribute_groups; },
+				function error(reason)     { return false; }
+			);
+			
+		$scope.attribute = {
+			name: null,
+			attribute_group: null,
+		};
+
+		$scope.submit = function (i_attribute) {
+			
+			$http.post('../api/attributes', i_attribute).success( function (data) {
+				alert("Attribut ajouté.");
+				$scope.attribute = {
+					name: null,
+					attribute_group: null
+				};
+				console.log(data);
+			}).error( function(data) {
+				alert("Une erreur est survenue.");
+				console.log(data);
+			});
+		};
+	}
+]);
+
+
+rebelLeaguesAdminControllers.controller('editAttributeCtrl', ['$scope', '$http',
+	function ($scope, $http) {
+	
+		$scope.title = "Modifier ou supprimer un attribut";
+		$scope.partial = "partials/editAttribute.html";
+	
+		$scope.expanded = false;
+		$scope.toggle = function () { $scope.expanded = !$scope.expanded };
+		
+		$scope.attributes = [];
+		
+		$http.get('../api/attributes')
+			.then(
+				function success(response) { $scope.attributes = response.data.data.attributes; },
+				function error(reason)     { return false; }
+			);
+
+		$scope.save = function (attribute) {
+			
+			$http.put('../api/attributes', attribute).success( function (data) {
+				alert("Attribut modifié.");
+				console.log(data);
+			}).error( function(data) {
+				alert("Une erreur est survenue.");
+				console.log(data);
+			});
+		};
+
+		$scope.delete = function (attribute) {
+			
+			$http.delete('../api/attributes', attribute).success( function (data) {
+				alert("Attribut supprimé.");
+				console.log(data);
+			}).error( function(data) {
+				alert("Une erreur est survenue.");
+				console.log(data);
+			});
+		};
+	}
+]);
+
+
+
+
+
+rebelLeaguesAdminControllers.directive('attributeEditor', function($http) {
+    return {
+        restrict: 'AE',
+        // we don't need anymore to bind the value to the external ngModel
+        // as we require its controller and thus can access it directly
+        scope: {},
+        // the 'require' property says we need a ngModel attribute in the declaration.
+        // this require makes a 4th argument available in the link function below
+        require: 'ngModel',
+		
+        templateUrl: 'partials/attributeEditor.html',
+		
+        // the ngModelController attribute is an instance of an ngModelController
+        // for our current ngModel.
+        // if we had required multiple directives in the require attribute, this 4th
+        // argument would give us an array of controllers.
+        link: function(scope, iElement, iAttrs, ngModelController) {
+		
+			scope.all_attributes = [];
+			scope.attribute_groups = {};
+			scope.attributes = [];
+			
+			scope.game_attributes = [];
+			scope.selected_attribute = null;
+			
+			scope.loading = $http.get('../api/attributes/')
+				.then(
+					function success(response) {
+						scope.all_attributes = response.data.data.attributes;
+						response.data.data.attributes.forEach(function (attribute, index) {
+							if (attribute.attribute_group == null) {
+								scope.attributes.push(attribute);
+							} else {
+								if (attribute.attribute_group in scope.attribute_groups) {
+									scope.attribute_groups[attribute.attribute_group]["group_attributes"].push(attribute);
+								} else {
+									scope.attribute_groups[attribute.attribute_group] = {
+										"attribute_group": attribute.attribute_group,
+										"selected_attribute_id": null,
+										"group_attributes": [attribute]
+									};
+								}
+							}
+						});
+					},
+					function error(reason)     { return false; }
+				);
+				
+			function updateInternalsFromString (attrString) {
+				scope.loading.then(function () {
+					if (attrString == "" || attrString == undefined) {
+						scope.game_attributes = [];
+						scope.selected_attribute = null;
+						for (var key in scope.attribute_groups) {
+							// skip loop if the property is from prototype
+							if (!scope.attribute_groups.hasOwnProperty(key)) continue;
+							var attribute_group = scope.attribute_groups[key];
+							attribute_group.selected_attribute_id = null;
+						}
+					}
+					else
+					{
+						if( typeof attrString === 'string' ) {
+							attrString = attrString.split(",");
+						}
+						
+						scope.game_attributes = [];
+							
+						attrString.forEach(function (attribute_id, index) {
+							var attr = scope.all_attributes.filter(function( obj ) {
+								return obj.attribute_id == attribute_id;
+							})[0];
+							
+							if (scope.all_attributes.indexOf(attr) == -1) {
+								// Shouldn't happen...
+								alert("An error occured.");
+							}
+							
+							
+							if (attr.attribute_group == null) {
+								scope.game_attributes.push(attr);
+							} else {
+								scope.attribute_groups[attr.attribute_group].selected_attribute_id = attr.attribute_id;
+							}
+						});
+					}
+				});
+			}
+			
+			function arrayFromInternals () {
+				var attribute_ids = scope.game_attributes.map(function(obj){ return obj.attribute_id; });
+			
+				for (var attribute_group in scope.attribute_groups) {
+					var selected_attribute_id = scope.attribute_groups[attribute_group].selected_attribute_id;
+					if (selected_attribute_id != undefined) {
+						attribute_ids.push(selected_attribute_id);
+					}
+				}
+				
+				return attribute_ids;
+			}
+			
+			scope.addAttribute = function (attribute_id) {
+				
+				var attr = scope.attributes.filter(function( obj ) {
+					return obj.attribute_id == attribute_id;
+				})[0];
+				
+				if (scope.game_attributes.indexOf(attr) == -1) {
+					scope.game_attributes.push(attr);
+				}
+				
+                ngModelController.$setViewValue( arrayFromInternals() );
+			};
+			
+			scope.removeAttribute = function (attribute) {
+				var index = scope.game_attributes.indexOf(attribute);
+				if (index > -1) {
+					scope.game_attributes.splice(index, 1);
+				}
+				
+                ngModelController.$setViewValue( arrayFromInternals() );
+			}
+			
+			scope.attributeGroupChange = function () {
+				ngModelController.$setViewValue( arrayFromInternals() );
+			}
+			
+            // we can now use our ngModelController builtin methods
+            // that do the heavy-lifting for us
+
+            // when model changes, update our view (just update the div content)
+            ngModelController.$render = function() {
+				
+				updateInternalsFromString( ngModelController.$viewValue );
+				
+            };
+        }
+    };
+});
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

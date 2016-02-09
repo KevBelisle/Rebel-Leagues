@@ -1,0 +1,13 @@
+
+<div id="editAttribute" class="clear">
+
+	<form ng-repeat="attribute in attributes" class="inline">
+		
+		<input type="text" ng-model="attribute.name"></input>
+		<input type="text" ng-model="attribute.attribute_group"></input>
+		<button ng-click="save(attribute)">Enregistrer</button>
+		<button ng-click="delete(attribute)">Supprimer</button>
+		
+	</forms>
+	
+</div>

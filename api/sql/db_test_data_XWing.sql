@@ -1,4 +1,4 @@
-
+﻿
 /* POPULATE leagues
 ============================================= */
 
@@ -22,7 +22,6 @@ INSERT INTO `factions` (`faction_id`, `name`, `parent_faction_id`, `color`, `log
 (1, 'Alliance', NULL, 'a90c0c', 'uploads/factions/81edf7d428e9f21aefab65d440a2c1a1.png'),
 (2, 'Empire', NULL, '248717', 'uploads/factions/84935fe3eba50ea4e3d70b7f7964b9c0.png'),
 (3, 'Scum and Villainy', NULL, 'dda923', 'uploads/factions/f01a32fba3591049fc979f5fc7d0bc08.png');
-
 
 
 /* POPULATE players
@@ -69,14 +68,31 @@ INSERT INTO `players` (`player_id`, `nickname`, `firstname`, `lastname`) VALUES
 (39, 'BenSigouin', 'Benoit', 'Sigouin');
 
 
+/* POPULATE attributes
+============================================= */
+
+INSERT INTO `attributes` (`attribute_id`, `name`, `attribute_group`) VALUES
+(1, 'Epic', 'Format'),
+(2, 'VASSAL', 'Emplacement'),
+(3, 'Free Game', 'Emplacement'),
+(4, 'Donjon', 'Emplacement'),
+(5, 'La Revanche', 'Emplacement'),
+(6, 'Imaginaire', 'Emplacement'),
+(7, 'Standard', 'Format'),
+(8, 'Scenario', 'Format'),
+(9, 'Escalation', 'Format'),
+(10, 'Autre', 'Format'),
+(11, 'Ligue Saison 1', null);
+
+
 /* POPULATE games
 ============================================= */
 INSERT INTO `games` (`game_id`, `player1_id`, `player1_faction_id`, `player2_id`, `player2_faction_id`, `date`, `is_draw`, `is_ranked`, `is_time_runout`, `is_online`, `notes`) VALUES
 (1, 1, 1, 3, 2, '2014-01-21 19:30:00', 0, 1, 0, 0, ''),
-(2, 3, 2, 7, 1, '2014-01-21 21:00:00', 0, 1, 0, 0, NULL),
+(2, 3, 2, 7, 1, '2014-01-21 21:00:00', 0, 1, 0, 0, ''),
 (3, 6, 1, 7, 2, '2014-01-21 19:00:00', 0, 1, 0, 0, 'Mic: ma liste était = <a href="http://xwing-builder.co.uk/view/22730/ibtie-and-friends-2">http://xwing-builder.co.uk/view/22730/ibtie-and-friends-2</a> '),
-(4, 6, 2, 1, 2, '2014-01-21 21:30:00', 0, 1, 0, 0, NULL),
-(5, 8, 1, 9, 2, '2014-01-21 21:00:00', 0, 1, 0, 0, NULL),
+(4, 6, 2, 1, 2, '2014-01-21 21:30:00', 0, 1, 0, 0, ''),
+(5, 8, 1, 9, 2, '2014-01-21 21:00:00', 0, 1, 0, 0, ''),
 (6, 5, 2, 6, 1, '2014-01-13 17:00:00', 0, 1, 0, 0, ''),
 (7, 5, 2, 6, 1, '2014-01-13 18:30:00', 0, 1, 0, 0, ''),
 (8, 5, 2, 6, 1, '2014-01-13 20:30:00', 0, 1, 0, 0, ''),
@@ -102,8 +118,8 @@ INSERT INTO `games` (`game_id`, `player1_id`, `player1_faction_id`, `player2_id`
 (35, 3, 2, 1, 2, '2014-02-24 18:00:00', 0, 1, 0, 0, ''),
 (36, 1, 1, 6, 2, '2014-02-26 00:30:00', 0, 1, 0, 1, 'sacrifié Carnor Jax comme un idiot (i.e. un radis) vers la fin, Roark a tout bouffé mes 4 vaisseaux tapochés.\n'),
 (37, 6, 1, 1, 1, '2014-02-28 01:30:00', 0, 1, 0, 1, 'Chewie full health wins!\n(Chewbacca+Expert Handling + Merc Copilot + Luke Skywalker + MF title, 2x Blue\n\nvs \n\nRoark + RecSpec + Blaster\nDutch + R2 + ion cannon turret\n2x rookie + R2)\n'),
-(38, 2, 2, 1, 1, '2013-12-31 00:00:00', 0, 0, 0, 0, NULL),
-(39, 2, 2, 1, 1, '2013-12-31 00:00:00', 0, 0, 0, 0, NULL),
+(38, 2, 2, 1, 1, '2013-12-31 00:00:00', 0, 0, 0, 0, ''),
+(39, 2, 2, 1, 1, '2013-12-31 00:00:00', 0, 0, 0, 0, ''),
 (40, 1, 2, 8, 1, '2014-03-10 20:00:00', 0, 1, 0, 0, 'Klutz essaye 2 Bombers avec Seismic Charges... et oublie de les utiliser au moment opportun...'),
 (41, 1, 1, 6, 1, '2014-03-12 22:30:00', 0, 1, 0, 1, ''),
 (42, 6, 1, 1, 2, '2014-03-13 01:45:00', 0, 1, 0, 1, ''),

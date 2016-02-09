@@ -23,7 +23,9 @@
 		<label class="fullWidth"> <input type="checkbox" ng-model="game.is_ranked" /> Comptabilisée au classement</label>
 		<label class="fullWidth"> <input type="checkbox" ng-model="game.is_time_runout" /> Terminée par manque de temps</label>
 		<label class="fullWidth"> <input type="checkbox" ng-model="game.is_online" /> Jouée en ligne (VASSAL, OCTGN, etc.)</label>
-	
+		
+		<div attribute-editor ng-model="game.attributes"></div>
+		
 	</div>
 	
 	<div class="right">
@@ -36,9 +38,9 @@
 		</div>
 		
 		<textarea class="fullWidth" ng-model="game.notes" placeholder="{{league.defaultGameNotes}}"></textarea>
-		
-		<button ng-click="submit(game)" class="fullWidth">Submit</button>
 	</div>
 	
+	<button ng-click="submit(game)" class="fullWidth">Submit</button>
+	<label class="fullWidth"> <input type="checkbox" ng-model="buggy.keep_values" ng-change="checked()" /> Conserver les valeurs</label>
 	
 </form>
