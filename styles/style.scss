@@ -122,6 +122,16 @@ div#wrapper {
 				font-size: 1em;
 				font-weight: 100;
 			}
+			div.description {
+				margin-top: 10px;
+				text-align: left;
+				font-size: 0.8em;
+				font-weight: 100;
+				
+				a, b {
+					color: $xlight_color;
+				}
+			}
 		}
 		
 		nav {

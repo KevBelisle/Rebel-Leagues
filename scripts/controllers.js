@@ -1,7 +1,7 @@
 var monthNames = [ "janvier", "février", "mars", "avril", "mai", "juin",
 	"juillet", "août", "septembre", "octobre", "novembre", "décembre" ];
 
-var rebelLeaguesControllers = angular.module('rebelLeaguesControllers', ['ui.bootstrap']);
+var rebelLeaguesControllers = angular.module('rebelLeaguesControllers', ['ui.bootstrap', 'ngSanitize']);
 
 rebelLeaguesControllers.controller('mobileMenuCtrl', ['$scope',
 	function ($scope) {
@@ -417,12 +417,13 @@ rebelLeaguesControllers.controller('leagueStatsCtrl', ['$scope', '$http',
 ]);
 
 
-rebelLeaguesControllers.controller('leagueInfoCtrl', ['$scope', '$http',
-	function ($scope, $http) {
+rebelLeaguesControllers.controller('leagueInfoCtrl', ['$scope', '$http', '$sce',
+	function ($scope, $http, $sce) {
 		$http.get('api/leagues').success(function(data) {
 			console.log(data);
 			$scope.title = data.data.league.title;
 			$scope.subtitle = data.data.league.subtitle;
+			$scope.description = $sce.trustAsHtml(data.data.league.description);
 		});
 				
 	}

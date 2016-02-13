@@ -74,6 +74,10 @@ BEGIN
 		ALTER TABLE leagues ADD eloSeasonedGameCountRequirement INT NOT NULL;
 	END IF;
 	
+	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'leagues' AND column_name = 'description' ) = 0 THEN
+		ALTER TABLE leagues ADD description TEXT;
+	END IF;
+	
 	
 	/* CREATE ranking_methods COLUMNS
 	============================================= */
