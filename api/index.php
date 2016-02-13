@@ -186,7 +186,7 @@ class League {
             games_split g
         ON p.player_id = g.player_id
         GROUP BY p.player_id
-        ORDER BY nickname'
+        ORDER BY firstname'
 		);
 		echo outputSuccess( array( 'players' => $players ) );
 	}
@@ -242,6 +242,7 @@ class League {
 		echo outputSuccess( array( 'factions' => $factions ) );
 	}
 	
+	
 	public static function getFactionRanking($faction_id) {
 		$factionRanking = getDatabase()->one(
 		"SELECT * FROM factions_ranking
@@ -251,12 +252,14 @@ class League {
 		echo outputSuccess( $factionRanking );
 	}
 	
+	
 	public static function getFactionsRankings() {
 		$factionsRankings = getDatabase()->all(
 		"SELECT * FROM factions_ranking"
 		);
 		echo outputSuccess( array( 'factionsRankings' => $factionsRankings) );
     }
+	
 	
 	public static function getLeafFactions() {
 		$factions = getDatabase()->all(
@@ -362,7 +365,6 @@ class League {
 		echo outputSuccess( $factionsStats );
     }
     
-	
 	
 	public static function getFactionStats($faction_id) {
 		
@@ -738,7 +740,11 @@ WHERE percentage_played_with >=50
 					:winPoints*games_won + :drawPoints*games_tied + :lossPoints*games_lost AS points
 					FROM players_ranking
 					ORDER BY points DESC, games_won DESC, games_tied DESC',
-					array(":winPoints" => $league["pointsWinValue"], ":drawPoints" => $league["pointsDrawValue"], ":lossPoints" => $league["pointsLossValue"])
+					array(
+						":winPoints" => $league["pointsWinValue"],
+						":drawPoints" => $league["pointsDrawValue"],
+						":lossPoints" => $league["pointsLossValue"]
+					)
 				);
 				break;
 			
