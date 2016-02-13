@@ -129,7 +129,8 @@ class League {
 			eloSeasonedKFactor,
 			eloMasterKFactor,
 			eloSeasonedGameCountRequirement,
-			eloStartRank
+			eloStartRank,
+			description
 		FROM leagues
 		WHERE league_id = :league_id',
 			array( ':league_id' => $league_id )
@@ -1182,7 +1183,8 @@ class Admin {
 								 'eloStartKFactor',
 								 'eloSeasonedKFactor',
 								 'eloMasterKFactor',
-								 'eloSeasonedGameCountRequirement'),
+								 'eloSeasonedGameCountRequirement',
+								 'description'),
 						   $_POST );
 		
 		try {
@@ -1198,7 +1200,8 @@ class Admin {
 					eloStartKFactor = :eloStartKFactor,
 					eloSeasonedKFactor = :eloSeasonedKFactor,
 					eloMasterKFactor = :eloMasterKFactor,
-					eloSeasonedGameCountRequirement = :eloSeasonedGameCountRequirement
+					eloSeasonedGameCountRequirement = :eloSeasonedGameCountRequirement,
+					description = :description
 				WHERE league_id = :league_id',
 			array(
 				":title" => $_POST["title"],
@@ -1213,6 +1216,7 @@ class Admin {
 				":eloSeasonedKFactor" => $_POST["eloSeasonedKFactor"],
 				":eloMasterKFactor" => $_POST["eloMasterKFactor"],
 				":eloSeasonedGameCountRequirement" => $_POST["eloSeasonedGameCountRequirement"],
+				":description" => $_POST["description"],
 				':league_id' => $leagueId
 			)
 			);
