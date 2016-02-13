@@ -38,8 +38,11 @@
 		
 		<label>K-Factor en tant que maître
 		<input type="text" class="fullWidth" ng-model="league.eloMasterKFactor" /></label>
-		
-		<button ng-click="submit(league)" class="fullWidth">Enregistrer les paramètres</button>
 	</div>
+		
+	<label>Description :
+	<textarea class="fullWidth" ng-model="league.description"></textarea></label>
+		
+	<button ng-click="submit(league)" class="fullWidth">Enregistrer les paramètres</button>
 	
 </form>
