@@ -144,9 +144,7 @@ rebelLeaguesAdminControllers.controller('addGameCtrl', ['$scope', '$http',
 			player2_id: null,
 			player2_faction_id: null,
 			is_draw: false,
-			is_ranked: true,
 			is_time_runout: false,
-			is_online: false,
 			datetime: new Date(),
 			notes: "",
 			attributes: ""
@@ -181,9 +179,7 @@ rebelLeaguesAdminControllers.controller('addGameCtrl', ['$scope', '$http',
 						player2_id: null,
 						player2_faction_id: null,
 						is_draw: false,
-						is_ranked: true,
 						is_time_runout: false,
-						is_online: false,
 						datetime: new Date(),
 						notes: "",
 						attributes: ""
@@ -254,8 +250,6 @@ rebelLeaguesAdminControllers.controller('editGameCtrl', ['$scope', '$http',
 			$scope.selectedGame.datetime = new Date( $scope.selectedGame.date );
 			
 			$scope.selectedGame.is_draw = $scope.selectedGame.is_draw == 1 ? true : false;
-			$scope.selectedGame.is_online = $scope.selectedGame.is_online == 1 ? true : false;
-			$scope.selectedGame.is_ranked = $scope.selectedGame.is_ranked == 1 ? true : false;
 			$scope.selectedGame.is_time_runout = $scope.selectedGame.is_time_runout == 1 ? true : false;
 			
 			console.log($scope.selectedGame);

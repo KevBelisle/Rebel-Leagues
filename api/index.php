@@ -1036,12 +1036,12 @@ class Admin {
 	public static function addGame() {
 		//self::checkTier(3);
 		
-		self::checkFields( array('player1_id', 'player1_faction_id', 'player2_id', 'player2_faction_id', 'date', 'is_draw', 'is_ranked', 'is_time_runout', 'is_online', 'attributes'), $_POST );
+		self::checkFields( array('player1_id', 'player1_faction_id', 'player2_id', 'player2_faction_id', 'date', 'is_draw', 'is_time_runout', 'attributes'), $_POST );
 		
 		try {
 			getDatabase()->begin();
 		
-			$game_id = getDatabase()->execute('INSERT INTO games (player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES (:player1_id, :player1_faction_id, :player2_id, :player2_faction_id, :date, :is_draw, :is_ranked, :is_time_runout, :is_online, :notes)',
+			$game_id = getDatabase()->execute('INSERT INTO games (player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_time_runout, notes) VALUES (:player1_id, :player1_faction_id, :player2_id, :player2_faction_id, :date, :is_draw, :is_time_runout, :notes)',
 			array(
 				':player1_id' => $_POST['player1_id'],
 				':player1_faction_id' => $_POST['player1_faction_id'],
@@ -1049,9 +1049,7 @@ class Admin {
 				':player2_faction_id' => $_POST['player2_faction_id'],
 				':date' => $_POST['date'],
 				':is_draw' => $_POST['is_draw'],
-				':is_ranked' => $_POST['is_ranked'],
 				':is_time_runout' => $_POST['is_time_runout'],
-				':is_online' => $_POST['is_online'],
 				':notes' => $_POST['notes']
 			)
 			);
@@ -1079,7 +1077,7 @@ class Admin {
 	public static function editGame($game_id) {
 		self::checkTier(2);
 		
-		self::checkFields( array('player1_id', 'player1_faction_id', 'player2_id', 'player2_faction_id', 'date', 'is_draw', 'is_ranked', 'is_time_runout', 'is_online', 'attributes'), $_POST );
+		self::checkFields( array('player1_id', 'player1_faction_id', 'player2_id', 'player2_faction_id', 'date', 'is_draw', 'is_time_runout', 'attributes'), $_POST );
 		
 		try {
 			getDatabase()->begin();
@@ -1091,9 +1089,7 @@ class Admin {
 					player2_faction_id = :player2_faction_id,
 					date = :date,
 					is_draw = :is_draw,
-					is_ranked = :is_ranked,
 					is_time_runout = :is_time_runout,
-					is_online = :is_online,
 					notes = :notes
 				WHERE game_id = :game_id',
 				array(
@@ -1103,9 +1099,7 @@ class Admin {
 					':player2_faction_id' => $_POST['player2_faction_id'],
 					':date' => $_POST['date'],
 					':is_draw' => $_POST['is_draw'],
-					':is_ranked' => $_POST['is_ranked'],
 					':is_time_runout' => $_POST['is_time_runout'],
-					':is_online' => $_POST['is_online'],
 					':notes' => $_POST['notes'],
 					':game_id' => $game_id
 				)
