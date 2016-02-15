@@ -58,6 +58,7 @@ div#wrapper { width: 100%; }
 		header {
 			width: 100%;
 			margin-top: 20px;
+			padding: 0 10px;
 		}
 		nav { display: none; }
 		aside { display: none; }
@@ -70,6 +71,12 @@ div#wrapper { width: 100%; }
 			width: 100%;
 			
 			div#main {
+			
+				div#gamesHistoryFilter {
+					width: 100%;
+					padding: 10px 10px 0 10px;
+				}
+			
 				div.game {
 					width: 100%;
 					padding: 10px 0 10px 10px;
@@ -103,10 +110,14 @@ div#wrapper { width: 100%; }
 							}
 						}
 					}
+				}
+					
+				div.attributes {
+					padding: 0 10px 10px 10px;
 					
 					div.moreInfo {
-						display: table-cell;
-						vertical-align: middle;
+						display: block;
+						float: right;
 						
 						i {
 							font-size: $large_text;
@@ -116,6 +127,7 @@ div#wrapper { width: 100%; }
 				
 				div.notes {
 					padding: 0 10px 10px 10px;
+					margin-top: -10px;
 				}
 				
 				> div.player {
@@ -269,7 +281,9 @@ div#wrapper { width: 100%; }
 		div#right {
 			width: $cols6;
 			
-			header {  }
+			header {
+				padding: 0;
+			}
 			aside {  }
 		}
 		
@@ -404,7 +418,7 @@ div#wrapper { width: 100%; }
 				div#main {
 					
 					div.game {
-						padding: 20px 0 20px 20px;
+						padding: 20px;
 						
 						div.player {
 						
@@ -458,6 +472,10 @@ div#wrapper { width: 100%; }
 						div.moreInfo {
 						}
 						
+					}
+					
+					div.attributes {
+						padding: 0 20px 20px 20px;
 					}
 					
 					div.notes {

@@ -74,6 +74,10 @@ BEGIN
 		ALTER TABLE leagues ADD eloSeasonedGameCountRequirement INT NOT NULL;
 	END IF;
 	
+	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'leagues' AND column_name = 'description' ) = 0 THEN
+		ALTER TABLE leagues ADD description TEXT;
+	END IF;
+	
 	
 	/* CREATE ranking_methods COLUMNS
 	============================================= */
@@ -259,6 +263,14 @@ BEGIN
 	
 	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'attributes' AND column_name = 'attribute_group' ) = 0 THEN
 		ALTER TABLE attributes ADD attribute_group VARCHAR(40);
+	END IF;
+	
+	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'attributes' AND column_name = 'icon' ) = 0 THEN
+		ALTER TABLE attributes ADD icon VARCHAR(40);
+	END IF;
+	
+	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'attributes' AND column_name = 'logo' ) = 0 THEN
+		ALTER TABLE attributes ADD logo VARCHAR(60);
 	END IF;
 		
 		

@@ -1,0 +1,4 @@
+
+	<select class="fullWidth" ng-model="selected_player_id" ng-options="p.player_id as p.nickname + ' (' + p.firstname + ' ' + p.lastname + ')' for p in players" ng-change="valueChange()">
+		<option value="">Choisir un joueur</option>
+	</select>

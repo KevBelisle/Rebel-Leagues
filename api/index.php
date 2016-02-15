@@ -32,6 +32,10 @@ getRoute()->get('/games/(\d+)(?:/?)', array('League', 'getGamesHistory'));
 getRoute()->get('/games/(\d+)/(\d+)(?:/?)', array('League', 'getGamesHistory'));
 getRoute()->get('/games/all(?:/?)', array('League', 'getGamesHistoryAll'));
 
+getRoute()->post('/games(?:/?)', array('League', 'postGamesHistory'));
+getRoute()->post('/games/(\d+)(?:/?)', array('League', 'postGamesHistory'));
+getRoute()->post('/games/(\d+)/(\d+)(?:/?)', array('League', 'postGamesHistory'));
+
 getRoute()->get('/attributes(?:/?)', array('League', 'getAttributes'));
 getRoute()->get('/attributes/groups(?:/?)', array('League', 'getAttributeGroups'));
 
@@ -64,6 +68,8 @@ getRoute()->put('/games/(\d+)(?:/?)', array('Admin', 'editGame'));
 getRoute()->delete('/games/(\d+)(?:/?)', array('Admin', 'deleteGame'));
 
 getRoute()->put('/leagues(?:/?)', array('Admin', 'editLeague'));
+getRoute()->put('/attributes/(\d+)(?:/?)', array('Admin', 'editAttribute'));
+getRoute()->delete('/attributes/(\d+)(?:/?)', array('Admin', 'deleteAttribute'));
 
 // Run router
 getRoute()->run();
@@ -129,7 +135,8 @@ class League {
 			eloSeasonedKFactor,
 			eloMasterKFactor,
 			eloSeasonedGameCountRequirement,
-			eloStartRank
+			eloStartRank,
+			description
 		FROM leagues
 		WHERE league_id = :league_id',
 			array( ':league_id' => $league_id )
@@ -186,7 +193,7 @@ class League {
             games_split g
         ON p.player_id = g.player_id
         GROUP BY p.player_id
-        ORDER BY nickname'
+        ORDER BY firstname'
 		);
 		echo outputSuccess( array( 'players' => $players ) );
 	}
@@ -209,7 +216,9 @@ class League {
 		'SELECT
 			attribute_id,
 			name,
-			attribute_group
+			attribute_group,
+			icon,
+			logo
 		FROM attributes
 		ORDER BY attribute_group'
 		);
@@ -242,6 +251,7 @@ class League {
 		echo outputSuccess( array( 'factions' => $factions ) );
 	}
 	
+	
 	public static function getFactionRanking($faction_id) {
 		$factionRanking = getDatabase()->one(
 		"SELECT * FROM factions_ranking
@@ -251,12 +261,14 @@ class League {
 		echo outputSuccess( $factionRanking );
 	}
 	
+	
 	public static function getFactionsRankings() {
 		$factionsRankings = getDatabase()->all(
 		"SELECT * FROM factions_ranking"
 		);
 		echo outputSuccess( array( 'factionsRankings' => $factionsRankings) );
     }
+	
 	
 	public static function getLeafFactions() {
 		$factions = getDatabase()->all(
@@ -362,7 +374,6 @@ class League {
 		echo outputSuccess( $factionsStats );
     }
     
-	
 	
 	public static function getFactionStats($faction_id) {
 		
@@ -652,6 +663,84 @@ WHERE percentage_played_with >=50
 			'SELECT * FROM games_history ORDER BY date DESC LIMIT :skip, :take',
 			array(':skip' => $skip, ':take' => $take)
 		);
+		
+		foreach($games as $index => $game) {
+			$attributes = getDatabase()->all(
+				'SELECT
+					a.attribute_id,
+					a.name,
+					a.icon,
+					a.logo
+				FROM games_attributes ga
+				INNER JOIN attributes a ON a.attribute_id = ga.attribute_id
+				WHERE game_id = :game_id',
+				array(':game_id' => $game['game_id'])
+			);
+			
+			$games[$index]["attributes"] = array();
+
+			foreach($attributes as $attribute) {
+				$games[$index]["attributes"][] = $attribute;
+			}
+		}
+		
+		echo outputSuccess( array( 'games' => $games ) );
+	}
+	
+	public static function postGamesHistory($skip = 0, $take = 20) {
+		if( array_key_exists('skip', $_GET) ) {
+			$skip = $_GET['skip'];
+		}
+		if( array_key_exists('take', $_GET) ) {
+			$take = $_GET['take'];
+		}
+		
+		$filters = null;
+		if( array_key_exists('filters', $_POST) ) {
+			$filters = $_POST['filters'];
+		}
+		
+		if ($filters == null) {
+			$games = getDatabase()->all(
+				'SELECT * FROM games_history ORDER BY date DESC LIMIT :skip, :take',
+				array(':skip' => $skip, ':take' => $take)
+			);
+		}
+		else {
+			$query = array('SELECT * FROM games_history');
+			$values = array(':skip' => $skip, ':take' => $take);
+			
+			if( array_key_exists('player_id', $filters) && $filters['player_id'] != null ) {
+				$query[] = 'WHERE player1_id = :player1_id OR player2_id = :player2_id ';
+				$values[':player1_id'] = $filters['player_id'];
+				$values[':player2_id'] = $filters['player_id'];
+			}
+			
+			$query[] = 'ORDER BY date DESC LIMIT :skip, :take';
+			
+			$games = getDatabase()->all(implode(" ", $query), $values);
+		}
+		
+		foreach($games as $index => $game) {
+			$attributes = getDatabase()->all(
+				'SELECT
+					a.attribute_id,
+					a.name,
+					a.icon,
+					a.logo
+				FROM games_attributes ga
+				INNER JOIN attributes a ON a.attribute_id = ga.attribute_id
+				WHERE game_id = :game_id',
+				array(':game_id' => $game['game_id'])
+			);
+			
+			$games[$index]["attributes"] = array();
+
+			foreach($attributes as $attribute) {
+				$games[$index]["attributes"][] = $attribute;
+			}
+		}
+		
 		echo outputSuccess( array( 'games' => $games ) );
 	}
 	
@@ -738,7 +827,11 @@ WHERE percentage_played_with >=50
 					:winPoints*games_won + :drawPoints*games_tied + :lossPoints*games_lost AS points
 					FROM players_ranking
 					ORDER BY points DESC, games_won DESC, games_tied DESC',
-					array(":winPoints" => $league["pointsWinValue"], ":drawPoints" => $league["pointsDrawValue"], ":lossPoints" => $league["pointsLossValue"])
+					array(
+						":winPoints" => $league["pointsWinValue"],
+						":drawPoints" => $league["pointsDrawValue"],
+						":lossPoints" => $league["pointsLossValue"]
+					)
 				);
 				break;
 			
@@ -1029,12 +1122,12 @@ class Admin {
 	public static function addGame() {
 		//self::checkTier(3);
 		
-		self::checkFields( array('player1_id', 'player1_faction_id', 'player2_id', 'player2_faction_id', 'date', 'is_draw', 'is_ranked', 'is_time_runout', 'is_online', 'attributes'), $_POST );
+		self::checkFields( array('player1_id', 'player1_faction_id', 'player2_id', 'player2_faction_id', 'date', 'is_draw', 'is_time_runout', 'attributes'), $_POST );
 		
 		try {
 			getDatabase()->begin();
 		
-			$game_id = getDatabase()->execute('INSERT INTO games (player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_ranked, is_time_runout, is_online, notes) VALUES (:player1_id, :player1_faction_id, :player2_id, :player2_faction_id, :date, :is_draw, :is_ranked, :is_time_runout, :is_online, :notes)',
+			$game_id = getDatabase()->execute('INSERT INTO games (player1_id, player1_faction_id, player2_id, player2_faction_id, date, is_draw, is_time_runout, notes) VALUES (:player1_id, :player1_faction_id, :player2_id, :player2_faction_id, :date, :is_draw, :is_time_runout, :notes)',
 			array(
 				':player1_id' => $_POST['player1_id'],
 				':player1_faction_id' => $_POST['player1_faction_id'],
@@ -1042,9 +1135,7 @@ class Admin {
 				':player2_faction_id' => $_POST['player2_faction_id'],
 				':date' => $_POST['date'],
 				':is_draw' => $_POST['is_draw'],
-				':is_ranked' => $_POST['is_ranked'],
 				':is_time_runout' => $_POST['is_time_runout'],
-				':is_online' => $_POST['is_online'],
 				':notes' => $_POST['notes']
 			)
 			);
@@ -1072,7 +1163,7 @@ class Admin {
 	public static function editGame($game_id) {
 		self::checkTier(2);
 		
-		self::checkFields( array('player1_id', 'player1_faction_id', 'player2_id', 'player2_faction_id', 'date', 'is_draw', 'is_ranked', 'is_time_runout', 'is_online', 'attributes'), $_POST );
+		self::checkFields( array('player1_id', 'player1_faction_id', 'player2_id', 'player2_faction_id', 'date', 'is_draw', 'is_time_runout', 'attributes'), $_POST );
 		
 		try {
 			getDatabase()->begin();
@@ -1084,9 +1175,7 @@ class Admin {
 					player2_faction_id = :player2_faction_id,
 					date = :date,
 					is_draw = :is_draw,
-					is_ranked = :is_ranked,
 					is_time_runout = :is_time_runout,
-					is_online = :is_online,
 					notes = :notes
 				WHERE game_id = :game_id',
 				array(
@@ -1096,9 +1185,7 @@ class Admin {
 					':player2_faction_id' => $_POST['player2_faction_id'],
 					':date' => $_POST['date'],
 					':is_draw' => $_POST['is_draw'],
-					':is_ranked' => $_POST['is_ranked'],
 					':is_time_runout' => $_POST['is_time_runout'],
-					':is_online' => $_POST['is_online'],
 					':notes' => $_POST['notes'],
 					':game_id' => $game_id
 				)
@@ -1176,7 +1263,8 @@ class Admin {
 								 'eloStartKFactor',
 								 'eloSeasonedKFactor',
 								 'eloMasterKFactor',
-								 'eloSeasonedGameCountRequirement'),
+								 'eloSeasonedGameCountRequirement',
+								 'description'),
 						   $_POST );
 		
 		try {
@@ -1192,7 +1280,8 @@ class Admin {
 					eloStartKFactor = :eloStartKFactor,
 					eloSeasonedKFactor = :eloSeasonedKFactor,
 					eloMasterKFactor = :eloMasterKFactor,
-					eloSeasonedGameCountRequirement = :eloSeasonedGameCountRequirement
+					eloSeasonedGameCountRequirement = :eloSeasonedGameCountRequirement,
+					description = :description
 				WHERE league_id = :league_id',
 			array(
 				":title" => $_POST["title"],
@@ -1207,6 +1296,7 @@ class Admin {
 				":eloSeasonedKFactor" => $_POST["eloSeasonedKFactor"],
 				":eloMasterKFactor" => $_POST["eloMasterKFactor"],
 				":eloSeasonedGameCountRequirement" => $_POST["eloSeasonedGameCountRequirement"],
+				":description" => $_POST["description"],
 				':league_id' => $leagueId
 			)
 			);
@@ -1221,7 +1311,7 @@ class Admin {
 	
 	public static function addAttribute() {
 		self::checkTier(1);
-		self::checkFields( array('name'), $_POST );
+		self::checkFields( array('name', 'icon', 'logo'), $_POST );
 		
 		$attribute_group = "";
 		
@@ -1230,10 +1320,45 @@ class Admin {
 		}
 		
 		try {
-			$attribute_id = getDatabase()->execute('INSERT INTO attributes (name, attribute_group) VALUES(:name, :attribute_group)',
+			$attribute_id = getDatabase()->execute('INSERT INTO attributes (name, attribute_group, icon, logo) VALUES(:name, :attribute_group, :icon, :logo)',
 			array(
 				':name' => $_POST['name'],
-				':attribute_group' => $_POST['attribute_group']
+				':attribute_group' => $_POST['attribute_group'],
+				':icon' => $_POST['icon'],
+				':logo' => $_POST['logo']
+			)
+			);
+			echo outputSuccess( array( 'attribute_id' => $attribute_id ) );
+			
+		} catch (Exception $e) {
+			echo outputError($e->getMessage());
+		}
+		
+	}
+	
+	public static function editAttribute($attribute_id) {
+		self::checkTier(1);
+		self::checkFields( array('name', 'icon', 'logo'), $_POST );
+		
+		$attribute_group = "";
+		
+		if( array_key_exists('attribute_group', $_POST) ) {
+			$attribute_group = $_POST['attribute_group'];
+		}
+		
+		try {
+			getDatabase()->execute('UPDATE attributes SET
+				name = :name,
+				attribute_group = :attribute_group,
+				icon = :icon,
+				logo = :logo
+				WHERE attribute_id = :attribute_id',
+			array(
+				':name' => $_POST['name'],
+				':attribute_group' => $_POST['attribute_group'],
+				':icon' => $_POST['icon'],
+				':logo' => $_POST['logo'],
+				':attribute_id' => $attribute_id
 			)
 			);
 			echo outputSuccess( array( 'attribute_id' => $attribute_id ) );

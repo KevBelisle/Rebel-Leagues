@@ -3,9 +3,6 @@
 
 	<div class="left">
 		<input type="text" class="fullWidth" ng-model="attribute.name" placeholder="Nom de l'attribut" required></input>
-	</div>
-	
-	<div class="right">
 		<input type="text" class="fullWidth" ng-model="attribute.attribute_group" placeholder="Groupe de l'attribut"></input>
 		<div class="fullWidth info">
 			Groupes existants :
@@ -13,6 +10,11 @@
 				{{attribute_group.attribute_group}}<span ng-if="$first || $middle">, </span>
 			</span>
 		</div>
+	</div>
+	
+	<div class="right">
+		<input type="text" class="fullWidth" placeholder="Icône (Font Awesome)" ng-model="attribute.icon"></input>
+		<input type="text" class="fullWidth" placeholder="Logo (URL)" ng-model="attribute.logo"></input>
 	</div>
 	
 	<button ng-click="submit(attribute)" class="fullWidth">Submit</button>

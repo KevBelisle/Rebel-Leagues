@@ -122,6 +122,16 @@ div#wrapper {
 				font-size: 1em;
 				font-weight: 100;
 			}
+			div.description {
+				margin-top: 10px;
+				text-align: left;
+				font-size: 0.8em;
+				font-weight: 100;
+				
+				a, b {
+					color: $xlight_color;
+				}
+			}
 		}
 		
 		nav {
@@ -204,6 +214,16 @@ div#wrapper {
         margin-top: 30px;
 	
 		section {
+		
+			div#gamesHistoryFilter {
+				background-color: $accent_color;
+				
+				.fullWidth {
+					width: 100%;
+					margin-bottom: 10px;
+				}
+			}
+		
 			div#main {
 				background: $xlight_color;
 				color: $xdark_color;
@@ -248,14 +268,28 @@ div#wrapper {
 							}
 						}
 					}
-					
+				}
+				
+				div.attributes {
+				
+					text-align: right;
+				
+					span.attribute {
+						font-size: $small_text;
+						margin-right: 10px;
+						padding: 1px 3px;
+						border: 1px solid $xdark-color;
+						border-radius: 4px;
+					}
+					i.attribute {
+						font-size: $normal_text;
+						margin-right: 10px;
+						padding: 0 3px;
+					}
+				
 					div.moreInfo {
-						width: 40px;
-						margin-right: -40px;
-						text-align: center;
-						
 						i {
-							display: block;
+							display: inline-block;
 							color: $xdark_color;
 							margin: 0 0 5px 0;
 						}
