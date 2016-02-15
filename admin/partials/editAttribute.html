@@ -3,10 +3,16 @@
 
 	<form ng-repeat="attribute in attributes" class="inline">
 		
-		<input type="text" ng-model="attribute.name"></input>
-		<input type="text" ng-model="attribute.attribute_group"></input>
-		<button ng-click="save(attribute)">Enregistrer</button>
-		<button ng-click="delete(attribute)">Supprimer</button>
+		<div class="left">
+			<label class="fullWidth">Nom: <input type="text" ng-model="attribute.name" /></label>
+			<label class="fullWidth">Groupe: <input type="text" ng-model="attribute.attribute_group" /></label>
+			<button class="fullWidth" ng-click="save(attribute)">Enregistrer</button>
+		</div>
+		<div class="right">
+			<label class="fullWidth">Icône: <input type="text" ng-model="attribute.icon" /></label>
+			<label class="fullWidth">Logo: <input type="text" ng-model="attribute.logo" /></label>
+			<button class="fullWidth" ng-click="delete(attribute)">Supprimer</button>
+		</div>
 		
 	</forms>
 	

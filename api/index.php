@@ -68,6 +68,8 @@ getRoute()->put('/games/(\d+)(?:/?)', array('Admin', 'editGame'));
 getRoute()->delete('/games/(\d+)(?:/?)', array('Admin', 'deleteGame'));
 
 getRoute()->put('/leagues(?:/?)', array('Admin', 'editLeague'));
+getRoute()->put('/attributes/(\d+)(?:/?)', array('Admin', 'editAttribute'));
+getRoute()->delete('/attributes/(\d+)(?:/?)', array('Admin', 'deleteAttribute'));
 
 // Run router
 getRoute()->run();
@@ -214,7 +216,9 @@ class League {
 		'SELECT
 			attribute_id,
 			name,
-			attribute_group
+			attribute_group,
+			icon,
+			logo
 		FROM attributes
 		ORDER BY attribute_group'
 		);
@@ -660,6 +664,26 @@ WHERE percentage_played_with >=50
 			array(':skip' => $skip, ':take' => $take)
 		);
 		
+		foreach($games as $index => $game) {
+			$attributes = getDatabase()->all(
+				'SELECT
+					a.attribute_id,
+					a.name,
+					a.icon,
+					a.logo
+				FROM games_attributes ga
+				INNER JOIN attributes a ON a.attribute_id = ga.attribute_id
+				WHERE game_id = :game_id',
+				array(':game_id' => $game['game_id'])
+			);
+			
+			$games[$index]["attributes"] = array();
+
+			foreach($attributes as $attribute) {
+				$games[$index]["attributes"][] = $attribute;
+			}
+		}
+		
 		echo outputSuccess( array( 'games' => $games ) );
 	}
 	
@@ -695,6 +719,26 @@ WHERE percentage_played_with >=50
 			$query[] = 'ORDER BY date DESC LIMIT :skip, :take';
 			
 			$games = getDatabase()->all(implode(" ", $query), $values);
+		}
+		
+		foreach($games as $index => $game) {
+			$attributes = getDatabase()->all(
+				'SELECT
+					a.attribute_id,
+					a.name,
+					a.icon,
+					a.logo
+				FROM games_attributes ga
+				INNER JOIN attributes a ON a.attribute_id = ga.attribute_id
+				WHERE game_id = :game_id',
+				array(':game_id' => $game['game_id'])
+			);
+			
+			$games[$index]["attributes"] = array();
+
+			foreach($attributes as $attribute) {
+				$games[$index]["attributes"][] = $attribute;
+			}
 		}
 		
 		echo outputSuccess( array( 'games' => $games ) );
@@ -1267,7 +1311,7 @@ class Admin {
 	
 	public static function addAttribute() {
 		self::checkTier(1);
-		self::checkFields( array('name'), $_POST );
+		self::checkFields( array('name', 'icon', 'logo'), $_POST );
 		
 		$attribute_group = "";
 		
@@ -1276,10 +1320,45 @@ class Admin {
 		}
 		
 		try {
-			$attribute_id = getDatabase()->execute('INSERT INTO attributes (name, attribute_group) VALUES(:name, :attribute_group)',
+			$attribute_id = getDatabase()->execute('INSERT INTO attributes (name, attribute_group, icon, logo) VALUES(:name, :attribute_group, :icon, :logo)',
 			array(
 				':name' => $_POST['name'],
-				':attribute_group' => $_POST['attribute_group']
+				':attribute_group' => $_POST['attribute_group'],
+				':icon' => $_POST['icon'],
+				':logo' => $_POST['logo']
+			)
+			);
+			echo outputSuccess( array( 'attribute_id' => $attribute_id ) );
+			
+		} catch (Exception $e) {
+			echo outputError($e->getMessage());
+		}
+		
+	}
+	
+	public static function editAttribute($attribute_id) {
+		self::checkTier(1);
+		self::checkFields( array('name', 'icon', 'logo'), $_POST );
+		
+		$attribute_group = "";
+		
+		if( array_key_exists('attribute_group', $_POST) ) {
+			$attribute_group = $_POST['attribute_group'];
+		}
+		
+		try {
+			getDatabase()->execute('UPDATE attributes SET
+				name = :name,
+				attribute_group = :attribute_group,
+				icon = :icon,
+				logo = :logo
+				WHERE attribute_id = :attribute_id',
+			array(
+				':name' => $_POST['name'],
+				':attribute_group' => $_POST['attribute_group'],
+				':icon' => $_POST['icon'],
+				':logo' => $_POST['logo'],
+				':attribute_id' => $attribute_id
 			)
 			);
 			echo outputSuccess( array( 'attribute_id' => $attribute_id ) );

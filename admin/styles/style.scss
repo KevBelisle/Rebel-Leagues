@@ -222,6 +222,22 @@ div#wrapper {
 				padding: 5px 0;
 				margin: 10px 0;
 			}
+			
+			label.fullWidth {
+				width: 100%;
+				margin-top: 0;
+				margin-bottom: 0;
+				text-align: right;
+				line-height: 31px;
+				
+				input {
+					width: 70%;
+					float: right;
+					margin-top: 0;
+					margin-bottom: 0;
+					margin-left: 10px;
+				}
+			}
 		}
 		
 	}
@@ -288,6 +304,14 @@ div.datepicker {
 	}
 }
 	
+	
+	
+div#wrapper div#main div#editAttribute form {
+	border-top: 1px solid $xdark_color;
+	float: left;
+	padding-top: 15px;
+	margin-top: 10px;
+}
 	
 	
 	

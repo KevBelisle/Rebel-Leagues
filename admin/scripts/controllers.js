@@ -278,8 +278,6 @@ rebelLeaguesAdminControllers.controller('editGameCtrl', ['$scope', '$http',
 		$scope.games = [];
 		$scope.factions = [];
 		$scope.players = [];
-		$scope.attribute_groups = {};
-		$scope.attributes = [];
 		
 		$http.get('../api/games/all')
 			.then(
@@ -294,30 +292,6 @@ rebelLeaguesAdminControllers.controller('editGameCtrl', ['$scope', '$http',
 		$http.get('../api/players/')
 			.then(
 				function success(response) { $scope.players = response.data.data.players; },
-				function error(reason)     { return false; }
-			);
-		$http.get('../api/attributes/')
-			.then(
-				function success(response) {
-					response.data.data.attributes.forEach(function (attribute, index) {
-						if (attribute.attribute_group == null) {
-							$scope.attributes.push(attribute);
-						} else {
-							if (attribute.attribute_group in $scope.attribute_groups) {
-								$scope.attribute_groups[attribute.attribute_group]["group_attributes"].push(attribute);
-							} else {
-								$scope.attribute_groups[attribute.attribute_group] = {
-									"attribute_group": attribute.attribute_group,
-									"selected_attribute_id": null,
-									"group_attributes": [attribute]
-								};
-							}
-						}
-					});
-					console.log("attributes:");
-					console.log($scope.attribute_groups);
-					console.log($scope.attributes);
-				},
 				function error(reason)     { return false; }
 			);
 		
@@ -423,6 +397,8 @@ rebelLeaguesAdminControllers.controller('addAttributeCtrl', ['$scope', '$http',
 		$scope.attribute = {
 			name: null,
 			attribute_group: null,
+			icon: null,
+			logo: null
 		};
 
 		$scope.submit = function (i_attribute) {
@@ -431,7 +407,9 @@ rebelLeaguesAdminControllers.controller('addAttributeCtrl', ['$scope', '$http',
 				alert("Attribut ajouté.");
 				$scope.attribute = {
 					name: null,
-					attribute_group: null
+					attribute_group: null,
+					icon: null,
+					logo: null
 				};
 				console.log(data);
 			}).error( function(data) {
@@ -462,7 +440,7 @@ rebelLeaguesAdminControllers.controller('editAttributeCtrl', ['$scope', '$http',
 
 		$scope.save = function (attribute) {
 			
-			$http.put('../api/attributes', attribute).success( function (data) {
+			$http.put('../api/attributes/' + attribute["attribute_id"], attribute).success( function (data) {
 				alert("Attribut modifié.");
 				console.log(data);
 			}).error( function(data) {
@@ -518,7 +496,7 @@ rebelLeaguesAdminControllers.directive('attributeEditor', function($http) {
 					function success(response) {
 						scope.all_attributes = response.data.data.attributes;
 						response.data.data.attributes.forEach(function (attribute, index) {
-							if (attribute.attribute_group == null) {
+							if (attribute.attribute_group == null || attribute.attribute_group == "") {
 								scope.attributes.push(attribute);
 							} else {
 								if (attribute.attribute_group in scope.attribute_groups) {

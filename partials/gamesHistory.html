@@ -44,11 +44,21 @@
 				</div>
 			</div>
 			
-			<div class="moreInfo">
-				<i class="fa fa-clock-o" ng-if="game.is_time_runout" tooltip="Terminée par manque de temps"></i>
-				<i class="fa fa-file-text-o notes-icon" ng-show="game.notes" ng-class="{ 'active': game.showNotes }" ng-click="game.showNotes = !game.showNotes" tooltip="Afficher les notes"></i>
-			</div>
+		</div>
+		
+		<div class="attributes clear" ng-if="!game.is_group_title">
+			<span ng-repeat="attribute in game.attributes">
+				<span class="attribute" ng-if="attribute.icon == null || attribute.icon == ''">{{ attribute.name }}</span>
+				<i ng-if="attribute.icon != null && attribute.icon != ''" class="attribute fa {{ attribute.icon }}" tooltip="{{ attribute.name }}"></i></span>
+			</span>
 			
+			<span ng-if="game.is_time_runout">
+				<i class="attribute fa fa-clock-o" tooltip="Terminée par manque de temps"></i>
+			</span>
+			
+			<span>
+				<i class="attribute fa fa-file-text-o notes-icon" ng-show="game.notes" ng-class="{ 'active': game.showNotes }" ng-click="game.showNotes = !game.showNotes" tooltip="Afficher les notes"></i>
+			</span>
 		</div>
 		
 		<div class="notes" ng-show="game.showNotes">
