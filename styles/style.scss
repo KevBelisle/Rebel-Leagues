@@ -214,6 +214,16 @@ div#wrapper {
         margin-top: 30px;
 	
 		section {
+		
+			div#gamesHistoryFilter {
+				background-color: $accent_color;
+				
+				.fullWidth {
+					width: 100%;
+					margin-bottom: 10px;
+				}
+			}
+		
 			div#main {
 				background: $xlight_color;
 				color: $xdark_color;
