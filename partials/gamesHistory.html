@@ -1,4 +1,9 @@
 
+	<div id="gamesHistoryFilter">
+		<div games-filter-editor ng-model="filters"></div>
+		<button ng-click="filter()" class="fullWidth">Filtrer les parties</button>
+	</div>
+	
 	<div ng-repeat="game in games">
 	
 		<div class="date" ng-if="game.is_group_title">

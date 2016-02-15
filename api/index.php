@@ -32,6 +32,10 @@ getRoute()->get('/games/(\d+)(?:/?)', array('League', 'getGamesHistory'));
 getRoute()->get('/games/(\d+)/(\d+)(?:/?)', array('League', 'getGamesHistory'));
 getRoute()->get('/games/all(?:/?)', array('League', 'getGamesHistoryAll'));
 
+getRoute()->post('/games(?:/?)', array('League', 'postGamesHistory'));
+getRoute()->post('/games/(\d+)(?:/?)', array('League', 'postGamesHistory'));
+getRoute()->post('/games/(\d+)/(\d+)(?:/?)', array('League', 'postGamesHistory'));
+
 getRoute()->get('/attributes(?:/?)', array('League', 'getAttributes'));
 getRoute()->get('/attributes/groups(?:/?)', array('League', 'getAttributeGroups'));
 
@@ -655,6 +659,44 @@ WHERE percentage_played_with >=50
 			'SELECT * FROM games_history ORDER BY date DESC LIMIT :skip, :take',
 			array(':skip' => $skip, ':take' => $take)
 		);
+		
+		echo outputSuccess( array( 'games' => $games ) );
+	}
+	
+	public static function postGamesHistory($skip = 0, $take = 20) {
+		if( array_key_exists('skip', $_GET) ) {
+			$skip = $_GET['skip'];
+		}
+		if( array_key_exists('take', $_GET) ) {
+			$take = $_GET['take'];
+		}
+		
+		$filters = null;
+		if( array_key_exists('filters', $_POST) ) {
+			$filters = $_POST['filters'];
+		}
+		
+		if ($filters == null) {
+			$games = getDatabase()->all(
+				'SELECT * FROM games_history ORDER BY date DESC LIMIT :skip, :take',
+				array(':skip' => $skip, ':take' => $take)
+			);
+		}
+		else {
+			$query = array('SELECT * FROM games_history');
+			$values = array(':skip' => $skip, ':take' => $take);
+			
+			if( array_key_exists('player_id', $filters) && $filters['player_id'] != null ) {
+				$query[] = 'WHERE player1_id = :player1_id OR player2_id = :player2_id ';
+				$values[':player1_id'] = $filters['player_id'];
+				$values[':player2_id'] = $filters['player_id'];
+			}
+			
+			$query[] = 'ORDER BY date DESC LIMIT :skip, :take';
+			
+			$games = getDatabase()->all(implode(" ", $query), $values);
+		}
+		
 		echo outputSuccess( array( 'games' => $games ) );
 	}
 	

@@ -19,8 +19,34 @@ rebelLeaguesControllers.controller('gamesHistoryCtrl', ['$scope', '$http', '$mod
 		$scope.prev_date_string = "";
 		$scope.loadInProgress = false;
 		$scope.noMoreData = false;
+		
+		$scope.filters = {};
+		$scope.currentFilters = {};
+		
+		function processGameData (game) {
+			game.is_draw = game.is_draw == "1" ? true : false;
+			game.is_time_runout = game.is_time_runout == "1" ? true : false;
+			game.is_group_title = false;
+			
+			var date = new Date( game.date.substring(0,4), parseInt(game.date.substring(5,7))-1, game.date.substring(8,10) );
+			
+			game.date_string = date.getDate() + " " + monthNames[date.getMonth()] + " " + date.getFullYear();
+			
+			if ( game.date_string != $scope.prev_date_string) {
+				$scope.prev_date_string = game.date_string
+				$scope.games.push( { is_group_title: true, date_string: game.date_string } );
+			}
+			
+			game.showNotes = false;
+			
+			return game;
+		}
 	
-		$scope.loadMore = function (skip) {
+		$scope.loadMore = function (skip, clearGames) {
+			
+			console.log($scope);
+		
+			clearGames = typeof clearGames !== 'undefined' ? clearGames : false;
 		
 			if ($scope.loadInProgress || $scope.noMoreData) {
 				return;
@@ -28,45 +54,45 @@ rebelLeaguesControllers.controller('gamesHistoryCtrl', ['$scope', '$http', '$mod
 			
 			$scope.loadInProgress = true;
 			
-			$http.get('api/games/'+skip+'/20/').success(function(data) {
+			if (clearGames) {
+				$scope.games = [];
+			}
 			
-				for (var i = 0; i < data.data.games.length; i++) {
+			function param (data) {
+				return Object.keys(data).map(function(k) {
+					return encodeURIComponent(k) + '=' + encodeURIComponent(data[k])
+				}).join('&');
+			}
+			
+			$http.post('api/games/'+skip+'/20/', JSON.stringify({"filters": $scope.currentFilters}))
+				.success(function(data) {
 				
-					var game = data.data.games[i];
-					
-					game.is_draw = game.is_draw == "1" ? true : false;
-					game.is_time_runout = game.is_time_runout == "1" ? true : false;
-					game.is_group_title = false;
-					
-					var date = new Date( game.date.substring(0,4), parseInt(game.date.substring(5,7))-1, game.date.substring(8,10) );
-					
-					game.date_string = date.getDate() + " " + monthNames[date.getMonth()] + " " + date.getFullYear();
-					
-					if ( game.date_string != $scope.prev_date_string) {
-						$scope.prev_date_string = game.date_string
-						$scope.games.push( { is_group_title: true, date_string: game.date_string } );
+					for (var i = 0; i < data.data.games.length; i++) {
+						$scope.games.push( processGameData(data.data.games[i]) );
 					}
 					
-					game.showNotes = false;
+					$scope.lastIndex = skip + data.data.games.length;
+					if (data.data.games.length < 20) {
+						$scope.noMoreData = true;
+					}
 					
-					$scope.games.push( game );
+					$scope.loadInProgress = false;
 					
+				})
+				.error(function(data){
+					console.log(data);
+					$scope.loadInProgress = false;
 				}
-				
-				$scope.lastIndex += data.data.games.length;
-				if (data.data.games.length < 20) {
-					$scope.noMoreData = true;
-				}
-				
-				$scope.loadInProgress = false;
-				
-			}).error(function(data){
-				console.log(data);
-				$scope.loadInProgress = false;
-			});
+			);
 		
 		};
 		
+		
+		$scope.filter = function () {
+			$scope.currentFilters = $scope.filters;
+			$scope.noMoreData = false;
+			$scope.loadMore(0, true);
+		}
 		
 
 		$scope.showFactionModal = function ($factionId) {
@@ -430,6 +456,77 @@ rebelLeaguesControllers.controller('leagueInfoCtrl', ['$scope', '$http', '$sce',
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+rebelLeaguesControllers.directive('gamesFilterEditor', function($http) {
+    return {
+        restrict: 'AE',
+        // we don't need anymore to bind the value to the external ngModel
+        // as we require its controller and thus can access it directly
+        scope: {},
+        // the 'require' property says we need a ngModel attribute in the declaration.
+        // this require makes a 4th argument available in the link function below
+        require: 'ngModel',
+		
+        templateUrl: 'partials/gamesFilterEditor.html',
+		
+        // the ngModelController attribute is an instance of an ngModelController
+        // for our current ngModel.
+        // if we had required multiple directives in the require attribute, this 4th
+        // argument would give us an array of controllers.
+        link: function(scope, iElement, iAttrs, ngModelController) {
+			
+			console.log("link");
+			console.log(ngModelController);
+		
+			scope.players = [];
+			scope.selected_player = null;
+			
+			scope.loading = $http.get('api/players/')
+				.then(
+					function success(response) {
+						scope.players = response.data.data.players;
+					},
+					function error(reason) {
+						return false;
+					}
+				);
+			
+			scope.valueChange = function () {
+				ngModelController.$setViewValue({
+					"player_id": scope.selected_player_id
+				});
+				
+				console.log("valueChange");
+				console.log(ngModelController);
+			}
+
+            // when model changes, update our view (just update the div content)
+            ngModelController.$render = function() {
+				scope.loading.then(function () {
+					if (ngModelController.$viewValue == "" || ngModelController.$viewValue == undefined) {
+					}
+					else {
+						if ('player_id' in ngModelController.$viewValue) {
+							scope.selected_player = ngModelController.$viewValue['player_id'];
+						}
+					}
+				});
+            };
+        }
+    };
+});
 
 
 
