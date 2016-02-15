@@ -1,5 +1,6 @@
 
 api/.htaccess
+.htaccess
 
 api/db_access.php
 styles/scss_cache/*
