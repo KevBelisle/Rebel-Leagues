@@ -64,7 +64,7 @@ rebelLeaguesControllers.controller('gamesHistoryCtrl', ['$scope', '$http', '$mod
 				}).join('&');
 			}
 			
-			$http.post('api/games/'+skip+'/20/', JSON.stringify({"filters": $scope.currentFilters}))
+			$http.post('api/games/search/'+skip+'/20/', JSON.stringify({"filters": $scope.currentFilters}))
 				.success(function(data) {
 				
 					for (var i = 0; i < data.data.games.length; i++) {
