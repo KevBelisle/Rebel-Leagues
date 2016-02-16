@@ -32,9 +32,9 @@ getRoute()->get('/games/(\d+)(?:/?)', array('League', 'getGamesHistory'));
 getRoute()->get('/games/(\d+)/(\d+)(?:/?)', array('League', 'getGamesHistory'));
 getRoute()->get('/games/all(?:/?)', array('League', 'getGamesHistoryAll'));
 
-getRoute()->post('/games(?:/?)', array('League', 'postGamesHistory'));
-getRoute()->post('/games/(\d+)(?:/?)', array('League', 'postGamesHistory'));
-getRoute()->post('/games/(\d+)/(\d+)(?:/?)', array('League', 'postGamesHistory'));
+getRoute()->post('/games/search(?:/?)', array('League', 'postGamesHistory'));
+getRoute()->post('/games/search/(\d+)(?:/?)', array('League', 'postGamesHistory'));
+getRoute()->post('/games/search/(\d+)/(\d+)(?:/?)', array('League', 'postGamesHistory'));
 
 getRoute()->get('/attributes(?:/?)', array('League', 'getAttributes'));
 getRoute()->get('/attributes/groups(?:/?)', array('League', 'getAttributeGroups'));
