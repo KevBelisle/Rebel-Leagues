@@ -1236,14 +1236,24 @@ class Admin {
 		self::checkTier(1);
 		
 		try {
+			getDatabase()->begin();
 			$game_id = getDatabase()->execute('DELETE FROM games WHERE game_id = :game_id',
 			array(
 				':game_id' => $gameId
 			)
 			);
+			
+			$game_id = getDatabase()->execute('DELETE FROM games_attributes WHERE game_id = :game_id',
+			array(
+				':game_id' => $gameId
+			)
+			);
+			getDatabase()->commit();
+			
 			echo outputSuccess( array( 'game_id' => $gameId ) );
 			
 		} catch (Exception $e) {
+			getDatabase()->rollBack();
 			echo outputError($e->getMessage());
 		}
 	}
