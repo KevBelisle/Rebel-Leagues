@@ -61,7 +61,8 @@ getRoute()->get('/admins(?:/?)', array('Admin', 'getAdmins'));
 getRoute()->post('/admins(?:/?)', array('Admin', 'addAdmin'));
 getRoute()->post('/players(?:/?)', array('Admin', 'addPlayer'));
 getRoute()->post('/factions(?:/?)', array('Admin', 'addFaction'));
-getRoute()->post('/attributes(?:/?)', array('Admin', 'addAttribute'));
+getRoute()->post('/attributes(?:/?)', array('Admin', 'addAttribute'));
+getRoute()->put('/players/(\d+)(?:/?)', array('Admin', 'editPlayer'));
 
 getRoute()->post('/games(?:/?)', array('Admin', 'addGame'));
 getRoute()->put('/games/(\d+)(?:/?)', array('Admin', 'editGame'));
@@ -1072,6 +1073,32 @@ class Admin {
 		try {
 			$player_id = getDatabase()->execute('INSERT INTO players (nickname, firstname, lastname) VALUES(:nickname, :firstname, :lastname)',
 			array(':nickname' => $_POST['nickname'], ':firstname' => $_POST['firstname'], ':lastname' => $_POST['lastname']) );
+			echo outputSuccess( array( 'player_id' => $player_id ) );
+			
+		} catch (Exception $e) {
+			echo outputError($e->getMessage());
+		}
+		
+	}
+	
+	
+	public static function editPlayer() {
+		self::checkTier(2);
+		self::checkFields( array('player_id', 'nickname', 'firstname', 'lastname'), $_POST );
+		
+		try {
+			getDatabase()->execute('UPDATE players SET
+				nickname = :nickname,
+				firstname = :firstname,
+				lastname = :lastname
+				WHERE player_id = :player_id',
+			array(
+				':player_id' => $_POST['player_id'],
+				':nickname' => $_POST['nickname'],
+				':firstname' => $_POST['firstname'],
+				':lastname' => $_POST['lastname']
+			)
+			);
 			echo outputSuccess( array( 'player_id' => $player_id ) );
 			
 		} catch (Exception $e) {

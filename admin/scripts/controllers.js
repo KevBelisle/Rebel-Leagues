@@ -232,6 +232,74 @@ rebelLeaguesAdminControllers.controller('addPlayerCtrl', ['$scope', '$http',
 ]);
 
 
+rebelLeaguesAdminControllers.controller('editPlayerCtrl', ['$scope', '$http',
+	function ($scope, $http) {
+	
+		$scope.title = "Modifier un joueur";
+		$scope.partial = "partials/editPlayer.html";
+	
+		$scope.expanded = false;
+		$scope.toggle = function () { $scope.expanded = !$scope.expanded };
+		
+		$scope.selectedPlayer = false;
+		$scope.selectedPlayerId = false;
+		
+		$scope.change = function (selectedPlayerId) {
+			$scope.selectedPlayer =  $scope.players.filter(function(obj) { if(obj.player_id == selectedPlayerId) { return obj } })[0];
+			console.log($scope.selectedPlayer);
+		};
+		
+		$scope.players = [];
+		
+		$http.get('../api/players/')
+			.then(
+				function success(response) { $scope.players = response.data.data.players; },
+				function error(reason)     { return false; }
+			);
+		
+		$scope.player = {
+			nickname: null,
+			firstname: null,
+			lastname: null
+		};
+
+		$scope.submit = function (player) {
+			
+			$http.put('../api/players', player).success( function (data) {
+				alert("Joueur ajouté.");
+				$scope.player = {
+					nickname: null,
+					firstname: null,
+					lastname: null
+				};
+				console.log(data);
+			}).error( function(data) {
+				alert("Une erreur est survenue.");
+				console.log(data);
+			});
+		};
+		
+		$scope.submit = function (selectedPlayer) {
+			
+			console.log("Editing...");
+			console.log(selectedPlayer);
+			
+			$http.put('../api/players/'+selectedPlayer.player_id, selectedPlayer).success( function (data) {
+				alert("Joueur modifiée.");
+				$scope.selectedPlayerId = false;
+				$scope.selectedPlayer = false;
+				console.log(data);
+			}).error( function(data) {
+				alert("Une erreur est survenue.");
+				console.log(data);
+			});
+		
+			console.log(selectedPlayer);
+		};
+	}
+]);
+
+
 
 rebelLeaguesAdminControllers.controller('editGameCtrl', ['$scope', '$http',
 	function ($scope, $http) {
@@ -490,9 +558,6 @@ rebelLeaguesAdminControllers.directive('attributeEditor', function($http) {
 			
 			scope.game_attributes = [];
 			scope.selected_attribute = null;
-			scope.has_selected_attribute = function () {
-				return !(scope.selected_attribute == null);
-			}
 			
 			scope.loading = $http.get('../api/attributes/')
 				.then(
@@ -573,10 +638,6 @@ rebelLeaguesAdminControllers.directive('attributeEditor', function($http) {
 			
 			scope.addAttribute = function (attribute_id) {
 				
-				if (attribute_id == null) {
-					return;
-				}
-				
 				var attr = scope.attributes.filter(function( obj ) {
 					return obj.attribute_id == attribute_id;
 				})[0];
@@ -586,8 +647,6 @@ rebelLeaguesAdminControllers.directive('attributeEditor', function($http) {
 				}
 				
                 ngModelController.$setViewValue( arrayFromInternals() );
-				
-				scope.selected_attribute = null;
 			};
 			
 			scope.removeAttribute = function (attribute) {

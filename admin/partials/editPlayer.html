@@ -1,0 +1,22 @@
+
+<form id="editPlayer" class="clear">
+
+	<select class="fullWidth" ng-model="selectedPlayerId" ng-options="player.player_id as (player.nickname + ' (' + player.firstname + ' ' + player.lastname + ')') for player in players" ng-change="change(selectedPlayerId)">
+		<option value="">Choisir un joueur existant</option>
+	</select>
+	
+	<div ng-show="selectedPlayer">
+		<h2>Modifier les données :</h2>
+
+		<div class="left">
+			<input type="text" class="fullWidth" ng-model="selectedPlayer.nickname" placeholder="Nickname" required></input>
+		</div>
+		<div class="right">
+			<input type="text" class="fullWidth" ng-model="selectedPlayer.firstname" placeholder="Prénom" required></input>
+			<input type="text" class="fullWidth" ng-model="selectedPlayer.lastname" placeholder="Nom" required></input>
+			<button ng-click="submit(selectedPlayer)" class="fullWidth">Submit</button>
+		</div>
+	
+	</div>
+	
+</form>

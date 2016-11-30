@@ -44,6 +44,11 @@ rebelLeaguesApp.config([
 				controller: 'playersRankingCtrl'
 			})
 			
+			.when('/playersRanking/:rankingMethod', {
+				templateUrl: 'partials/playersRanking.html',
+				controller: 'playersRankingCtrl'
+			})
+			
 			.when('/factionsReview', {
 				templateUrl: 'partials/factionsReview.html',
 				controller: 'factionsReviewCtrl'
