@@ -348,9 +348,16 @@ rebelLeaguesControllers.controller('factionsReviewCtrl', ['$scope', '$http', '$m
 	}
 ]);
 
-rebelLeaguesControllers.controller('playersRankingCtrl', ['$scope', '$http', '$modal',
-	function ($scope, $http, $modal) {
-		$http.get('api/ranking').success(function(data) {
+rebelLeaguesControllers.controller('playersRankingCtrl', ['$scope', '$http', '$modal', '$routeParams',
+	function ($scope, $http, $modal, $routeParams) {
+		
+		var rankingUrl = 'api/ranking';
+		
+		if ("rankingMethod" in $routeParams) {
+			rankingUrl = 'api/ranking/' + $routeParams["rankingMethod"];
+		}
+		
+		$http.get(rankingUrl).success(function(data) {
 		
 			if (data.data.ranking == 3) { // ELO rating
 				$scope.min = Math.min.apply(null, data.data.players.map(function(a){return a.elo_rating;}));
