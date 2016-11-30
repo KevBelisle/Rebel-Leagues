@@ -211,6 +211,10 @@ div#wrapper {
 					cursor: pointer;
 				}
 			}
+			
+			button.highlight {
+				animation: highlight_flashing 1s infinite;
+			}
 		}
 		
 		form.inline {
@@ -263,6 +267,10 @@ div#wrapper {
 	
 }
 
+@keyframes highlight_flashing {
+  0%   { box-shadow: 0 0 0 3px #6652c8; }
+  100% { box-shadow: 0 0 0 0 #6652c8; }
+}
 	
 	
 div.timepicker,
