@@ -558,6 +558,9 @@ rebelLeaguesAdminControllers.directive('attributeEditor', function($http) {
 			
 			scope.game_attributes = [];
 			scope.selected_attribute = null;
+			scope.has_selected_attribute = function () {
+				return !(scope.selected_attribute == null);
+			}
 			
 			scope.loading = $http.get('../api/attributes/')
 				.then(
@@ -637,6 +640,9 @@ rebelLeaguesAdminControllers.directive('attributeEditor', function($http) {
 			}
 			
 			scope.addAttribute = function (attribute_id) {
+				if (attribute_id == null) {
+					return;
+				}
 				
 				var attr = scope.attributes.filter(function( obj ) {
 					return obj.attribute_id == attribute_id;
@@ -647,6 +653,8 @@ rebelLeaguesAdminControllers.directive('attributeEditor', function($http) {
 				}
 				
                 ngModelController.$setViewValue( arrayFromInternals() );
+				
+				scope.selected_attribute = null;
 			};
 			
 			scope.removeAttribute = function (attribute) {
