@@ -19,5 +19,5 @@
 				<option value="">Choisir un attribut à ajouter</option>
 			</select>
 			
-			<button ng-click="addAttribute(selected_attribute)" class="fullWidth">Ajouter l'attribut</button>
+			<button ng-click="addAttribute(selected_attribute)" ng-class="{'fullWidth': true, 'highlight': has_selected_attribute()}">Ajouter l'attribut</button>
 		</div>
