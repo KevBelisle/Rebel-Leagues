@@ -197,13 +197,15 @@ div#wrapper {
 				color: red;
 			}
 			
-			span.attribute {
+			span.attribute,
+			span.tag {
 			    padding: 2px 5px;
 				border: 1px solid grey;
 				border-radius: 2px;
 				margin-right: 2px;
 			
-				a.removeAttribute {
+				a.removeAttribute,
+				a.removeTag {
 				    color: red;
 					position: relative;
 					top: -5px;

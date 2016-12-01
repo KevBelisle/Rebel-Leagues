@@ -265,7 +265,7 @@ rebelLeaguesAdminControllers.controller('editPlayerCtrl', ['$scope', '$http',
 
 		$scope.submit = function (player) {
 			
-			$http.put('../api/players', player).success( function (data) {
+			$http.put('../api/players/'+player.player_id, player).success( function (data) {
 				alert("Joueur ajouté.");
 				$scope.player = {
 					nickname: null,
@@ -448,7 +448,7 @@ rebelLeaguesAdminControllers.controller('editLeagueCtrl', ['$scope', '$http',
 rebelLeaguesAdminControllers.controller('addAttributeCtrl', ['$scope', '$http',
 	function ($scope, $http) {
 	
-		$scope.title = "Ajouter un attribut";
+		$scope.title = "Créer un attribut (pour les parties)";
 		$scope.partial = "partials/addAttribute.html";
 	
 		$scope.expanded = false;
@@ -520,6 +520,91 @@ rebelLeaguesAdminControllers.controller('editAttributeCtrl', ['$scope', '$http',
 		$scope.delete = function (attribute) {
 			
 			$http.delete('../api/attributes', attribute).success( function (data) {
+				alert("Attribut supprimé.");
+				console.log(data);
+			}).error( function(data) {
+				alert("Une erreur est survenue.");
+				console.log(data);
+			});
+		};
+	}
+]);
+
+
+rebelLeaguesAdminControllers.controller('addTagCtrl', ['$scope', '$http',
+	function ($scope, $http) {
+	
+		$scope.title = "Créer un tag (pour les joueurs)";
+		$scope.partial = "partials/addTag.html";
+	
+		$scope.expanded = false;
+		$scope.toggle = function () { $scope.expanded = !$scope.expanded };
+		
+		$scope.tag_groups = [];
+		
+		$http.get('../api/tags/groups')
+			.then(
+				function success(response) { $scope.tag_groups = response.data.data.tag_groups; },
+				function error(reason)     { return false; }
+			);
+			
+		$scope.tag = {
+			name: null,
+			tag_group: null,
+			icon: null,
+			logo: null
+		};
+
+		$scope.submit = function (i_tag) {
+			$http.post('../api/tags', i_tag).success( function (data) {
+				alert("Attribut ajouté.");
+				$scope.tag = {
+					name: null,
+					tag_group: null,
+					icon: null,
+					logo: null
+				};
+				console.log(data);
+			}).error( function(data) {
+				alert("Une erreur est survenue.");
+				console.log(data);
+			});
+		};
+	}
+]);
+
+
+rebelLeaguesAdminControllers.controller('editTagCtrl', ['$scope', '$http',
+	function ($scope, $http) {
+	
+		$scope.title = "Modifier ou supprimer un tag";
+		$scope.partial = "partials/editTag.html";
+	
+		$scope.expanded = false;
+		$scope.toggle = function () { $scope.expanded = !$scope.expanded };
+		
+		$scope.tags = [];
+		
+		$http.get('../api/tags')
+			.then(
+				function success(response) { $scope.tags = response.data.data.tags; },
+				function error(reason)     { return false; }
+			);
+
+		$scope.save = function (tag) {
+			
+			$http.put('../api/tags/' + tag["tag_id"], tag).success( function (data) {
+				alert("Attribut modifié.");
+				console.log(data);
+			}).error( function(data) {
+				alert("Une erreur est survenue.");
+				console.log(data);
+			});
+		};
+
+		$scope.delete = function (tag) {
+			
+			$http.delete('../api/tags', tag).success( function (data) {
 				alert("Attribut supprimé.");
 				console.log(data);
 			}).error( function(data) {
@@ -688,6 +773,156 @@ rebelLeaguesAdminControllers.directive('attributeEditor', function($http) {
 
 
 
+
+
+rebelLeaguesAdminControllers.directive('tagEditor', function($http) {
+    return {
+        restrict: 'AE',
+        // we don't need anymore to bind the value to the external ngModel
+        // as we require its controller and thus can access it directly
+        scope: {},
+        // the 'require' property says we need a ngModel attribute in the declaration.
+        // this require makes a 4th argument available in the link function below
+        require: 'ngModel',
+		
+        templateUrl: 'partials/tagEditor.html',
+		
+        // the ngModelController attribute is an instance of an ngModelController
+        // for our current ngModel.
+        // if we had required multiple directives in the require attribute, this 4th
+        // argument would give us an array of controllers.
+        link: function(scope, iElement, iTags, ngModelController) {
+		
+			scope.all_tags = [];
+			scope.tag_groups = {};
+			scope.tags = [];
+			
+			scope.player_tags = [];
+			scope.selected_tag = null;
+			scope.has_selected_tag = function () {
+				return !(scope.selected_tag == null);
+			}
+			
+			scope.loading = $http.get('../api/tags/')
+				.then(
+					function success(response) {
+						scope.all_tags = response.data.data.tags;
+						response.data.data.tags.forEach(function (tag, index) {
+							if (tag.tag_group == null || tag.tag_group == "") {
+								scope.tags.push(tag);
+							} else {
+								if (tag.tag_group in scope.tag_groups) {
+									scope.tag_groups[tag.tag_group]["group_tags"].push(tag);
+								} else {
+									scope.tag_groups[tag.tag_group] = {
+										"tag_group": tag.tag_group,
+										"selected_tag_id": null,
+										"group_tags": [tag]
+									};
+								}
+							}
+						});
+					},
+					function error(reason)     { return false; }
+				);
+				
+			function updateInternalsFromString (tagString) {
+				scope.loading.then(function () {
+					if (tagString == "" || tagString == undefined) {
+						scope.player_tags = [];
+						scope.selected_tag = null;
+						for (var key in scope.tag_groups) {
+							// skip loop if the property is from prototype
+							if (!scope.tag_groups.hasOwnProperty(key)) continue;
+							var tag_group = scope.tag_groups[key];
+							tag_group.selected_tag_id = null;
+						}
+					}
+					else
+					{
+						if( typeof tagString === 'string' ) {
+							tagString = tagString.split(",");
+						}
+						
+						scope.player_tags = [];
+							
+						tagString.forEach(function (tag_id, index) {
+							var tag = scope.all_tags.filter(function( obj ) {
+								return obj.tag_id == tag_id;
+							})[0];
+							
+							if (scope.all_tags.indexOf(tag) == -1) {
+								// Shouldn't happen...
+								alert("An error occured.");
+							}
+							
+							
+							if (tag.tag_group == null) {
+								scope.player_tags.push(tag);
+							} else {
+								scope.tag_groups[tag.tag_group].selected_tag_id = tag.tag_id;
+							}
+						});
+					}
+				});
+			}
+			
+			function arrayFromInternals () {
+				var tag_ids = scope.player_tags.map(function(obj){ return obj.tag_id; });
+			
+				for (var tag_group in scope.tag_groups) {
+					var selected_tag_id = scope.tag_groups[tag_group].selected_tag_id;
+					if (selected_tag_id != undefined) {
+						tag_ids.push(selected_tag_id);
+					}
+				}
+				
+				return tag_ids;
+			}
+			
+			scope.addTag = function (tag_id) {
+				if (tag_id == null) {
+					return;
+				}
+				
+				var tag = scope.tags.filter(function( obj ) {
+					return obj.tag_id == tag_id;
+				})[0];
+				
+				if (scope.player_tags.indexOf(tag) == -1) {
+					scope.player_tags.push(tag);
+				}
+				
+                ngModelController.$setViewValue( arrayFromInternals() );
+				
+				scope.selected_tag = null;
+			};
+			
+			scope.removeTag = function (tag) {
+				var index = scope.player_tags.indexOf(tag);
+				if (index > -1) {
+					scope.player_tags.splice(index, 1);
+				}
+				
+                ngModelController.$setViewValue( arrayFromInternals() );
+			}
+			
+			scope.tagGroupChange = function () {
+				ngModelController.$setViewValue( arrayFromInternals() );
+			}
+			
+            // we can now use our ngModelController builtin methods
+            // that do the heavy-lifting for us
+
+            // when model changes, update our view (just update the div content)
+            ngModelController.$render = function() {
+				
+				updateInternalsFromString( ngModelController.$viewValue );
+				
+            };
+        }
+    };
+});
 
 
 

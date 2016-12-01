@@ -1,0 +1,22 @@
+
+<form id="addTag" class="clear">
+
+	<div class="left">
+		<input type="text" class="fullWidth" ng-model="tag.name" placeholder="Nom de l'attribut" required></input>
+		<input type="text" class="fullWidth" ng-model="tag.tag_group" placeholder="Groupe de l'attribut"></input>
+		<div class="fullWidth info">
+			Groupes existants :
+			<span ng-repeat="tag_group in tag_groups">
+				{{tag_group.tag_group}}<span ng-if="$first || $middle">, </span>
+			</span>
+		</div>
+	</div>
+	
+	<div class="right">
+		<input type="text" class="fullWidth" placeholder="Icône (Font Awesome)" ng-model="tag.icon"></input>
+		<input type="text" class="fullWidth" placeholder="Logo (URL)" ng-model="tag.logo"></input>
+	</div>
+	
+	<button ng-click="submit(tag)" class="fullWidth">Submit</button>
+	
+</form>
