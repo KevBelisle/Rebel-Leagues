@@ -38,6 +38,8 @@ getRoute()->post('/games/search/(\d+)/(\d+)(?:/?)', array('League', 'postGamesHi
 
 getRoute()->get('/attributes(?:/?)', array('League', 'getAttributes'));
 getRoute()->get('/attributes/groups(?:/?)', array('League', 'getAttributeGroups'));
+getRoute()->get('/tags(?:/?)', array('League', 'getTags'));
+getRoute()->get('/tags/groups(?:/?)', array('League', 'getTagGroups'));
 
 getRoute()->get('/ranking(?:/?)', array('League', 'getRanking'));
 getRoute()->get('/ranking/(\d+)(?:/?)', array('League', 'getRanking'));
@@ -62,6 +64,7 @@ getRoute()->post('/admins(?:/?)', array('Admin', 'addAdmin'));
 getRoute()->post('/players(?:/?)', array('Admin', 'addPlayer'));
 getRoute()->post('/factions(?:/?)', array('Admin', 'addFaction'));
 getRoute()->post('/attributes(?:/?)', array('Admin', 'addAttribute'));
+getRoute()->post('/tags(?:/?)', array('Admin', 'addTag'));
 getRoute()->put('/players/(\d+)(?:/?)', array('Admin', 'editPlayer'));
 
 getRoute()->post('/games(?:/?)', array('Admin', 'addGame'));
@@ -71,6 +74,8 @@ getRoute()->delete('/games/(\d+)(?:/?)', array('Admin', 'deleteGame'));
 getRoute()->put('/leagues(?:/?)', array('Admin', 'editLeague'));
 getRoute()->put('/attributes/(\d+)(?:/?)', array('Admin', 'editAttribute'));
 getRoute()->delete('/attributes/(\d+)(?:/?)', array('Admin', 'deleteAttribute'));
+getRoute()->put('/tags/(\d+)(?:/?)', array('Admin', 'editTag'));
+getRoute()->delete('/tags/(\d+)(?:/?)', array('Admin', 'deleteTag'));
 
 // Run router
 getRoute()->run();
@@ -182,20 +187,48 @@ class League {
 
 	public static function getPlayers() {
 		$players = getDatabase()->all(
-		'SELECT
-            p.player_id,
-            p.nickname,
-            p.firstname,
-            p.lastname,
-            IFNULL(MAX(g.date) > DATE_SUB(NOW(), INTERVAL 60 DAY), 0) AS active
-        FROM
-            players p
-        LEFT JOIN
-            games_split g
-        ON p.player_id = g.player_id
-        GROUP BY p.player_id
-        ORDER BY firstname'
+			'SELECT
+				p.player_id,
+				p.nickname,
+				p.firstname,
+				p.lastname,
+				IFNULL(MAX(g.date) > DATE_SUB(NOW(), INTERVAL 60 DAY), 0) AS active
+			FROM
+				players p
+			LEFT JOIN
+				games_split g
+			ON p.player_id = g.player_id
+			GROUP BY p.player_id
+			ORDER BY firstname'
 		);
+		$players_tags = getDatabase()->all(
+			'SELECT * FROM players_tags'
+		);
+		
+		$players_tags_dict = array();
+		foreach($players_tags as $player_tag) {
+			if (array_key_exists($player_tag['player_id'], $players_tags_dict))
+			{
+				$players_tags_dict[$player_tag['player_id']][] = $player_tag["tag_id"];
+			}
+			else
+			{
+				$players_tags_dict[$player_tag['player_id']] = [$player_tag["tag_id"],];
+			}
+		}
+		
+		foreach ($players as $index => $player)
+		{
+			if (array_key_exists($player['player_id'], $players_tags_dict))
+			{
+				$players[$index]["tags"] = $players_tags_dict[$player['player_id']];
+			}
+			else
+			{
+				$players[$index]["tags"] = array();
+			}
+		}
+		
 		echo outputSuccess( array( 'players' => $players ) );
 	}
 	
@@ -227,6 +260,21 @@ class League {
 	}
 	
 	
+	public static function getTags() {
+		$tags = getDatabase()->all(
+		'SELECT
+			tag_id,
+			name,
+			tag_group,
+			icon,
+			logo
+		FROM tags
+		ORDER BY tag_group'
+		);
+		echo outputSuccess( array( 'tags' => $tags ) );
+	}
+	
+	
 	public static function getAttributeGroups() {
 		$attribute_groups = getDatabase()->all(
 		'SELECT attribute_group
@@ -234,6 +282,16 @@ class League {
 		GROUP BY attribute_group'
 		);
 		echo outputSuccess( array( 'attribute_groups' => $attribute_groups ) );
+	}
+	
+	
+	public static function getTagGroups() {
+		$tag_groups = getDatabase()->all(
+		'SELECT tag_group
+		FROM tags
+		GROUP BY tag_group'
+		);
+		echo outputSuccess( array( 'tag_groups' => $tag_groups ) );
 	}
 	
 	
@@ -396,26 +454,6 @@ class League {
                 ':faction_id_b' => $faction_id
             )
 		);
-		
-        /*
-		$frequentUseList = getDatabase()->all("
-			SELECT * FROM (
-    SELECT *,  100*highest/total_games_played as percentage_played_with
-			FROM
-				(SELECT *, MAX(games_played_with) as highest
-					, SUM(games_played_with) as total_games_played
-				FROM
-					(SELECT * FROM players_factions_with_stats ORDER BY games_played_with DESC) x
-				GROUP BY player_id
-				) y
-			WHERE faction_id = :faction_id AND highest > 9
-			ORDER BY percentage_played_with DESC
-    ) z
-WHERE percentage_played_with >=50
-		",
-		array( ':faction_id' => $faction_id)
-		);
-        */
         
 		$frequentUseList = getDatabase()->all("
             SELECT
@@ -1068,11 +1106,30 @@ class Admin {
 	
 	public static function addPlayer() {
 		//self::checkTier(3);
-		self::checkFields( array('nickname', 'firstname', 'lastname'), $_POST );
+		self::checkFields( array('nickname', 'firstname', 'lastname', 'tags'), $_POST );
 		
 		try {
+			getDatabase()->begin();
+			
 			$player_id = getDatabase()->execute('INSERT INTO players (nickname, firstname, lastname) VALUES(:nickname, :firstname, :lastname)',
-			array(':nickname' => $_POST['nickname'], ':firstname' => $_POST['firstname'], ':lastname' => $_POST['lastname']) );
+			array(
+				':nickname' => $_POST['nickname'],
+				':firstname' => $_POST['firstname'],
+				':lastname' => $_POST['lastname'])
+			);
+			
+			
+			foreach ($_POST['tags'] as $tag_id) {
+				getDatabase()->execute('INSERT INTO players_tags (player_id, tag_id) VALUES (:player_id, :tag_id)',
+				array(
+					':player_id' => $player_id,
+					':tag_id' => intval($tag_id)
+				)
+				);
+			}
+			
+			getDatabase()->commit();
+			
 			echo outputSuccess( array( 'player_id' => $player_id ) );
 			
 		} catch (Exception $e) {
@@ -1082,11 +1139,13 @@ class Admin {
 	}
 	
 	
-	public static function editPlayer() {
+	public static function editPlayer($player_id) {
 		self::checkTier(2);
-		self::checkFields( array('player_id', 'nickname', 'firstname', 'lastname'), $_POST );
+		self::checkFields( array('player_id', 'nickname', 'firstname', 'lastname', 'tags'), $_POST );
 		
 		try {
+			getDatabase()->begin();
+			
 			getDatabase()->execute('UPDATE players SET
 				nickname = :nickname,
 				firstname = :firstname,
@@ -1099,6 +1158,39 @@ class Admin {
 				':lastname' => $_POST['lastname']
 			)
 			);
+			
+			$players_tags = getDatabase()->all(
+				'SELECT * FROM players_tags WHERE player_id = :player_id',
+				array(':player_id' => $player_id)
+			);
+			
+			foreach ($players_tags as $key => $player_tag) {
+				if (!in_array($player_tag["tag_id"], $_POST['tags'])) {
+					getDatabase()->execute('DELETE FROM players_tags WHERE player_id = :player_id AND tag_id = :tag_id',
+						array(
+							':player_id' => $player_id,
+							':tag_id' => $game_attribute["tag_id"]
+						)
+					);
+				}
+			}
+			
+			$players_tags = array_map(function($a) { return $a["tag_id"]; }, $players_tags);
+			
+			foreach ($_POST['tags'] as $tag_id) {
+				if ( !in_array($tag_id, $players_tags) ) {
+					getDatabase()->execute(
+						'INSERT INTO players_tags (player_id, tag_id) VALUES (:player_id, :tag_id)',
+						array(
+							':player_id' => $player_id,
+							':tag_id' => intval($tag_id)
+						)
+					);
+				}
+			}
+			
+			getDatabase()->commit();
+			
 			echo outputSuccess( array( 'player_id' => $player_id ) );
 			
 		} catch (Exception $e) {
@@ -1189,7 +1281,6 @@ class Admin {
 	
 	public static function editGame($game_id) {
 		self::checkTier(2);
-		
 		self::checkFields( array('player1_id', 'player1_faction_id', 'player2_id', 'player2_faction_id', 'date', 'is_draw', 'is_time_runout', 'attributes'), $_POST );
 		
 		try {
@@ -1237,7 +1328,7 @@ class Admin {
 			$game_attributes = array_map(function($a) { return $a["attribute_id"]; }, $game_attributes);
 			
 			foreach ($_POST['attributes'] as $attribute_id) {
-				if ( !in_array($attribute_id, $game_attributes) ) {
+				if ( !in_array($attribute_id, $players_tags) ) {
 					getDatabase()->execute(
 						'INSERT INTO games_attributes (game_id, attribute_id) VALUES (:game_id, :attribute_id)',
 						array(
@@ -1399,6 +1490,67 @@ class Admin {
 			)
 			);
 			echo outputSuccess( array( 'attribute_id' => $attribute_id ) );
+			
+		} catch (Exception $e) {
+			echo outputError($e->getMessage());
+		}
+		
+	}
+
+	
+	public static function addTag() {
+		self::checkTier(1);
+		self::checkFields( array('name', 'icon', 'logo'), $_POST );
+		
+		$tag_group = "";
+		
+		if( array_key_exists('tag_group', $_POST) ) {
+			$tag_group = $_POST['tag_group'];
+		}
+		
+		try {
+			$tag_id = getDatabase()->execute('INSERT INTO tags (name, tag_group, icon, logo) VALUES(:name, :tag_group, :icon, :logo)',
+			array(
+				':name' => $_POST['name'],
+				':tag_group' => $_POST['tag_group'],
+				':icon' => $_POST['icon'],
+				':logo' => $_POST['logo']
+			)
+			);
+			echo outputSuccess( array( 'tag_id' => $tag_id ) );
+			
+		} catch (Exception $e) {
+			echo outputError($e->getMessage());
+		}
+		
+	}
+	
+	public static function editTag($tag_id) {
+		self::checkTier(1);
+		self::checkFields( array('name', 'icon', 'logo'), $_POST );
+		
+		$tag_group = "";
+		
+		if( array_key_exists('tag_group', $_POST) ) {
+			$tag_group = $_POST['tag_group'];
+		}
+		
+		try {
+			getDatabase()->execute('UPDATE tags SET
+				name = :name,
+				tag_group = :tag_group,
+				icon = :icon,
+				logo = :logo
+				WHERE tag_id = :tag_id',
+			array(
+				':name' => $_POST['name'],
+				':tag_group' => $_POST['tag_group'],
+				':icon' => $_POST['icon'],
+				':logo' => $_POST['logo'],
+				':tag_id' => $tag_id
+			)
+			);
+			echo outputSuccess( array( 'tag_id' => $tag_id ) );
 			
 		} catch (Exception $e) {
 			echo outputError($e->getMessage());

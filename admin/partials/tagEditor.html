@@ -1,0 +1,23 @@
+
+		<div ng-repeat="group in tag_groups">
+			<b>{{group.tag_group}} :</b>
+			<select class="fullWidth" ng-model="group.selected_tag_id" ng-options="tag.tag_id as tag.name for tag in group.group_tags" ng-change="tagGroupChange()">
+				<option value="">Choisir une option</option>
+			</select>
+		</div>
+		
+		<div class="well">
+			<div class="fullWidth">
+				<b>Tags :</b>
+				<span ng-repeat="player_tag in player_tags" class="tag">
+					{{ player_tag.name }}
+					<a ng-click="removeTag(player_tag)" class="removeTag">x</a>
+				</span>
+			</div>
+			
+			<select class="fullWidth" ng-model="selected_tag" ng-options="t.tag_id as t.name for t in tags">
+				<option value="">Choisir un tag à ajouter</option>
+			</select>
+			
+			<button ng-click="addTag(selected_tag)" ng-class="{'fullWidth': true, 'highlight': has_selected_tag()}">Ajouter le tag</button>
+		</div>

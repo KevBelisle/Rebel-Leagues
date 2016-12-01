@@ -17,6 +17,8 @@ BEGIN
 	CREATE TABLE IF NOT EXISTS games ( game_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 	CREATE TABLE IF NOT EXISTS attributes ( attribute_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 	CREATE TABLE IF NOT EXISTS games_attributes ( game_attribute_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+	CREATE TABLE IF NOT EXISTS tags ( tag_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+	CREATE TABLE IF NOT EXISTS players_tags ( player_tag_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 	
 	/* CREATE leagues COLUMNS
@@ -272,6 +274,26 @@ BEGIN
 	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'attributes' AND column_name = 'logo' ) = 0 THEN
 		ALTER TABLE attributes ADD logo VARCHAR(60);
 	END IF;
+
+		
+	/* CREATE tags COLUMNS
+	============================================= */
+	
+	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'tags' AND column_name = 'name' ) = 0 THEN
+		ALTER TABLE tags ADD name VARCHAR(40) NOT NULL;
+	END IF;
+	
+	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'tags' AND column_name = 'tag_group' ) = 0 THEN
+		ALTER TABLE tags ADD tag_group VARCHAR(40);
+	END IF;
+	
+	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'tags' AND column_name = 'icon' ) = 0 THEN
+		ALTER TABLE tags ADD icon VARCHAR(40);
+	END IF;
+	
+	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'tags' AND column_name = 'logo' ) = 0 THEN
+		ALTER TABLE tags ADD logo VARCHAR(60);
+	END IF;
 		
 		
 	/* CREATE games_attributes COLUMNS + FOREIGN KEY CONSTRAINTS
@@ -294,6 +316,30 @@ BEGIN
 	ALTER TABLE games_attributes ADD
 		FOREIGN KEY (attribute_id)
 		REFERENCES attributes(attribute_id)
+		ON DELETE CASCADE
+		ON UPDATE CASCADE;
+		
+		
+	/* CREATE players_tags COLUMNS + FOREIGN KEY CONSTRAINTS
+	============================================= */
+	
+	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'players_tags' AND column_name = 'player_id' ) = 0 THEN
+		ALTER TABLE players_tags ADD player_id INT NOT NULL;
+	END IF;
+
+	IF ( SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'players_tags' AND column_name = 'tag_id' ) = 0 THEN
+		ALTER TABLE players_tags ADD tag_id INT NOT NULL;
+	END IF;
+	
+	ALTER TABLE players_tags ADD
+		FOREIGN KEY (player_id)
+		REFERENCES players(player_id)
+		ON DELETE CASCADE
+		ON UPDATE CASCADE;
+	
+	ALTER TABLE players_tags ADD
+		FOREIGN KEY (tag_id)
+		REFERENCES tags(tag_id)
 		ON DELETE CASCADE
 		ON UPDATE CASCADE;
 	
