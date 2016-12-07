@@ -1332,7 +1332,7 @@ class Admin {
 			$game_attributes = array_map(function($a) { return $a["attribute_id"]; }, $game_attributes);
 			
 			foreach ($_POST['attributes'] as $attribute_id) {
-				if ( !in_array($attribute_id, $players_tags) ) {
+				if ( !in_array($attribute_id, $game_attributes) ) {
 					getDatabase()->execute(
 						'INSERT INTO games_attributes (game_id, attribute_id) VALUES (:game_id, :attribute_id)',
 						array(
