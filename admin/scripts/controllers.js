@@ -700,8 +700,7 @@ rebelLeaguesAdminControllers.directive('attributeEditor', function($http) {
 								alert("An error occured.");
 							}
 							
-							
-							if (attr.attribute_group == null) {
+							if (attr.attribute_group == null || attr.attribute_group == "") {
 								scope.game_attributes.push(attr);
 							} else {
 								scope.attribute_groups[attr.attribute_group].selected_attribute_id = attr.attribute_id;
