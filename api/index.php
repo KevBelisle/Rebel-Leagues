@@ -1163,13 +1163,17 @@ class Admin {
 				'SELECT * FROM players_tags WHERE player_id = :player_id',
 				array(':player_id' => $player_id)
 			);
+      
+      print_r($players_tags);
+      
+      print_r($_POST['tags']);
 			
 			foreach ($players_tags as $key => $player_tag) {
 				if (!in_array($player_tag["tag_id"], $_POST['tags'])) {
 					getDatabase()->execute('DELETE FROM players_tags WHERE player_id = :player_id AND tag_id = :tag_id',
 						array(
 							':player_id' => $player_id,
-							':tag_id' => $game_attribute["tag_id"]
+							':tag_id' => $player_tag["tag_id"]
 						)
 					);
 				}
